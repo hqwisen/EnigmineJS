@@ -1,0 +1,10 @@
+Composant de la machine à implémenter:
+* Clavier d'entrée
+* Clavier de sortie
+* Rotors
+* Reflecteur
+* Instructions
+* Plugboard
+* 
+Facultatif:
+* Codebooks
