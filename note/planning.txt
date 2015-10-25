@@ -1,0 +1,10 @@
+1) Rapport
+  * Introduction
+  * Etat de l'art
+  * Implémentation du simulateur
+  * Conclusion
+2) Simulateur
+  * Schéma de l'interface + Use case
+  * Algo:
+    - Dia. de classe
+    - Impl. des classes
