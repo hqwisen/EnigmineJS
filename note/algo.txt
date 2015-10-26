@@ -5,4 +5,12 @@
 
 
 1) Rotor
- * Wiring Table
+  * Attribut:
+    - Wiring Table
+    - Ring setting
+    - start position
+    - notch
+  * Fonction:
+    - rotate (Rotate then process)
+    - rotate next
+    - process
