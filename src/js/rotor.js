@@ -81,20 +81,10 @@ function Rotor(name, wiringTable, startChar, ringChar, notchChar){
   this.notch = Rotor.charToNumber(notchChar);
   
   this.init = function(){
-    var nrot;
     // The first char of movable is the char on the little window
-    /*this.movableTable.rotateLeft(this.ring);
-    nrot = this.current - this.ring;
-    if (nrot < 0){
-      this.movableTable.rotateLeft(this.current);
-      this.contactTable.rotateLeft(this.current);      
-    }else{
-      
-    }*/
     this.contactTable.rotateRight(this.ring);
     this.movableTable.rotateLeft(this.current);
-    this.contactTable.rotateLeft(this.current);
-    
+    this.contactTable.rotateLeft(this.current);   
   }
   
   this.process = function(cinput){
@@ -111,8 +101,6 @@ function Rotor(name, wiringTable, startChar, ringChar, notchChar){
     nrandom = this.random(ncontact); // Pn
     npos = this.contactTable.getPosFromNumber(nrandom); // Wn
     coutput = Rotor.numberToChar(npos); // 
-    console.log(this.movableTable.toString());
-    console.log(this.contactTable.toString());
     Rotor.log(this, "end process for '"+cinput+"' and product '"+coutput+"'");
     
   }
@@ -134,6 +122,10 @@ function Rotor(name, wiringTable, startChar, ringChar, notchChar){
   
 }
 
-var rotorI = new Rotor("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ", "S", "K", "Q");
-var input = "O";
-rotorI.process(input);
+var rotor1 = new Rotor("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ", "C", "A", "Q");
+var rotor2 = new Rotor("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "R", "A", "E");
+var rotor3 = new Rotor("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "K", "A", "V");
+var input = "L";
+rotor1.process(input);
+rotor2.process(input);
+rotor3.process(input);

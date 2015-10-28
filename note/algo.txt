@@ -12,5 +12,5 @@
     - notch
   * Fonction:
     - rotate (Rotate then process)
-    - rotate next
+    - rotate ne
     - process
