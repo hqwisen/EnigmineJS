@@ -1,0 +1,16 @@
+ {
+    "folders":
+    [
+        {
+            "path": ".",
+            "name": "EnigmineJS",
+            "folder_exclude_patterns": [],
+            "file_exclude_patterns": [],
+            "follow_symlinks": true
+        },
+    ],
+    "settings":
+    {
+        "tab_size": 2
+    }
+}
