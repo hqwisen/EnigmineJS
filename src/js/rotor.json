@@ -1,0 +1,33 @@
+// This file is accessible from http://musteam.be/rotor.json
+{
+  "rotors": {
+    "I": {
+      "wires": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+      "notch": "Q"
+    },
+    "II": {
+      "wires": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+      "notch": "E"
+    },
+    "III": {
+      "wires": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+      "notch": "V"
+    },
+    "IV": {
+      "wires": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+      "notch": "J"
+    },
+    "V": {
+      "wires": "VZBRGITYUPSDNHLXAWMJQOFECK",
+      "notch": "Z"
+    }
+  },
+  "reflectors": {
+    "B": {
+      "wires": "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+    },
+    "C": {
+      "wires": "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+    }
+  }
+}

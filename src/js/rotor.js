@@ -1,60 +1,57 @@
-function Table(chars){
-  "use strict";
-  this.chars = chars;
-  
-  this.rotateRight = function(turn){
-    for(var i=0;i<turn;i++){
-      this.chars = this.chars[this.chars.length-1]
-                 + this.chars.slice(0, this.chars.length-1);      
-    }
+
+var rotorsData = {
+  "I": {
+    "wires": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+    "notch": "Q"
+  },
+  "II": {
+    "wires": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+    "notch": "E"
+  },
+  "III": {
+    "wires": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+    "notch": "V"
+  },
+  "IV": {
+    "wires": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+    "notch": "J"
+  },
+  "V": {
+    "wires": "VZBRGITYUPSDNHLXAWMJQOFECK",
+    "notch": "Z"
   }
-  
-  this.rotateLeft = function(turn){
-    for(var i=0;i<turn;i++){    
-      this.chars = this.chars.slice(1, this.chars.length)
-                 + this.chars[0];
-    }
-  }
-  
-  this.getPosFromChar = function(char){
-    for(var i=0;i<this.chars.length;++i){
-      if(this.chars[i] == char){
-        return i;
-      }
-    }
-    return -1;
-  }
-  
-  this.getPosFromNumber = function(number){
-    return this.getPosFromChar(Rotor.numberToChar(number));
-  }
-  
-  this.getChar = function(index){
-    return this.chars[index];
-  }
-  
-  this.getNumber = function(index){
-    return Rotor.charToNumber(this.getChar(index));
-  }
-  
-  this.toString = function(){
-    return this.chars;
-  }
-  
 }
 
-function Rotor(name, wiringTable, startChar, ringChar, notchChar){
+Rotor.rotors = {}
+for(rotorName in rotorsData){
+  Rotor.rotors[rotorName] = new Rotor(rotorName,
+                                      rotorsData[rotorName]["wires"],
+                                      rotorsData[rotorName]["notch"]);   
+}
+  
+  
+function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   "use strict";
   /** Numbers are between 0-25 (A-Z) */
   Rotor.charToNumber = function(char){
+    if(char == undefined){
+      return undefined;
+    }
     char = String.toUpperCase(char);
     return (char.charCodeAt(0) - "A".charCodeAt(0));  
   }
   
   Rotor.numberToChar = function(number){
+    if(number == undefined){
+      return undefined;
+    }
     return String.fromCharCode(number + "A".charCodeAt(0));  
   }
   
+  Rotor.getRotors = function(){
+    return Rotor.rotors;
+  }
+
   Rotor.log = function(rotor, message){
     console.log("[Rotor]["+rotor.getName()+"] "
                 + message
@@ -62,7 +59,7 @@ function Rotor(name, wiringTable, startChar, ringChar, notchChar){
   }
   
   Rotor.error = function(rotor, message, abort){
-    fullMessage = "[Rotor]["+rotor.getName()+"] "
+    var fullMessage = "[Rotor]["+rotor.getName()+"] "
                 + message
                 + ".";
     abort = abort || false;
@@ -76,37 +73,65 @@ function Rotor(name, wiringTable, startChar, ringChar, notchChar){
   this.wiringTable = new Table(wiringTable);
   this.movableTable = new Table("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
   this.contactTable = new Table("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-  this.current = Rotor.charToNumber(startChar);
-  this.ring = Rotor.charToNumber(ringChar);
+  this.current = Rotor.charToNumber(startChar) || 0;
+  this.ring = Rotor.charToNumber(ringChar) || 0;
   this.notch = Rotor.charToNumber(notchChar);
   
-  this.init = function(){
-    // The first char of movable is the char on the little window
-    this.contactTable.rotateRight(this.ring);
-    this.movableTable.rotateLeft(this.current);
-    this.contactTable.rotateLeft(this.current);   
-  }
+  // The first char of movable is the char on the little window
+  this.contactTable.rotateRight(this.ring);
+  this.movableTable.rotateLeft(this.current);
+  this.contactTable.rotateLeft(this.current);   
   
-  this.process = function(cinput){
+  this.processIn = function(cinput){
     var coutput, ninput, ncontact, nrandom, npos;
     if(typeof cinput != "string"){
-      Rotor.error(this, "can't process with a non-string input", true);  
+      Rotor.error(this,
+       "can't process with a non-string input '"+cinput+"'", true);  
     }
     else if(cinput.length != 1){
       Rotor.error(this, "can't process with a cinput.length != 1", true);
     }
-    Rotor.log(this, "begin process for '"+cinput+"'");
+    Rotor.log(this, "begin processIn for '"+cinput+"'");
     ninput = Rotor.charToNumber(cinput); // An
     ncontact = this.contactTable.getNumber(ninput); // Tn
-    nrandom = this.random(ncontact); // Pn
+    nrandom = this.getNrandom(ncontact); // Pn
     npos = this.contactTable.getPosFromNumber(nrandom); // Wn
     coutput = Rotor.numberToChar(npos); // 
-    Rotor.log(this, "end process for '"+cinput+"' and product '"+coutput+"'");
-    
+    Rotor.log(this, "end processIn for '"+cinput+"' and product '"+coutput+"'"); 
+    return coutput; 
   }
 
-  this.random = function(number){
+this.processOut = function(cinput){
+    var coutput, ninput, ncontact, nrandom, npos;
+    if(typeof cinput != "string"){
+      Rotor.error(this,
+       "can't process with a non-string input '"+cinput+"'", true);  
+    }
+    else if(cinput.length != 1){
+      Rotor.error(this, "can't process with a cinput.length != 1", true);
+    }
+    Rotor.log(this, "begin processOut for '"+cinput+"'");
+    ninput = Rotor.charToNumber(cinput); // An
+    ncontact = this.contactTable.getNumber(ninput); // Tn
+    nrandom = this.getCunrandom(ncontact); // Pn
+    npos = this.contactTable.getPosFromNumber(nrandom); // Wn
+    coutput = Rotor.numberToChar(npos); // 
+    Rotor.log(this, "end processOut for '"+cinput+"' and product '"+coutput+"'"); 
+    return coutput; 
+  }
+
+
+  this.getNrandom = function(number){
     return Rotor.charToNumber(this.wiringTableAt(number)); 
+  }
+  
+  this.getCunrandom = function(number){
+    for(var i=0;i<this.wiringTable.getSize();i++){
+      if(this.wiringTable.getChar(i) == Rotor.numberToChar(number)){
+        return i; 
+      }
+    }
+    return undefined;
   }
   
   this.wiringTableAt = function(number){
@@ -116,16 +141,16 @@ function Rotor(name, wiringTable, startChar, ringChar, notchChar){
   this.getName = function(){
     return name;
   }
-  
-  // TODO check better way
-  this.init();
-  
 }
 
-var rotor1 = new Rotor("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ", "C", "A", "Q");
-var rotor2 = new Rotor("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "R", "A", "E");
-var rotor3 = new Rotor("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "K", "A", "V");
+/*
 var input = "L";
-rotor1.process(input);
-rotor2.process(input);
-rotor3.process(input);
+var rotors = Rotor.getRotors();
+console.log(rotors["I"].process(input));
+rotors["II"].process(input);
+rotors["III"].process(input);
+console.log(rotors);
+*/
+
+
+
