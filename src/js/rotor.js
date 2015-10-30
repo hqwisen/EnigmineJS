@@ -22,9 +22,9 @@ var rotorsData = {
   }
 }
 
-Rotor.rotors = {}
+Rotor.ROTORS = {}
 for(rotorName in rotorsData){
-  Rotor.rotors[rotorName] = new Rotor(rotorName,
+  Rotor.ROTORS[rotorName] = new Rotor(rotorName,
                                       rotorsData[rotorName]["wires"],
                                       rotorsData[rotorName]["notch"]);   
 }
@@ -48,10 +48,6 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     return String.fromCharCode(number + "A".charCodeAt(0));  
   }
   
-  Rotor.getRotors = function(){
-    return Rotor.rotors;
-  }
-
   Rotor.log = function(rotor, message){
     console.log("[Rotor]["+rotor.getName()+"] "
                 + message
@@ -77,10 +73,42 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   this.ring = Rotor.charToNumber(ringChar) || 0;
   this.notch = Rotor.charToNumber(notchChar);
   
+  this.getName = function(){
+    return name;
+  }
+
+  this.setRing = function(ring){
+    Rotor.log(this, "setRing " + ring);
+    if(typeof ring == "string"){
+      ring = Rotor.charToNumber(ring);
+    }
+    if(ring > this.ring){
+      this.contactTable.rotateRight(ring - this.ring);
+      this.ring = ring;
+    }else if(ring < this.ring){
+      this.contactTable.rotateLeft(this.ring - ring);
+      this.ring = ring;
+    }
+  }
+
+  this.setStart = function(start){
+    Rotor.log(this, "setStart " + start);
+    if(typeof start == "string"){
+      start = Rotor.charToNumber(start);
+    }
+    if(start > this.current){
+      this.movableTable.rotateLeft(start - this.current);
+      this.contactTable.rotateLeft(start - this.current);
+      this.current = start;
+    }else if(start < this.current){ 
+      this.movableTable.rotateRight(this.current - start);
+      this.contactTable.rotateRight(this.current- start);
+      this.current = start;
+    }
+  }
   // The first char of movable is the char on the little window
-  this.contactTable.rotateRight(this.ring);
-  this.movableTable.rotateLeft(this.current);
-  this.contactTable.rotateLeft(this.current);   
+  this.setRing(this.ring);
+  this.setStart(this.current);
   
   this.processIn = function(cinput){
     var coutput, ninput, ncontact, nrandom, npos;
@@ -92,11 +120,13 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
       Rotor.error(this, "can't process with a cinput.length != 1", true);
     }
     Rotor.log(this, "begin processIn for '"+cinput+"'");
-    ninput = Rotor.charToNumber(cinput); // An
-    ncontact = this.contactTable.getNumber(ninput); // Tn
-    nrandom = this.getNrandom(ncontact); // Pn
-    npos = this.contactTable.getPosFromNumber(nrandom); // Wn
-    coutput = Rotor.numberToChar(npos); // 
+    //Rotor.log(this, "movable: "+this.movableTable.toString());
+    //Rotor.log(this, "contact: "+this.contactTable.toString());
+    ninput = Rotor.charToNumber(cinput);
+    ncontact = this.contactTable.getNumber(ninput);
+    nrandom = this.getRandom(ncontact);
+    npos = this.contactTable.getPosFromNumber(nrandom);
+    coutput = Rotor.numberToChar(npos); 
     Rotor.log(this, "end processIn for '"+cinput+"' and product '"+coutput+"'"); 
     return coutput; 
   }
@@ -111,21 +141,26 @@ this.processOut = function(cinput){
       Rotor.error(this, "can't process with a cinput.length != 1", true);
     }
     Rotor.log(this, "begin processOut for '"+cinput+"'");
-    ninput = Rotor.charToNumber(cinput); // An
-    ncontact = this.contactTable.getNumber(ninput); // Tn
-    nrandom = this.getCunrandom(ncontact); // Pn
-    npos = this.contactTable.getPosFromNumber(nrandom); // Wn
-    coutput = Rotor.numberToChar(npos); // 
+    ninput = Rotor.charToNumber(cinput);
+    ncontact = this.contactTable.getNumber(ninput);
+    nrandom = this.getInverseRandom(ncontact);
+    npos = this.contactTable.getPosFromNumber(nrandom);
+    coutput = Rotor.numberToChar(npos);
     Rotor.log(this, "end processOut for '"+cinput+"' and product '"+coutput+"'"); 
     return coutput; 
   }
 
+  this.rotate = function(){
+    Rotor.log(this, "rotate");
+    this.movableTable.rotateLeft(1);
+    this.contactTable.rotateLeft(1);
+  }
 
-  this.getNrandom = function(number){
+  this.getRandom = function(number){
     return Rotor.charToNumber(this.wiringTableAt(number)); 
   }
   
-  this.getCunrandom = function(number){
+  this.getInverseRandom = function(number){
     for(var i=0;i<this.wiringTable.getSize();i++){
       if(this.wiringTable.getChar(i) == Rotor.numberToChar(number)){
         return i; 
@@ -136,11 +171,7 @@ this.processOut = function(cinput){
   
   this.wiringTableAt = function(number){
     return wiringTable[number];
-  }
-  
-  this.getName = function(){
-    return name;
-  }
+  }  
 }
 
 /*

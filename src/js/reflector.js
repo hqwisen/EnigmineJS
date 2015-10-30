@@ -9,9 +9,9 @@ var reflectorsData =
   }
 }
 
-Reflector.reflectors = {}
+Reflector.REFLECTORS = {}
 for(reflectorName in reflectorsData){
-  Reflector.reflectors[reflectorName] = new Reflector(reflectorName,
+  Reflector.REFLECTORS[reflectorName] = new Reflector(reflectorName,
   reflectorsData[reflectorName]["wires"]);   
 }
 
@@ -34,11 +34,6 @@ function Reflector(name, wiringTable){
     console.error(fullMessage);
   }
 
-
-  Reflector.getReflectors = function(){
-    return Reflector.reflectors;
-  }
-  
   this.wiringTable = new Table(wiringTable);
   this.process = function(cinput){
     Reflector.log(this, "begin process for '"+cinput+"'");
