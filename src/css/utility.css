@@ -1,0 +1,36 @@
+html, body{
+  height:100%;
+  margin:0px;
+  padding:0px;
+}
+div#config{
+  float:left;
+  height:100%;
+  width:50%;
+  background-color:#000000;
+}
+
+div#data{
+  float:right;
+  height:100%;
+  width:50%;
+  background-color:#111111;
+}
+
+div#input{
+  float:top;
+  height:50%;
+  width:100%;
+  background-color:#555555;
+}
+
+div#output{
+  float:bottom;
+  height:50%;
+  background-color:#AAAAAA;
+}
+
+#textinput{
+  height:100%;
+  width:100%;
+}
