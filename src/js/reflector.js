@@ -3,7 +3,7 @@ var reflectorsData =
 {
   "B":{
     "wires":"YRUHQSLDPXNGOKMIEBFZCWVJAT"
-	},
+  },
   "C":{
     "wires":"FVPJIAOYEDRZXWGCTKUQSBNMHL"
   }
@@ -16,7 +16,7 @@ for(reflectorName in reflectorsData){
 }
 
 function Reflector(name, wiringTable){
-	"use strict";
+  "use strict";
   Reflector.log = function(refl, message){
     console.log("[Reflector]["+refl.getName()+"] "
                 + message
