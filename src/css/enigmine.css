@@ -2,8 +2,9 @@ html, body{
   height:100%;
   margin:0;
   padding:0;
-  font: bold 15px Sans-serif;
-  font-variant:small-caps;
+  font-family: Ubuntu, Verdana, Geneva, Arial, Helvetica, sans-serif;
+  /*font: bold 15px Sans-serif;
+  font-variant:small-caps;*/
 }
 
 /* Config view */
@@ -15,7 +16,7 @@ html, body{
   float:left;
   width:50%;
   height:100%;
-  background:#d0d0d0; 
+  background:#9a9a9a; 
   /*border: 1px solid black;*/
   padding:0;
   margin;0;
@@ -52,9 +53,10 @@ button.reflector{
   width:100%;
   padding:0;
   margin:0;
-  background:#505050;
-  color:white;
+  background:#9a9a9a;
+  color:black;
   border-width:0;
+  border-right:2px #505050 solid;
 }
 
 div.rotor{
@@ -99,6 +101,9 @@ button.rotorchoice{
   height:100%;
   width:20%;
   background:#9a9a9a;
+  color:black;
+  padding:0;
+  margin:0;
   border-width:0;
   
 }
@@ -130,15 +135,43 @@ div.settingname{
 }
 
 div.startsetting{
-  display:flex;
+  display:block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width:100%;
   height:70%;
+}
+
+div.startvalue{
+  float:left;
+  display:flex;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:70%;
+  height:100%;
   align-items: center;
-  justify-content: center;
-  /*border:2px solid black;*/
+  justify-content: center;  
+}
+
+div.startbutton{
+  float:left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:30%;
+  height:100%;
+}
+
+button.startbutton{
+  float:top;
+  height:50%;
+  width:100%;
+  font-size:30px;
+  border-width:0;
+  background:#9a9a9a;
+  color:black;
 }
 
 div.rotorring{
@@ -191,6 +224,7 @@ textarea{
   border-radius:0;
   padding:15px;
   margin:0;
+  background:#f0f0f0;
   resize:none;
   text-transform:uppercase;  
 }

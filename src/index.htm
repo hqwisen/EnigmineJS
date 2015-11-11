@@ -3,6 +3,7 @@
 
   <meta charset="utf-8"/>
   <head>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,italic,bold,bolditalic&amp;subset=Latin" />
     <link rel="stylesheet" type="text/css" href="css/enigmine.css">  
     <title>Enigmine</title>
   </head>
@@ -10,68 +11,8 @@
     <div class="config">
       <div class="parameters">
         <div class="reflector">
-          <button class="reflector">B</button>
-          <button class="reflector">C</button>
-        </div>
-        <div class="rotor">
-          <div class="rotorname">
-            <span class="rotorname">Rotor I</span>
-          </div>
-          <div class="rotorchoice">
-            <button class="rotorchoice">I</button>
-            <button class="rotorchoice">II</button>
-            <button class="rotorchoice">III</button>
-            <button class="rotorchoice">IV</button>
-            <button class="rotorchoice">V</button>
-          </div>
-          <div class="rotorstart">
-            <div class="settingname">Start</div>
-            <div class="startsetting">A</div>
-          </div>
-          <div class="rotorring">            
-            <div class="settingname">Ring</div>
-            <div class="ringsetting">A-01</div>
-          </div>
-        </div>
-        <div class="rotor">
-          <div class="rotorname">
-            <span class="rotorname">Rotor I</span>
-          </div>
-          <div class="rotorchoice">
-            <button class="rotorchoice">I</button>
-            <button class="rotorchoice">II</button>
-            <button class="rotorchoice">III</button>
-            <button class="rotorchoice">IV</button>
-            <button class="rotorchoice">V</button>
-          </div>
-          <div class="rotorstart">
-            <div class="settingname">Start</div>
-            <div class="startsetting">A</div>
-          </div>
-          <div class="rotorring">            
-            <div class="settingname">Ring</div>
-            <div class="ringsetting">A-01</div>
-          </div>
-        </div>
-        <div class="rotor">
-          <div class="rotorname">
-            <span class="rotorname">Rotor I</span>
-          </div>
-          <div class="rotorchoice">
-            <button class="rotorchoice">I</button>
-            <button class="rotorchoice">II</button>
-            <button class="rotorchoice">III</button>
-            <button class="rotorchoice">IV</button>
-            <button class="rotorchoice">V</button>
-          </div>
-          <div class="rotorstart">
-            <div class="settingname">Start</div>
-            <div class="startsetting">A</div>
-          </div>
-          <div class="rotorring">            
-            <div class="settingname">Ring</div>
-            <div class="ringsetting">A-01</div>
-          </div>
+          <button id="refl_B" class="reflector">B</button>
+          <button id="refl_C" class="reflector">C</button>
         </div>
       </div>
       <div class="board">
@@ -86,7 +27,7 @@
       </div>
       <div class="output">
         <div class="title">Output</div>
-        <textarea id="outputarea" class="output" readonly></textarea>
+        <textarea id="outputarea" class="output"></textarea>
       </div>
     </div>
     

@@ -3,8 +3,8 @@ Enigma.DEFAULT_CONFIG =
 {
   "rotors":["I", "II", "III"],
   "reflector":"B",
-  "starts":["D", "J", "K"],
-  "rings":["V", "L", "R"]
+  "starts":["A", "A", "A"],
+  "rings":["A", "A", "A"]
 }
 
 Enigma.RIGHT_ROTOR = 2;
@@ -96,6 +96,9 @@ function Enigma(config, name){
     return Reflector.REFLECTORS[this.config["reflector"]];
   }
 
+  this.setReflector = function(reflector){
+    this.config["reflector"] = reflector;
+  }
   this.reflect = function(cinput){
     return this.getReflector().process(cinput);
   }
@@ -110,12 +113,12 @@ function Enigma(config, name){
   this.applyConfig();
 }
 
-var inputs = "HAKIM";
+/*var inputs = "HAKIM";
 var enigma = new Enigma();
 var output = "";
 for(var i=0;i<inputs.length;i++){
   output+=enigma.process(inputs[i]);
 }
-console.log(output);
+console.log(output);*/
 
 

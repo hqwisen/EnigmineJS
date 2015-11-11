@@ -18,9 +18,9 @@ for(reflectorName in reflectorsData){
 function Reflector(name, wiringTable){
   "use strict";
   Reflector.log = function(refl, message){
-    /*console.log("[Reflector]["+refl.getName()+"] "
+    console.log("[Reflector]["+refl.getName()+"] "
                 + message
-                + ".");*/
+                + ".");
   }
   
   Reflector.error = function(refl, message, abort){
