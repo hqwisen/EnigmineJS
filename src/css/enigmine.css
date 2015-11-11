@@ -2,6 +2,8 @@ html, body{
   height:100%;
   margin:0;
   padding:0;
+  font: bold 15px Sans-serif;
+  font-variant:small-caps;
 }
 
 /* Config view */
@@ -14,7 +16,7 @@ html, body{
   width:50%;
   height:100%;
   background:#d0d0d0; 
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   padding:0;
   margin;0;
 }
@@ -32,7 +34,7 @@ div.reflector{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border:2px solid black;
+  /*border:2px solid black;*/
   width:10%;
   height:100%;
   margin:0;
@@ -45,9 +47,9 @@ button.reflector{
   width:100%;
   padding:0;
   margin:0;
-  background:black;
+  background:#505050;
   color:white;
-  border:2px solid white;
+  border-width:0;
 }
 
 div.rotor{
@@ -55,19 +57,24 @@ div.rotor{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border:2px solid black;
+  /*border:2px solid black;*/
   width:30%;
   height:100%;
 }
 
 div.rotorname{
   float:top;
+  display:flex;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border:2px solid black;
+  background:#505050;
+  /*border:2px solid black;*/
   width:100%;
   height:10%;
+  align-items: center;
+  justify-content: center;
+
 }
 
 div.rotorchoice{
@@ -76,7 +83,7 @@ div.rotorchoice{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border:2px solid black;
+  /*border:2px solid black;*/
   width:100%;
   height:10%;
 }
@@ -85,6 +92,9 @@ button.rotorchoice{
   float:left;
   height:100%;
   width:20%;
+  background:#9a9a9a;
+  border-width:0;
+  
 }
 
 div.rotorstart{
@@ -93,28 +103,35 @@ div.rotorstart{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border:2px solid black;
+  /*border:2px solid black;*/
   width:100%;
   height:40%;
 }
 
 div.settingname{
+  display:flex;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width:100%;
   height:30%;
-  border:2px solid black;
+  background:#505050;
+  align-items: center;
+  justify-content: center;
+  /*border:2px solid black;*/
   
 }
 
 div.startsetting{
+  display:flex;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width:100%;
   height:70%;
-  border:2px solid black;  
+  align-items: center;
+  justify-content: center;
+  /*border:2px solid black;*/
 }
 
 div.rotorring{
@@ -123,18 +140,21 @@ div.rotorring{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border:2px solid black;
+  /*border:2px solid black;*/
   width:100%;
   height:40%;
 }
 
 div.ringsetting{
+  display:flex;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width:100%;
   height:70%;
-  border:2px solid black;  
+  align-items: center;
+  justify-content: center;
+  /*border:2px solid black;*/ 
 }
 
 div.board{
@@ -151,7 +171,7 @@ div.plugboard{
   width:100%;
   margin:0;
   padding:0;
-  border:2px solid black;
+  /*border:2px solid black;*/
 }
 
 /* Data view */
@@ -160,7 +180,7 @@ textarea{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border: 2px solid black;
+  /*border: 2px solid black;*/
   border-radius:0;
   padding:15px;
   margin:0;
@@ -176,7 +196,7 @@ textarea{
   width:50%;
   height:100%;
   background:#d0d0d0; 
-  border:1px solid black;
+  /*border:1px solid black;*/
   padding:0;
   margin:0;
 }
@@ -205,16 +225,16 @@ textarea.output{
 }
 
 div.title{
+  display:flex;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   background:#e0e0e0;
   width:100%;
   height:10%;
-  border:2px solid black;
-  padding:7px;
-  text-align: center;
-  font: bold 20px Sans-serif;
-  font-variant:small-caps;
+  /*border:2px solid black;*/
+  font-size:25px;
+  align-items: center;
+  justify-content: center;
 }
 
