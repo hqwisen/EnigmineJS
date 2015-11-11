@@ -51,13 +51,90 @@ button.reflector{
 }
 
 div.rotor{
-  float:right;
+  float:left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   border:2px solid black;
   width:30%;
   height:100%;
+}
+
+div.rotorname{
+  float:top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border:2px solid black;
+  width:100%;
+  height:10%;
+}
+
+div.rotorchoice{
+  display:block;
+  float:top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border:2px solid black;
+  width:100%;
+  height:10%;
+}
+
+button.rotorchoice{
+  float:left;
+  height:100%;
+  width:20%;
+}
+
+div.rotorstart{
+  display:block;
+  float:top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border:2px solid black;
+  width:100%;
+  height:40%;
+}
+
+div.settingname{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%;
+  height:30%;
+  border:2px solid black;
+  
+}
+
+div.startsetting{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%;
+  height:70%;
+  border:2px solid black;  
+}
+
+div.rotorring{
+  display:block;
+  float:top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border:2px solid black;
+  width:100%;
+  height:40%;
+}
+
+div.ringsetting{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%;
+  height:70%;
+  border:2px solid black;  
 }
 
 div.board{
