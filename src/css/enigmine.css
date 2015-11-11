@@ -22,10 +22,15 @@ html, body{
 }
 
 div.parameters{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   display:block;
   float:top;
   height:50%;
   width:100%;
+  border:2px solid #505050;
+  border-right:0;
 }
 
 div.reflector{
@@ -57,7 +62,7 @@ div.rotor{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  /*border:2px solid black;*/
+  border-right:2px solid #505050;
   width:30%;
   height:100%;
 }
@@ -69,6 +74,7 @@ div.rotorname{
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   background:#505050;
+  color:white;
   /*border:2px solid black;*/
   width:100%;
   height:10%;
@@ -116,6 +122,7 @@ div.settingname{
   width:100%;
   height:30%;
   background:#505050;
+  color:white;
   align-items: center;
   justify-content: center;
   /*border:2px solid black;*/
@@ -180,12 +187,12 @@ textarea{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  /*border: 2px solid black;*/
+  border: 2px solid #505050;
   border-radius:0;
   padding:15px;
   margin:0;
   resize:none;
-  
+  text-transform:uppercase;  
 }
 
 .data{ 
@@ -210,6 +217,7 @@ div.input{
 textarea.input{
   width:100%;
   height:90%;
+  border-left:0;
 }
 
 div.output{ 
