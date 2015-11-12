@@ -49,25 +49,29 @@ $(function(){
     enigmaMachine.setReflector("B");
   }
   
-  function addHtmlRotor(rotor){
+  function addRotorHtml(rotor){
     var name = undefined;
+    var rotorHtml = "";
     if(rotor == Enigma.LEFT_ROTOR){
-      name = "Left";
+      nameid = "left";
     }else if(rotor == Enigma.MIDDLE_ROTOR){
-      name = "Middle";
+      nameid = "middle";
     }else if(rotor == Enigma.RIGHT_ROTOR){
-      name = "Right";  
+      nameid = "right";  
     }
-    $(".parameters").append("<div class='rotor'><div class='rotorname'><span class='rotorname'>"+name+" Rotor</span></div><div class='rotorchoice'><button class='rotorchoice'>I</button><button class='rotorchoice'>II</button><button class='rotorchoice'>III</button><button class='rotorchoice'>IV</button><button class='rotorchoice'>V</button></div><div class='rotorstart'><div class='settingname'>Start</div><div class='startsetting'><div class='startvalue'>A</div><div class='startbutton'><button class='startbutton'>&#x21A5;</button><button class='startbutton'>&#x21A7;</button></div></div></div><div class='rotorstart'><div class='settingname'>Ring</div><div class='startsetting'><div class='startvalue'>A-01</div><div class='startbutton'><button class='startbutton'>&#x21A5;</button><button class='startbutton'>&#x21A7;</button></div></div></div></div>");
+    rotorHtml+=
+    
+    
+    /*$(".parameters").append("<div class='rotor'><div class='rotorname'><span class='rotorname'>"+name+" Rotor</span></div><div class='rotorchoice'><button class='rotorchoice'>I</button><button class='rotorchoice'>II</button><button class='rotorchoice'>III</button><button class='rotorchoice'>IV</button><button class='rotorchoice'>V</button></div><div class='rotorstart'><div class='settingname'>Start</div><div class='startsetting'><div class='startvalue'>A</div><div class='startbutton'><button class='startbutton'>&#x21A5;</button><button class='startbutton'>&#x21A7;</button></div></div></div><div class='rotorstart'><div class='settingname'>Ring</div><div class='startsetting'><div class='startvalue'>A-01</div><div class='startbutton'><button class='startbutton'>&#x21A5;</button><button class='startbutton'>&#x21A7;</button></div></div></div></div>");*/
   }
   
   $('#inputarea').keydown(inputChange);
   $('#refl_B').click(changeReflectorToB);
   $('#refl_C').click(changeReflectorToC);
   changeReflectorToB();
-  addHtmlRotor(Enigma.LEFT_ROTOR);
-  addHtmlRotor(Enigma.MIDDLE_ROTOR);
-  addHtmlRotor(Enigma.RIGHT_ROTOR);
+  addRotorHtml(Enigma.LEFT_ROTOR);
+  addRotorHtml(Enigma.MIDDLE_ROTOR);
+  addRotorHtml(Enigma.RIGHT_ROTOR);
 });
 /*var inputs = "HAKIM";
 var enigma = new Enigma();
