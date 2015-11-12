@@ -49,9 +49,9 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   }
   
   Rotor.log = function(rotor, message){
-    /*console.log("[Rotor]["+rotor.getName()+"] "
+    console.log("[Rotor]["+rotor.getName()+"] "
                 + message
-                + ".");*/
+                + ".");
   }
   
   Rotor.error = function(rotor, message, abort){
@@ -102,7 +102,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
       this.current = start;
     }else if(start < this.current){ 
       this.movableTable.rotateRight(this.current - start);
-      this.contactTable.rotateRight(this.current- start);
+      this.contactTable.rotateRight(this.current - start);
       this.current = start;
     }
   }

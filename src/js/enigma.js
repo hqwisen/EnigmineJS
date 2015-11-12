@@ -92,6 +92,10 @@ function Enigma(config, name){
     return Rotor.ROTORS[this.config["rotors"][r]];	
   }
 
+  this.setRotor = function(r, rotor){
+    this.config["rotors"][r] = rotor;
+  }
+  
   this.getReflector = function(){
     return Reflector.REFLECTORS[this.config["reflector"]];
   }
