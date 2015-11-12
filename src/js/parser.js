@@ -49,9 +49,23 @@ $(function(){
     enigmaMachine.setReflector("B");
   }
   
+  function htmlTagString(tag, className, idName, content){
+    return "<"+tag+" class='"
+      +(className == undefined ? "" : className)+"' id='"
+      +(idName == undefined ? "" : idName)+"'>"
+      +(content == undefined ? "" : content)+"</"+tag+">";  
+  }
+  
+  function divString(className, idName, content){
+    return htmlTagString("div", className, idName, content);
+  }
+  
+  function spanString(className, idName, content){
+      return htmlTagString("span", className, idName, content);
+  }
+  
   function addRotorHtml(rotor){
-    var name = undefined;
-    var rotorHtml = "";
+    var nameid = undefined;
     if(rotor == Enigma.LEFT_ROTOR){
       nameid = "left";
     }else if(rotor == Enigma.MIDDLE_ROTOR){
@@ -59,7 +73,16 @@ $(function(){
     }else if(rotor == Enigma.RIGHT_ROTOR){
       nameid = "right";  
     }
-    rotorHtml+=
+    var rotorid = function(str){return "rotor"+nameid+(str == undefined ? "" : str);};
+    /* Adding div rotor */
+    $(".parameters").append(divString("rotor", rotorid()));
+    /* Adding the rotorname */
+    $("#"+rotorid()).append(divString("rotorname", "",
+                                      spanString("rotorname", rotorid("name"))));
+    $("#"+rotorid("name")).append(rotorid());
+    /* Adding rotorchoice buttons */
+    $("#"+rotorid()).append(divString("rotorchoice", rotorid("choice")));
+    $("#"+rotorid("choice")).append
     
     
     /*$(".parameters").append("<div class='rotor'><div class='rotorname'><span class='rotorname'>"+name+" Rotor</span></div><div class='rotorchoice'><button class='rotorchoice'>I</button><button class='rotorchoice'>II</button><button class='rotorchoice'>III</button><button class='rotorchoice'>IV</button><button class='rotorchoice'>V</button></div><div class='rotorstart'><div class='settingname'>Start</div><div class='startsetting'><div class='startvalue'>A</div><div class='startbutton'><button class='startbutton'>&#x21A5;</button><button class='startbutton'>&#x21A7;</button></div></div></div><div class='rotorstart'><div class='settingname'>Ring</div><div class='startsetting'><div class='startvalue'>A-01</div><div class='startbutton'><button class='startbutton'>&#x21A5;</button><button class='startbutton'>&#x21A7;</button></div></div></div></div>");*/
