@@ -102,14 +102,14 @@ $(function(){
     
     this.activateChoice = function(index){
        var buttonid = this.shtmlid("choice")+index.toString();
-      $(buttonid).css({"background":"#505050"});   
+      $(buttonid).css({"background":"#505050", color:"#FFFFFF"});   
       enigmaMachine.setRotor(this.config["rotor"], Rotor.NAME[index]);
       this.setStart(enigmaMachine.getRotor(this.config["rotor"]).getCharStart());
     }
     
     this.deactivateChoice = function(index){
       var buttonid = this.shtmlid("choice")+index.toString();
-      $(buttonid).css({"background":"#9a9a9a"});   
+      $(buttonid).css({"background":"#9a9a9a", color:"#000000"});   
     }
     
     this.changeChoice = function(newIndex, checkOthers){
