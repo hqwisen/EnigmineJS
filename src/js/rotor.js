@@ -22,8 +22,10 @@ var rotorsData = {
   }
 }
 
+Rotor.NAME = ["I", "II", "III", "IV", "V"];
+
 Rotor.ROTORS = {}
-for(rotorName in rotorsData){
+for(var rotorName in rotorsData){
   Rotor.ROTORS[rotorName] = new Rotor(rotorName,
                                       rotorsData[rotorName]["wires"],
                                       rotorsData[rotorName]["notch"]);   

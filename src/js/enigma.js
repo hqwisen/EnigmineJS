@@ -1,4 +1,4 @@
-
+// TODO Static method outside definition
 Enigma.DEFAULT_CONFIG = 
 {
   "rotors":["I", "II", "III"],

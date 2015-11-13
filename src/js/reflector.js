@@ -10,7 +10,7 @@ var reflectorsData =
 }
 
 Reflector.REFLECTORS = {}
-for(reflectorName in reflectorsData){
+for(var reflectorName in reflectorsData){
   Reflector.REFLECTORS[reflectorName] = new Reflector(reflectorName,
   reflectorsData[reflectorName]["wires"]);   
 }
