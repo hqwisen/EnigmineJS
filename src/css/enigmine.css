@@ -108,7 +108,7 @@ button.rotorchoice{
   
 }
 
-div.rotorstart{
+div.settingblock{
   display:block;
   float:top;
   -webkit-box-sizing: border-box;
@@ -134,7 +134,7 @@ div.settingname{
   
 }
 
-div.startsetting{
+div.valuecontainer{
   display:block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -143,7 +143,7 @@ div.startsetting{
   height:70%;
 }
 
-div.startvalue{
+div.settingvalue{
   float:left;
   display:flex;
   -webkit-box-sizing: border-box;
@@ -151,11 +151,13 @@ div.startvalue{
   box-sizing: border-box;
   width:70%;
   height:100%;
+  font-size:30px;
+  font-weight:40px;
   align-items: center;
   justify-content: center;  
 }
 
-div.startbutton{
+div.settingbutton{
   float:left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -164,37 +166,14 @@ div.startbutton{
   height:100%;
 }
 
-button.startbutton{
+button.settingbutton{
   float:top;
   height:50%;
   width:100%;
   font-size:30px;
   border-width:0;
   background:#9a9a9a;
-  color:black;
-}
-
-div.rotorring{
-  display:block;
-  float:top;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  /*border:2px solid black;*/
-  width:100%;
-  height:40%;
-}
-
-div.ringsetting{
-  display:flex;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  width:100%;
-  height:70%;
-  align-items: center;
-  justify-content: center;
-  /*border:2px solid black;*/ 
+  color:#272525;
 }
 
 div.board{

@@ -31,7 +31,12 @@ for(var rotorName in rotorsData){
                                       rotorsData[rotorName]["notch"]);   
 }
   
-  
+Rotor.MINSET = "A";
+Rotor.MAXSET = "Z";
+Rotor.CHARCODEMINSET = Rotor.MINSET.charCodeAt(0);
+Rotor.CHARCODEMAXSET = Rotor.MAXSET.charCodeAt(0);
+
+
 function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   "use strict";
   /** Numbers are between 0-25 (A-Z) */
@@ -79,6 +84,14 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     return name;
   }
 
+  this.getCharStart = function(){
+    return Rotor.numberToChar(this.current);
+  }
+  
+  this.getCharRing = function(){
+    return Rotor.numberToChar(this.ring);
+  }
+  
   this.setRing = function(ring){
     Rotor.log(this, "setRing " + ring);
     if(typeof ring == "string"){
@@ -109,8 +122,8 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     }
   }
   // The first char of movable is the char on the little window
-  this.setRing(this.ring);
-  this.setStart(this.current);
+  //this.setRing(this.ring);
+  //this.setStart(this.current);
   
   this.processIn = function(cinput){
     var coutput, ninput, ncontact, nrandom, npos;
