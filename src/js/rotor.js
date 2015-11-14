@@ -106,7 +106,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
       this.ring = ring;
     }
   }
-
+  // TODO ambiguité entre setStart et rotation pour rotorhtml
   this.setStart = function(start){
     Rotor.log(this, "setStart " + start);
     if(typeof start == "string"){
