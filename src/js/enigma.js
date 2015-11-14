@@ -52,8 +52,8 @@ function Enigma(config, name){
 
   this.process = function(cinput){
     var coutput;
-    this.rotateRotor(Enigma.RIGHT_ROTOR);
     Enigma.log(this, "begin process for "+cinput);
+    this.rotateRotor(Enigma.RIGHT_ROTOR);
     coutput = this.processInRotor(Enigma.RIGHT_ROTOR, cinput);
     coutput = this.processInRotor(Enigma.MIDDLE_ROTOR, coutput);
     coutput = this.processInRotor(Enigma.LEFT_ROTOR, coutput);
@@ -75,7 +75,8 @@ function Enigma(config, name){
   }
 
   this.rotateRotor = function(r){
-    this.getRotor(r).rotate();
+    this.getRotor(r).rotate([this.getRotor(Enigma.MIDDLE_ROTOR),
+                             this.getRotor(Enigma.LEFT_ROTOR)]);
   }
 
   this.setRingRotor = function(r, ring){
@@ -93,7 +94,6 @@ function Enigma(config, name){
   }
 
   this.setRotor = function(r, rotor){
-    this.getRotor(r).unsetRotorHtml();
     this.config["rotors"][r] = rotor;
   }
   

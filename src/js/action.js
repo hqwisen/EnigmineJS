@@ -1,5 +1,11 @@
 $(function(){
   "use strict";
+  
+  // TODO disable buttons when running
+  // TODO afficher position de depart
+  // TODO input back up
+  // TODO plugboard
+  
   /* Instanciate an enigma machine */
   
   var enigmaMachine = new Enigma();
@@ -232,12 +238,10 @@ $(function(){
         +(value == undefined ? "" : value);
     }
     
-    this.startUp = function(){
-      $(this.shtmlid("startup")).click();
-    }
-    
-    this.startDown = function(){
-      $(this.shtmlid("startdown")).click();
+    this.rotate = function(){
+      var start = enigmaMachine.getRotor(this.config["rotor"]).getCharStart();
+      $(this.shtmlid("startvalue")).text(start);
+      this.config["start"] = start;
     }
     
     this.logConfig = function(){

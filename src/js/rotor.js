@@ -135,7 +135,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     else if(cinput.length != 1){
       Rotor.error(this, "can't process with a cinput.length != 1", true);
     }
-    Rotor.log(this, "begin processIn for '"+cinput+"'");
+    Rotor.log(this, "begin processIn for '"+cinput+"' "+ Rotor.numberToChar(this.current));
     //Rotor.log(this, "movable: "+this.movableTable.toString());
     //Rotor.log(this, "contact: "+this.contactTable.toString());
     ninput = Rotor.charToNumber(cinput);
@@ -165,21 +165,31 @@ this.processOut = function(cinput){
     Rotor.log(this, "end processOut for '"+cinput+"' and product '"+coutput+"'"); 
     return coutput; 
   }
-
-  this.rotate = function(){
+  // TODO fix notch rotation
+  this.rotate = function(otherList){
     Rotor.log(this, "rotate");
+    /*if(otherList.length != 0 && this.current == this.notch){
+      otherList[0].rotate(otherList.slice(1, otherList.length));
+    }*/
     this.movableTable.rotateLeft(1);
     this.contactTable.rotateLeft(1);
+    if(this.current == Rotor.charToNumber(Rotor.MAXSET)){
+      this.current = 0;
+    }else{
+      this.current += 1;
+    }
     if(this.rhtml != undefined){
-      this.rhtml.startUp();
+      this.rhtml.rotate();
     }
   }
 
   this.setRotorHtml = function(rhtml){
+    Rotor.log(this, "setRotorHtml");
     this.rhtml = rhtml;
   }
   
   this.unsetRotorHtml = function(){
+    Rotor.log(this, "unsetRotorHtml");
     this.rhtml = undefined;
   }
   
