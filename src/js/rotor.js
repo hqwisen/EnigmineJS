@@ -79,6 +79,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   this.current = Rotor.charToNumber(startChar) || 0;
   this.ring = Rotor.charToNumber(ringChar) || 0;
   this.notch = Rotor.charToNumber(notchChar);
+  this.rhtml = undefined;
   
   this.getName = function(){
     return name;
@@ -169,8 +170,19 @@ this.processOut = function(cinput){
     Rotor.log(this, "rotate");
     this.movableTable.rotateLeft(1);
     this.contactTable.rotateLeft(1);
+    if(this.rhtml != undefined){
+      this.rhtml.startUp();
+    }
   }
 
+  this.setRotorHtml = function(rhtml){
+    this.rhtml = rhtml;
+  }
+  
+  this.unsetRotorHtml = function(){
+    this.rhtml = undefined;
+  }
+  
   this.getRandom = function(number){
     return Rotor.charToNumber(this.wiringTableAt(number)); 
   }

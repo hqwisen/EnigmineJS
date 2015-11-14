@@ -39,7 +39,7 @@ $(function(){
   var leftConfig = {
     "rotor":Enigma.LEFT_ROTOR,
     "side":"left",
-    "defaultindex":4,
+    "defaultindex":0,
     "start":undefined,
     "ring":undefined   
   }
@@ -93,6 +93,30 @@ $(function(){
     rhtml.setStart(String.fromCharCode(charCode));
   }
 
+    function ringUp(event){
+    var rhtml = event.data.rhtml;
+    var value = rhtml.config["ring"];
+    var charCode = value.charCodeAt(0);
+    if(charCode >= Rotor.CHARCODEMAXSET){
+      charCode = Rotor.CHARCODEMINSET;
+    }else{
+      charCode += 1;
+    }
+    rhtml.setRing(String.fromCharCode(charCode));
+  }
+
+  function ringDown(event){
+    var rhtml = event.data.rhtml;
+    var value = rhtml.config["ring"];
+    var charCode = value.charCodeAt(0);
+    if(charCode <= Rotor.CHARCODEMINSET){
+      charCode = Rotor.CHARCODEMAXSET;
+    }else{
+      charCode -= 1;
+    }
+    rhtml.setRing(String.fromCharCode(charCode));
+  }
+
   
   /* RotorHtml class */
   function RotorHtml(config){
@@ -104,7 +128,10 @@ $(function(){
        var buttonid = this.shtmlid("choice")+index.toString();
       $(buttonid).css({"background":"#505050", color:"#FFFFFF"});   
       enigmaMachine.setRotor(this.config["rotor"], Rotor.NAME[index]);
+      // TODO fix bug with setRotorHtml (enigma dont encrypt good)
+      enigmaMachine.setRotorHtml(this.config["rotor"], this);
       this.setStart(enigmaMachine.getRotor(this.config["rotor"]).getCharStart());
+      this.setRing(enigmaMachine.getRotor(this.config["rotor"]).getCharRing());
     }
     
     this.deactivateChoice = function(index){
@@ -134,6 +161,12 @@ $(function(){
       this.config["start"] = start;
     }
     
+    this.setRing = function(ring){
+      enigmaMachine.setRingRotor(this.config["rotor"], ring);
+      $(this.shtmlid("ringvalue")).text(ring);
+      this.config["ring"] = ring;
+    }
+    
     this.build = function(){
       var tmp;
       /* Add div rotor */
@@ -151,34 +184,43 @@ $(function(){
         $(this.shtmlid("choice"+i.toString())).click({rhtml:this, "index":i}, choiceAction);
       }
       /* Adding startblock */
-      tmp = HtmlUtil.div("settingblock", this.htmlid("startblock"));
-      $(this.shtmlid()).append(tmp);
-      /* Adding start title*/
-      tmp = HtmlUtil.div("settingname", "", "Start");
-      $(this.shtmlid("startblock")).append(tmp);
-      /* Adding valuecontainer */
-      tmp = HtmlUtil.div("valuecontainer", this.htmlid("startcontainer"));
-      $(this.shtmlid("startblock")).append(tmp);
-      /* Adding value */
-      tmp = HtmlUtil.div("settingvalue", this.htmlid("startvalue"));
-      $(this.shtmlid("startcontainer")).append(tmp);
-      /* Adding startbuttons */
-      tmp = HtmlUtil.div("settingbutton", this.htmlid("startbuttons"));
-      $(this.shtmlid("startcontainer")).append(tmp);
-      $(this.shtmlid("startbuttons")).append(HtmlUtil.button("settingbutton", this.htmlid("startup")));
-      $(this.shtmlid("startbuttons")).append(HtmlUtil.button("settingbutton", this.htmlid("startdown")));
-      $(this.shtmlid("startup")).append("&#x21A5;");
-      $(this.shtmlid("startdown")).append("&#x21A7;");
-      /* Setting default start value */
-      //this.setStart(this.config["start"]);
-      // ALREADY setStart in default activateChoice
+      this.buildBlock("start");
+      /* Adding ringblock */
+      this.buildBlock("ring");
       /* Adding listener to up/down buttons */
       $(this.shtmlid("startup")).click({rhtml:this}, startUp);
       $(this.shtmlid("startdown")).click({rhtml:this}, startDown);
+      $(this.shtmlid("ringup")).click({rhtml:this}, ringUp);
+      $(this.shtmlid("ringdown")).click({rhtml:this}, ringDown);
       /* Active a default rotor */
       this.activateChoice(this.config["defaultindex"]);
       this.currentIndex = this.config["defaultindex"];
-      
+    }
+    
+    this.buildBlock = function(name){
+      var tmp;
+      /* Adding block */
+      tmp = HtmlUtil.div("settingblock", this.htmlid(name+"block"));
+      $(this.shtmlid()).append(tmp);
+      /* Adding title name */
+      tmp = HtmlUtil.div("settingname", "", name);
+      $(this.shtmlid(name+"block")).append(tmp);
+      /* Adding valuecontainer */
+      tmp = HtmlUtil.div("valuecontainer", this.htmlid(name+"container"));
+      $(this.shtmlid(name+"block")).append(tmp);
+      /* Adding value */
+      tmp = HtmlUtil.div("settingvalue", this.htmlid(name+"value"));
+      $(this.shtmlid(name+"container")).append(tmp);
+      /* Adding up/down buttons */
+      tmp = HtmlUtil.div("settingbutton", this.htmlid(name+"buttons"));
+      $(this.shtmlid(name+"container")).append(tmp);
+      $(this.shtmlid(name+"buttons")).append(HtmlUtil.button("settingbutton", this.htmlid(name+"up")));
+      $(this.shtmlid(name+"buttons")).append(HtmlUtil.button("settingbutton", this.htmlid(name+"down")));
+      $(this.shtmlid(name+"up")).append("&#9650;");
+      $(this.shtmlid(name+"down")).append("&#9660;");
+      /* Setting default start value */
+      //this.setStart(this.config["start"]);
+      // ALREADY setStart in default activateChoice
     }
     
     this.shtmlid = function(value){
@@ -188,6 +230,14 @@ $(function(){
     this.htmlid = function(value){
       return "rotor"+config["side"]
         +(value == undefined ? "" : value);
+    }
+    
+    this.startUp = function(){
+      $(this.shtmlid("startup")).click();
+    }
+    
+    this.startDown = function(){
+      $(this.shtmlid("startdown")).click();
     }
     
     this.logConfig = function(){

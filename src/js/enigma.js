@@ -93,7 +93,12 @@ function Enigma(config, name){
   }
 
   this.setRotor = function(r, rotor){
+    this.getRotor(r).unsetRotorHtml();
     this.config["rotors"][r] = rotor;
+  }
+  
+  this.setRotorHtml = function(r, rhtml){
+    //this.getRotor(r).setRotorHtml(rhtml);
   }
   
   this.getReflector = function(){
