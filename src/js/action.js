@@ -1,7 +1,6 @@
 $(function(){
   "use strict";
   
-  // TODO disable buttons when running
   // TODO afficher position de depart
   // TODO input back up
   // TODO plugboard
@@ -9,10 +8,17 @@ $(function(){
   /* Instanciate an enigma machine */
   
   var enigmaMachine = new Enigma();
+  var tape = false;
   
   /* Execute enigma */
   
   function inputChange(e){
+    if(!tape){
+      for(var rname in RotorHtml.ROTORS){
+        RotorHtml.ROTORS[rname].disableStartButtons();
+      }
+      tape = true;
+    }
     if (e.which >= 65 && e.which <= 90) {
       this.lastChar = String.fromCharCode(e.keyCode);  
       this.encryptChar = enigmaMachine.process(this.lastChar);
@@ -134,7 +140,6 @@ $(function(){
        var buttonid = this.shtmlid("choice")+index.toString();
       $(buttonid).css({"background":"#505050", color:"#FFFFFF"});   
       enigmaMachine.setRotor(this.config["rotor"], Rotor.NAME[index]);
-      // TODO fix bug with setRotorHtml (enigma dont encrypt good)
       enigmaMachine.setRotorHtml(this.config["rotor"], this);
       this.setStart(enigmaMachine.getRotor(this.config["rotor"]).getCharStart());
       this.setRing(enigmaMachine.getRotor(this.config["rotor"]).getCharRing());
@@ -242,6 +247,16 @@ $(function(){
       var start = enigmaMachine.getRotor(this.config["rotor"]).getCharStart();
       $(this.shtmlid("startvalue")).text(start);
       this.config["start"] = start;
+    }
+    
+    this.disableStartButtons = function(){
+      $(this.shtmlid("startup")).prop("disabled", true);
+      $(this.shtmlid("startup")).css({color:"#525252"});
+      $(this.shtmlid("startup")).text("-");
+      $(this.shtmlid("startdown")).prop("disabled", true);
+      $(this.shtmlid("startdown")).css({color:"#525252"});
+      $(this.shtmlid("startdown")).text("-");
+      
     }
     
     this.logConfig = function(){

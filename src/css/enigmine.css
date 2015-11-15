@@ -14,7 +14,7 @@ html, body{
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float:left;
-  width:50%;
+  width:65%;
   height:100%;
   background:#9a9a9a; 
   /*border: 1px solid black;*/
@@ -183,6 +183,7 @@ div.board{
 }
 
 div.plugboard{
+  display:block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -192,6 +193,154 @@ div.plugboard{
   padding:0;
   /*border:2px solid black;*/
 }
+
+div.plugblock{
+  float:left;
+  display:block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height:100%;
+  width:25%;
+}
+
+div.plugaddbutton{
+  display:block;
+  float:bottom;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height:40%;
+  width:100%;
+  background:black;
+}
+
+button.plugaddbutton{
+  float:top;
+  display:flex;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%;
+  height:100%;
+  font-size:30px;
+  font-weight:40px;
+  align-items: center;
+  justify-content: center; 
+  /*padding:0;
+  margin:0;*/
+  background:#505050;
+  color:white;
+  border-width:0;
+  border:0px black solid;
+  
+  
+}
+
+div.plugcontainer{
+  display:block;
+  float:top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height:60%;
+  width:100%;
+}
+
+
+div.plugchoicecontainer{
+  float:top;
+  display:block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:100%;
+  height:50%;
+}
+
+div.plugchoicevalue{
+  float:left;
+  display:flex;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:55%;
+  height:90%;
+  font-size:30px;
+  font-weight:40px;
+  align-items: center;
+  justify-content: center;  
+}
+
+div.plugchoicebutton{
+  float:right;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:45%;
+  height:90%;
+}
+
+button.plugchoicebutton{
+  float:top;
+  height:50%;
+  width:100%;
+  font-size:30px;
+  border-width:0;
+  background:#9a9a9a;
+  color:#272525;
+}
+
+
+div.plugvalueblock{
+  float:right;
+  display:block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height:100%;
+  width:75%;
+}
+
+div.plugvaluerow{
+  float:top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height:50%;
+  width:100%;
+  border:1px solid black;
+}
+
+div.plugvalue{
+  float:left;
+  display:flex;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width:20%;
+  height:100%;
+  font-size:30px;
+  font-weight:40px;
+  align-items: center;
+  justify-content: center;  
+}
+
+button.plugvaluedelete{
+  border:0px solid black;
+  background:#9a9a9a;
+  margin-left:10px;
+}
+
+button.plugvaluedelete:hover{
+  border:0px inset #4e0000;
+  color:black;
+  background:#7c3535;
+  margin-left:10px;
+}
+
+
+
 
 /* Data view */
 
@@ -213,7 +362,7 @@ textarea{
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float:right;
-  width:50%;
+  width:35%;
   height:100%;
   background:#d0d0d0; 
   /*border:1px solid black;*/
