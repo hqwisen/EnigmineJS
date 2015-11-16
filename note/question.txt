@@ -1,1 +1,5 @@
 1) utiliser jquery ?
+2) design
+3) musteam
+4) methode input (delete one, delete in middle, copy/paste)
+5) chrome compatibilité

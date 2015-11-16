@@ -44,7 +44,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     if(char == undefined){
       return undefined;
     }
-    char = String.toUpperCase(char);
+    char = char.toUpperCase();
     return (char.charCodeAt(0) - "A".charCodeAt(0));  
   }
   
