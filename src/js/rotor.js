@@ -135,7 +135,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     else if(cinput.length != 1){
       Rotor.error(this, "can't process with a cinput.length != 1", true);
     }
-    Rotor.log(this, "begin processIn for '"+cinput+"' "+    Rotor.numberToChar(this.current));
+    Rotor.log(this, "begin processIn for '"+cinput+"'");
     //Rotor.log(this, "movable: "+this.movableTable.toString());
     //Rotor.log(this, "contact: "+this.contactTable.toString());
     ninput = Rotor.charToNumber(cinput);

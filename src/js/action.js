@@ -263,6 +263,195 @@ $(function(){
       console.log(this.config);
     }
   }
+  /* Plugboard listener  */
+  
+  function plugChoiceUp(event){
+    var phtml = event.data.phtml;
+    var choice = event.data.choice;
+    phtml.plugChoiceUp(choice);
+  }
+  
+  function plugChoiceDown(event){
+    var phtml = event.data.phtml;
+    var choice = event.data.choice;
+    phtml.plugChoiceDown(choice);
+  }
+  
+  function addPlugChoice(event){
+    var phtml = event.data.phtml;
+    var values = phtml.getPlugChoiceValues();
+    phtml.addPlug(values[0], values[1]);
+  }
+  
+  function delPlugChoice(event){
+    var phtml = event.data.phtml;
+    var delchoice = event.data.delchoice;
+    phtml.delPlug(delchoice);
+  }
+  
+  /* PlugboardHtml class */
+  
+  function PlugboardHtml(){
+
+    this.plugList = [];
+    this.ROWS = 2;
+    this.COLS = 5;
+    
+    this.build = function(){
+      var tmp;
+      /* Add div plugblock */
+      tmp = HtmlUtil.div("plugblock", this.htmlid("block"));
+      $(".plugboard").append(tmp);
+      /* Add plugcontainer */
+      tmp = HtmlUtil.div("plugcontainer", this.htmlid("container"));
+      $(this.shtmlid("block")).append(tmp);
+      for(var i=0;i<2;i++){
+        /* add plugchoicecontainer */
+        tmp = HtmlUtil.div("plugchoicecontainer", this.htmlid("choicecontainer"+i));
+        $(this.shtmlid("container")).append(tmp);
+        /* add plugchoicevalue */
+        tmp = HtmlUtil.div("plugchoicevalue", this.htmlid("choicevalue"+i));
+        $(this.shtmlid("choicecontainer"+i)).append(tmp);
+        $(this.shtmlid("choicevalue"+i)).append(i % 2 == 0 ? "A" : "B");
+        /* add plugchoicebutton */
+        tmp = HtmlUtil.div("plugchoicebutton", this.htmlid("choicebutton"+i));
+        $(this.shtmlid("choicecontainer"+i)).append(tmp);
+        tmp = HtmlUtil.button("plugchoicebutton", this.htmlid("choicebuttonup"+i));
+        $(this.shtmlid("choicebutton"+i)).append(tmp);
+        $(this.shtmlid("choicebuttonup"+i)).append(" &#9650;");    
+        $(this.shtmlid("choicebuttonup"+i)).click({phtml:this, choice:i}, plugChoiceUp);
+        tmp = HtmlUtil.button("plugchoicebutton", this.htmlid("choicebuttondown"+i));
+        $(this.shtmlid("choicebutton"+i)).append(tmp);
+        $(this.shtmlid("choicebuttondown"+i)).append(" &#9660;");                  
+                $(this.shtmlid("choicebuttondown"+i)).click({phtml:this, choice:i}, plugChoiceDown);
+      }
+      /* Add + button */
+      tmp = HtmlUtil.div("plugaddbutton", this.htmlid("addbutton"));
+      $(this.shtmlid("block")).append(tmp);
+      tmp = HtmlUtil.button("plugaddbutton", this.htmlid("plusbutton"));
+      $(this.shtmlid("addbutton")).append(tmp);
+      $(this.shtmlid("plusbutton")).append("+");
+      $(this.shtmlid("plusbutton")).click({phtml:this}, addPlugChoice);   
+      /* Add plugvalueblock */
+      tmp = HtmlUtil.div("plugvalueblock", this.htmlid("valueblock"));
+      $(".plugboard").append(tmp);
+      /* Add plugvaluerows */
+      for(var row=0;row<this.ROWS;row++){
+        tmp = HtmlUtil.div("plugvaluerow", this.htmlid("valuerow"+row));
+        $(this.shtmlid("valueblock")).append(tmp);
+      }  
+    }
+    
+    
+    this.refreshPlugboard = function(refreshChoice){
+      var tmp;
+      var counter = 1;
+      var breakAddPlug = false;
+      for(var row=0;row<this.ROWS;row++){
+        $(this.shtmlid("valuerow"+row)).text("");
+        for(var col=0;col<this.COLS;col++){
+          if(counter  <= this.plugList.length){
+            tmp = HtmlUtil.div("plugvalue", this.htmlid("valuerow"+row+col));
+            $(this.shtmlid("valuerow"+row)).append(tmp);
+            tmp = enigmaMachine.plugToStr(this.plugList[counter-1][0], this.plugList[counter-1][1]);
+            $(this.shtmlid("valuerow"+row+col)).append(tmp);
+            tmp = HtmlUtil.button("plugvaluedelete", this.htmlid("delete"+row+col));
+            $(this.shtmlid("valuerow"+row+col)).append(tmp);
+            $(this.shtmlid("delete"+row+col)).append("&#10060;");
+            $(this.shtmlid("delete"+row+col)).click({phtml:this, delchoice:(counter-1)}, delPlugChoice);         
+          }else{
+            breakAddPlug = true;
+          }
+          if(breakAddPlug){
+            break;
+          }else{
+            counter++;    
+          }
+        }
+        if(breakAddPlug){
+            break;
+        }
+      }
+      counter--;
+      if(refreshChoice){
+        this.plugChoiceUp(0);
+        this.plugChoiceUp(1);        
+      }
+      if(counter == enigmaMachine.MAXCABLE){
+        $(this.shtmlid("plusbutton")).prop("disabled", true);
+        $(this.shtmlid("plusbutton")).css({background:"#9a9a9a"});
+        $(this.shtmlid("plusbutton")).text(""); 
+      }else{
+        $(this.shtmlid("plusbutton")).prop("disabled", false);
+        $(this.shtmlid("plusbutton")).css({background:"#505050"});
+        $(this.shtmlid("plusbutton")).text("+"); 
+      }
+    }
+    
+    this.getPlugChoiceValues = function(){
+      return [$(this.shtmlid("choicevalue0")).text(),
+             $(this.shtmlid("choicevalue1")).text()];
+    }
+    
+    this.plugChoiceUp = function(choice){
+      var char = $(this.shtmlid("choicevalue"+choice)).text();
+      var otherChoice = choice % 2 == 0 ? 1 : 0;
+      var otherChar = $(this.shtmlid("choicevalue"+otherChoice)).text();
+      var charCode = char.charCodeAt(0);
+      var foundNext = false;
+      while(!foundNext){
+        if(charCode >= Rotor.CHARCODEMAXSET){
+          charCode = Rotor.CHARCODEMINSET;
+        }else{
+          charCode += 1;
+        }
+        char = String.fromCharCode(charCode);
+        foundNext = !enigmaMachine.isPlugboardUsed(char) && !(char == otherChar);
+      }
+      $(this.shtmlid("choicevalue"+choice)).text(char);
+    }
+    
+    this.plugChoiceDown = function(choice){
+      var char = $(this.shtmlid("choicevalue"+choice)).text();
+      var otherChoice = choice % 2 == 0 ? 1 : 0;
+      var otherChar = $(this.shtmlid("choicevalue"+otherChoice)).text();
+      var charCode = char.charCodeAt(0);
+      var foundNext = false;
+      while(!foundNext){
+        if(charCode <= Rotor.CHARCODEMINSET){
+          charCode = Rotor.CHARCODEMAXSET;
+        }else{
+          charCode -= 1;
+        }
+        char = String.fromCharCode(charCode);
+        foundNext = !enigmaMachine.isPlugboardUsed(char) && !(char == otherChar);
+      }
+      $(this.shtmlid("choicevalue"+choice)).text(char);
+    }
+    
+    this.addPlug = function(charIn, charOut){
+      enigmaMachine.addToPlugboard(charIn, charOut);
+      this.plugList.push([charIn, charOut]);
+      this.refreshPlugboard(true);
+;   }
+    
+    this.delPlug = function(delchoice){
+      var charIn = this.plugList[delchoice][0];
+      var charOut = this.plugList[delchoice][1];
+      enigmaMachine.deleteToPlugboard(charIn, charOut);
+      this.plugList.splice(delchoice, 1);
+      this.refreshPlugboard(false);
+    }
+    
+    this.shtmlid = function(value){
+      return "#plugboard"+(value == undefined ? "" : value);
+    }
+    this.htmlid = function(value){
+      return "plugboard"+(value == undefined ? "" : value);
+    }
+    
+  }
+  
   /* Add listener to inputarea */
   $('#inputarea').keydown(inputChange);
   /* Add listener to reflector buttons */
@@ -274,8 +463,7 @@ $(function(){
   for(var side in RotorHtml.ROTORS){
     RotorHtml.ROTORS[side].build();
   }
+  /* Build PlugboardHtml */
+  var phtml = new PlugboardHtml();
+  phtml.build();
 });
-
-
-
-

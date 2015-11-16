@@ -223,8 +223,7 @@ button.plugaddbutton{
   box-sizing: border-box;
   width:100%;
   height:100%;
-  font-size:30px;
-  font-weight:40px;
+  font-size:70px;
   align-items: center;
   justify-content: center; 
   /*padding:0;
@@ -309,7 +308,7 @@ div.plugvaluerow{
   box-sizing: border-box;
   height:50%;
   width:100%;
-  border:1px solid black;
+  border:0px solid black;
 }
 
 div.plugvalue{
@@ -330,13 +329,16 @@ button.plugvaluedelete{
   border:0px solid black;
   background:#9a9a9a;
   margin-left:10px;
+  background:transparent;
+  color:#d8d8d8;
 }
 
 button.plugvaluedelete:hover{
   border:0px inset #4e0000;
   color:black;
-  background:#7c3535;
   margin-left:10px;
+  background:transparent;
+  color:#9d1616;
 }
 
 

@@ -12,7 +12,7 @@ Enigma.MIDDLE_ROTOR = 1;
 Enigma.LEFT_ROTOR = 0;
 
 
-function Enigma(config, name){
+function Enigma(config, name, maxCable){
   "use strict";
   Enigma.log = function(enig, message){
     console.log("[Enigma]["+enig.getName()+"] "
@@ -31,9 +31,11 @@ function Enigma(config, name){
     console.error(fullMessage);
   }
 
+  this.MAXCABLE = maxCable || 10;
   this.config = config || Enigma.DEFAULT_CONFIG;
   this.name = name || "Enigma I";
-
+  this.plugboard = new Plugboard(this.MAXCABLE);
+  
   this.applyConfig = function(config){
     this.setStartRotor(Enigma.RIGHT_ROTOR,
                        this.config["starts"][Enigma.RIGHT_ROTOR]);
@@ -47,12 +49,12 @@ function Enigma(config, name){
                        this.config["rings"][Enigma.MIDDLE_ROTOR]);
     this.setRingRotor(Enigma.LEFT_ROTOR,
                        this.config["rings"][Enigma.LEFT_ROTOR]);
-  
   }
 
   this.process = function(cinput){
     var coutput;
     Enigma.log(this, "begin process for "+cinput);
+    cinput = this.plugboard.plug(cinput);
     if(this.matchNotchRotor(Enigma.MIDDLE_ROTOR)){
       this.rotateRotor(Enigma.MIDDLE_ROTOR);
       this.rotateRotor(Enigma.LEFT_ROTOR);
@@ -122,6 +124,26 @@ function Enigma(config, name){
     return this.getReflector().process(cinput);
   }
 
+  this.addToPlugboard = function(charIn, charOut){
+    this.plugboard.add(charIn, charOut);
+  }
+  
+  this.deleteToPlugboard = function(charIn, charOut){
+    this.plugboard.delete(charIn, charOut);
+  }
+  
+  this.plugToStr = function(charIn, charOut){
+    return this.plugboard.combToStr(charIn, charOut);
+  }
+  
+  this.isPlugboardUsed = function(char){
+    return this.plugboard.used(char);
+  }
+  
+  this.setPlugboardHtml = function(phtml){
+    this.plugboard.setPlugboarHtml(phtml);
+  }
+  
   this.getConfig = function(){
     return this.config;
   }
