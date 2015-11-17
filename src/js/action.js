@@ -4,26 +4,156 @@ $(function(){
   // TODO afficher position de depart
   // TODO input back up
   // TODO plugboard
+  // TODO selection + keydown (pas delete ou backspace
+  // TODO Keydown au mileu du texte
+  // TODO delete of non-alpha char 
+  // TODO quand ecrit texte au milieu
   
   /* Instanciate an enigma machine */
   
   var enigmaMachine = new Enigma();
-  var tape = false;
+  var selectedText = undefined;
   
-  /* Execute enigma */
+  /* InputHandler (Execute enigma) */
   
-  function inputChange(e){
-    if(!tape){
-      for(var rname in RotorHtml.ROTORS){
-        RotorHtml.ROTORS[rname].disableStartButtons();
+  
+  InputHandler.inputChange = function(event){
+    var handler = event.data.handler;
+    if (event.which >= KeyCode.A && event.which <= KeyCode.Z) {
+      if(!handler.tape){
+        for(var rname in RotorHtml.ROTORS){
+          RotorHtml.ROTORS[rname].disableStartButtons();
+        }
+        handler.tape = true;
       }
-      tape = true;
-    }
-    if (e.which >= 65 && e.which <= 90) {
-      this.lastChar = String.fromCharCode(e.keyCode);  
+      this.lastChar = String.fromCharCode(event.keyCode);  
       this.encryptChar = enigmaMachine.process(this.lastChar);
-      $('#outputarea').html($('#outputarea').html() + this.encryptChar);
-    }  
+      handler.setOutputVal(handler.getOutputVal() + this.encryptChar);
+    }else if(event.which == KeyCode.BACKSPACE){
+      handler.refreshOutput();
+    }else if(event.which == KeyCode.DELETE){
+      console.log("delete");
+    }else{
+      //event.preventDefault();
+    }      
+  }  
+  
+  /*InputHandler.inputClick = function(event){
+    var handler = event.data.handler;
+    
+    console.log($(handler.sinputid())[0].selectionStart);
+  }*/
+  
+  
+  function InputHandler(inputid, outputid){
+  /* 
+  function showSelection(){
+    var textComponent = document.getElementById('inputarea');
+    if (textComponent.selectionStart != undefined)
+    {
+      var startPos = textComponent.selectionStart;
+      var endPos = textComponent.selectionEnd;
+      selectedText = textComponent.value.substring(startPos, endPos)
+    }
+    console.log(textComponent.selectionStart+" - "+textComponent.selectionEnd+" : "+selectedText);
+  }
+  
+  function inputMouseUp(){  
+    var textComponent = document.getElementById('inputarea');    
+    console.log("inputmouseUp = " + textComponent.selectionStart+" - "+textComponent.selectionEnd);
+    console.log(textComponent.value);
+  }
+
+  
+  $("#inputarea").select(showSelection);
+  $("#inputarea").mouseup(inputMouseUp); */   
+    
+    this.tape = false;
+    this.inputid = inputid;
+    this.outputid = outputid;
+
+    this.listen = function(){
+      $(this.shtml(inputid)).keydown({handler:this}, InputHandler.inputChange);
+      //$(this.shtml(inputid)).mouseup({handler:this}, InputHandler.inputClick);
+    }
+    
+    this.refreshOutput = function(){
+      var start = this.getSelectionStart(), end = this.getSelectionEnd();
+      var outputString = this.getOutputVal();
+      var newOutput = undefined;
+      var nbrDel = undefined;
+      if(start != 0 || end != 0){
+        if(start == end){
+          newOutput = StringUtil.removeSeq(outputString, start-1, start);
+          nbrDel = newOutput.length - (start - 1);
+          newOutput = StringUtil.removeSeq(newOutput, start-1, newOutput.length);
+          enigmaMachine.reverseProcess(nbrDel+1);
+          for(var i=0;i<nbrDel;i++){
+            // Char in inputval is not deleted (yet)
+            newOutput += enigmaMachine.process(this.getInputVal().charAt(start+i));
+          }
+        }else{
+          newOutput = StringUtil.removeSeq(outputString, start, end);
+          nbrDel = newOutput.length - start;
+          newOutput = StringUtil.removeSeq(newOutput, start, newOutput.length);
+          enigmaMachine.reverseProcess(nbrDel+(end-start));
+          for(var i=0;i<nbrDel;i++){
+            // Char in inputval is not deleted (yet)
+            newOutput += enigmaMachine.process(this.getInputVal().charAt(end+i));
+          }          
+        }
+        this.setOutputVal(newOutput);
+      }
+      /*console.log("refreshingoutuput");
+      console.log(this.getSelectionStart() + " - " + this.getSelectionEnd());
+      console.log("before = " + outputString.slice(0, this.getSelectionStart()));
+      console.log("before = " + outputString.slice(this.getSelectionEnd(), outputString.length));
+      console.log(outputString.slice(this.getSelectionStart(), this.getSelectionEnd()));*/
+    }
+    
+    this.shtml = function(id){
+      return "#"+id;
+    }
+    
+    this.sinputid = function(){
+      return this.shtml(this.inputid);
+    }
+    this.soutputid = function(){
+      return this.shtml(this.outputid);
+    }
+    
+    this.getVal = function(id){
+      return $(this.shtml(id)).val();
+    }
+    
+    this.setVal = function(id, value){
+      $(this.shtml(id)).val(value);
+    }
+    
+    this.getOutputVal = function(){
+      return this.getVal(outputid);  
+    }
+    
+    this.getInputVal = function(){
+      return this.getVal(inputid);
+    }
+    
+    this.setOutputVal = function(value){
+      this.setVal(outputid, value);
+    }
+    
+    this.setInputVal = function(value){
+      this.setVal(inputid, value);
+    }
+    
+    this.getSelectionStart = function(){
+      return $(this.sinputid())[0].selectionStart;
+    }
+    
+    this.getSelectionEnd = function(){
+      return $(this.sinputid())[0].selectionEnd;  
+    }
+    
   }
   
   /* Reflector choice */
@@ -74,6 +204,7 @@ $(function(){
   RotorHtml.ROTORS = {"left":new RotorHtml(leftConfig),
                      "middle":new RotorHtml(middleConfig),
                      "right":new RotorHtml(rightConfig)};
+  
   /* RotorHtml listener */
   function choiceAction(event){
     var rhtml = event.data.rhtml;
@@ -243,7 +374,7 @@ $(function(){
         +(value == undefined ? "" : value);
     }
     
-    this.rotate = function(){
+    this.refresh = function(){
       var start = enigmaMachine.getRotor(this.config["rotor"]).getCharStart();
       $(this.shtmlid("startvalue")).text(start);
       this.config["start"] = start;
@@ -453,7 +584,8 @@ $(function(){
   }
   
   /* Add listener to inputarea */
-  $('#inputarea').keydown(inputChange);
+  var inputHandler = new InputHandler("inputarea", "outputarea");
+  inputHandler.listen();
   /* Add listener to reflector buttons */
   $('#refl_B').click(changeReflectorToB);
   $('#refl_C').click(changeReflectorToC);

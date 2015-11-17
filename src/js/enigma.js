@@ -75,6 +75,22 @@ function Enigma(config, name, maxCable){
     return coutput;
   }
 
+  this.reverseProcess = function(loop){
+    loop = loop || 1;
+    Enigma.log(this, "begin a "+loop+" loop reverseProcess");
+    for(var i=0;i<loop;i++){
+      Enigma.log(this, "begin reverseProcess");
+      this.reverseRotateRotor(Enigma.RIGHT_ROTOR);
+      if(this.matchNotchRotor(Enigma.RIGHT_ROTOR)){
+        this.reverseRotateRotor(Enigma.MIDDLE_ROTOR);
+      }else if(this.matchNotchBeforeRotor(Enigma.MIDDLE_ROTOR)){
+        this.reverseRotateRotor(Enigma.MIDDLE_ROTOR);
+        this.reverseRotateRotor(Enigma.LEFT_ROTOR);
+      }
+      Enigma.log(this, "end reverseProcess");         
+    }
+  }
+  
   this.processInRotor = function(r, cinput){
     return this.getRotor(r).processIn(cinput);
   }
@@ -87,8 +103,17 @@ function Enigma(config, name, maxCable){
     return this.getRotor(r).matchNotch();
   }
   
+  this.matchNotchBeforeRotor = function(r){
+    return this.getRotor(r).matchNotchBefore();
+  }
+  
+  
   this.rotateRotor = function(r){
     this.getRotor(r).rotate();
+  }
+  
+  this.reverseRotateRotor = function(r){
+    this.getRotor(r).reverseRotate();
   }
 
   this.setRingRotor = function(r, ring){

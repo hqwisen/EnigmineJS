@@ -1,4 +1,23 @@
 
+/* CONST */
+
+function KeyCode(){}
+  
+KeyCode.A = 65;
+KeyCode.Z = 90;
+KeyCode.BACKSPACE = 8;
+KeyCode.DELETE = 46;
+  
+
+/* String utility */
+
+function StringUtil(){}
+StringUtil.removeSeq = function(string, start, end){
+  return string.substring(0, start) + string.substring(end, string.length);
+}
+
+/* Html utility */
+
 function HtmlUtil(){}
 
 HtmlUtil.htmlTag = function(tag, className, idName, content){

@@ -147,7 +147,38 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     return coutput; 
   }
 
-this.processOut = function(cinput){
+  
+  this.reverseProcessIn = function(invinput){
+    var cinput, ninput, npos, nrandom, ncontact;
+    if(typeof invinput != "string"){
+      Rotor.error(this,
+       "can't process with a non-string input '"+invinput+"'", true);  
+    }
+    else if(invinput.length != 1){
+      Rotor.error(this, "can't process with a invinput.length != 1", true);
+    }
+    Rotor.log(this, "begin reverseProcessIn for '"+invinput+"'");
+    npos = Rotor.charToNumber(invinput);
+    nrandom = this.contactTable.getNumber(npos);
+    for(var i=0;i<this.wiringTable.getSize();i++){
+      if(nrandom == this.wiringTable.getNumber(i)){
+        ncontact = i;
+        break;
+      }
+    }
+    for(var i=0;i<this.contactTable.getSize();i++){
+      if(ncontact == this.contactTable.getNumber(i)){
+        ninput = i;
+        break;
+      }
+    }
+    cinput = Rotor.numberToChar(ninput);    
+    Rotor.log(this, "end reverseProcessIn for '"+invinput+"' and product '"+cinput+"'"); 
+    return cinput; 
+  }
+
+  
+  this.processOut = function(cinput){
     var coutput, ninput, ncontact, nrandom, npos;
     if(typeof cinput != "string"){
       Rotor.error(this,
@@ -166,6 +197,30 @@ this.processOut = function(cinput){
     return coutput; 
   }
 
+  this.reverseProcessOut = function(invinput){
+    var npos, nrandom, ncontact, ninput, cinput;
+    if(typeof invinput != "string"){
+      Rotor.error(this,
+       "can't reverse process with a non-string input '"+invinput+"'", true);  
+    }
+    else if(invinput.length != 1){
+      Rotor.error(this, "can't process with a invinput.length != 1", true);
+    }
+    Rotor.log(this, "begin reverseProcessOut for '"+invinput+"'");
+    npos = Rotor.charToNumber(invinput);
+    nrandom = this.contactTable.getNumber(npos);
+    ncontact = this.wiringTable.getNumber(nrandom);
+    for(var i=0;i<this.contactTable.getSize();i++){
+      if(ncontact == this.contactTable.getNumber(i)){
+        ninput = i;
+        break;
+      }
+    }
+    cinput = Rotor.numberToChar(ninput);    
+    Rotor.log(this, "end reverseProcessOut for '"+invinput+"' and product '"+cinput+"'"); 
+    return cinput;
+  }
+  
   this.rotate = function(){
     Rotor.log(this, "rotate");
     this.movableTable.rotateLeft(1);
@@ -176,10 +231,24 @@ this.processOut = function(cinput){
       this.current += 1;
     }
     if(this.rhtml != undefined){
-      this.rhtml.rotate();
+      this.rhtml.refresh();
     }
   }
-
+  
+  this.reverseRotate = function(){
+    Rotor.log(this, "reverseRotate");
+    this.movableTable.rotateRight(1);
+    this.contactTable.rotateRight(1);
+    if(this.current == Rotor.charToNumber(Rotor.MINSET)){
+      this.current = 25;
+    }else{
+      this.current -= 1;
+    }
+    if(this.rhtml != undefined){
+      this.rhtml.refresh();
+    }
+  }
+  
   this.setRotorHtml = function(rhtml){
     Rotor.log(this, "setRotorHtml");
     this.rhtml = rhtml;
@@ -188,6 +257,14 @@ this.processOut = function(cinput){
   this.unsetRotorHtml = function(){
     Rotor.log(this, "unsetRotorHtml");
     this.rhtml = undefined;
+  }
+  
+  this.matchNotch = function(){
+    return this.current == this.notch;
+  }
+  
+  this.matchNotchBefore = function(){
+    return this.current-1 == this.notch;
   }
   
   this.matchNotch = function(){
@@ -212,6 +289,12 @@ this.processOut = function(cinput){
   }  
 }
 
+
+/*var rotor = Rotor.ROTORS["II"];
+rotor.setRing("Y");
+rotor.setStart("F");  
+console.log(rotor.matchNotch());
+console.log(rotor.matchNotchBefore());*/
 /*
 var input = "L";
 var rotors = Rotor.getRotors();
