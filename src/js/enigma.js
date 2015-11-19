@@ -15,9 +15,11 @@ Enigma.LEFT_ROTOR = 0;
 function Enigma(config, name, maxCable){
   "use strict";
   Enigma.log = function(enig, message){
-    console.log("[Enigma]["+enig.getName()+"] "
-                + message
-                + ".");
+    if(LOG_ENIGMA){
+      console.log("[Enigma]["+enig.getName()+"] "
+                  + message
+                  + ".");      
+    }
   }
   
   Enigma.error = function(enig, message, abort){

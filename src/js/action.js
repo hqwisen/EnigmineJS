@@ -12,103 +12,85 @@ $(function(){
   /* Instanciate an enigma machine */
   
   var enigmaMachine = new Enigma();
-  var selectedText = undefined;
   
   /* InputHandler (Execute enigma) */
   
-  
   InputHandler.inputChange = function(event){
     var handler = event.data.handler;
-    if (event.which >= KeyCode.A && event.which <= KeyCode.Z) {
-      if(!handler.tape){
-        for(var rname in RotorHtml.ROTORS){
-          RotorHtml.ROTORS[rname].disableStartButtons();
-        }
-        handler.tape = true;
-      }
-      this.lastChar = String.fromCharCode(event.keyCode);  
-      this.encryptChar = enigmaMachine.process(this.lastChar);
-      handler.setOutputVal(handler.getOutputVal() + this.encryptChar);
+    if (KeyCode.isAlpha(event.which)) {
+      handler.refreshOutput(KeyCode.toChar(event.keyCode), false, false);
     }else if(event.which == KeyCode.BACKSPACE){
-      handler.refreshOutput();
+      handler.refreshOutput(undefined, true, false);
     }else if(event.which == KeyCode.DELETE){
-      console.log("delete");
+      handler.refreshOutput(undefined, false, true);
     }else{
       //event.preventDefault();
     }      
-  }  
-  
-  /*InputHandler.inputClick = function(event){
-    var handler = event.data.handler;
-    
-    console.log($(handler.sinputid())[0].selectionStart);
-  }*/
-  
-  
+  } 
   function InputHandler(inputid, outputid){
-  /* 
-  function showSelection(){
-    var textComponent = document.getElementById('inputarea');
-    if (textComponent.selectionStart != undefined)
-    {
-      var startPos = textComponent.selectionStart;
-      var endPos = textComponent.selectionEnd;
-      selectedText = textComponent.value.substring(startPos, endPos)
-    }
-    console.log(textComponent.selectionStart+" - "+textComponent.selectionEnd+" : "+selectedText);
-  }
   
-  function inputMouseUp(){  
-    var textComponent = document.getElementById('inputarea');    
-    console.log("inputmouseUp = " + textComponent.selectionStart+" - "+textComponent.selectionEnd);
-    console.log(textComponent.value);
-  }
-
-  
-  $("#inputarea").select(showSelection);
-  $("#inputarea").mouseup(inputMouseUp); */   
-    
-    this.tape = false;
     this.inputid = inputid;
     this.outputid = outputid;
 
     this.listen = function(){
       $(this.shtml(inputid)).keydown({handler:this}, InputHandler.inputChange);
-      //$(this.shtml(inputid)).mouseup({handler:this}, InputHandler.inputClick);
     }
     
-    this.refreshOutput = function(){
-      var start = this.getSelectionStart(), end = this.getSelectionEnd();
-      var outputString = this.getOutputVal();
-      var newOutput = undefined;
-      var nbrDel = undefined;
-      if(start != 0 || end != 0){
-        if(start == end){
-          newOutput = StringUtil.removeSeq(outputString, start-1, start);
-          nbrDel = newOutput.length - (start - 1);
-          newOutput = StringUtil.removeSeq(newOutput, start-1, newOutput.length);
-          enigmaMachine.reverseProcess(nbrDel+1);
-          for(var i=0;i<nbrDel;i++){
-            // Char in inputval is not deleted (yet)
-            newOutput += enigmaMachine.process(this.getInputVal().charAt(start+i));
+    this.disableStartButtons = function(){
+      for(var rname in RotorHtml.ROTORS){
+        RotorHtml.ROTORS[rname].disableStartButtons();
+      }
+    }
+    
+    this.enableStartButtons = function(){
+      for(var rname in RotorHtml.ROTORS){
+        RotorHtml.ROTORS[rname].enableStartButtons();
+      }
+    }
+    
+    this.refreshOutput = function(newChar, isBackspace, isDelete){
+      var start = this.getStart(), end = this.getEnd();
+      var refreshOutput = this.getOutputVal();
+      var nbrDel = refreshOutput.length - start;
+      if(start == end){
+        if(start != refreshOutput.length){
+          refreshOutput = StringUtil.removeSeq(refreshOutput, start, refreshOutput.length);  
+          if(isBackspace){
+            refreshOutput = StringUtil.remove(refreshOutput, start-1);
+          }
+          enigmaMachine.reverseProcess(nbrDel+(isBackspace && start!=0?1:0));
+          if(newChar != undefined){
+            refreshOutput = StringUtil.add(refreshOutput, enigmaMachine.process(newChar));    
+          }
+          for(var i=(isDelete?1:0);i<nbrDel;i++){
+            refreshOutput = StringUtil.add(refreshOutput,
+                                           enigmaMachine.process((this.inputCharAt(start+i))));   
           }
         }else{
-          newOutput = StringUtil.removeSeq(outputString, start, end);
-          nbrDel = newOutput.length - start;
-          newOutput = StringUtil.removeSeq(newOutput, start, newOutput.length);
-          enigmaMachine.reverseProcess(nbrDel+(end-start));
-          for(var i=0;i<nbrDel;i++){
-            // Char in inputval is not deleted (yet)
-            newOutput += enigmaMachine.process(this.getInputVal().charAt(end+i));
-          }          
+          if(newChar != undefined){
+            refreshOutput = StringUtil.add(refreshOutput, enigmaMachine.process(newChar));    
+          }else if(isBackspace && start != 0){
+            refreshOutput = StringUtil.remove(refreshOutput, refreshOutput.length-1); 
+            enigmaMachine.reverseProcess(1);
+          }
         }
-        this.setOutputVal(newOutput);
+      }else{
+        refreshOutput = StringUtil.removeSeq(refreshOutput, start, refreshOutput.length); 
+        enigmaMachine.reverseProcess(nbrDel);
+        if(newChar != undefined){
+          refreshOutput = StringUtil.add(refreshOutput, enigmaMachine.process(newChar));    
+        }
+        for(var i=0;i<nbrDel - (end - start);i++){
+          refreshOutput = StringUtil.add(refreshOutput,
+                                         enigmaMachine.process((this.inputCharAt(end+i))));   
+        }
       }
-      /*console.log("refreshingoutuput");
-      console.log(this.getSelectionStart() + " - " + this.getSelectionEnd());
-      console.log("before = " + outputString.slice(0, this.getSelectionStart()));
-      console.log("before = " + outputString.slice(this.getSelectionEnd(), outputString.length));
-      console.log(outputString.slice(this.getSelectionStart(), this.getSelectionEnd()));*/
+      this.setOutputVal(refreshOutput);
+      if(refreshOutput.length == 0){
+        this.enableStartButtons();
+      }else{
+        this.disableStartButtons();
+      }
     }
     
     this.shtml = function(id){
@@ -138,6 +120,14 @@ $(function(){
       return this.getVal(inputid);
     }
     
+    this.inputCharAt = function(index){
+      return this.getInputVal().charAt(index);
+    }
+    
+    this.outputCharAt = function(index){
+      return this.getOutputVal().charAt(index);
+    }
+    
     this.setOutputVal = function(value){
       this.setVal(outputid, value);
     }
@@ -146,11 +136,11 @@ $(function(){
       this.setVal(inputid, value);
     }
     
-    this.getSelectionStart = function(){
+    this.getStart = function(){
       return $(this.sinputid())[0].selectionStart;
     }
     
-    this.getSelectionEnd = function(){
+    this.getEnd = function(){
       return $(this.sinputid())[0].selectionEnd;  
     }
     
@@ -382,13 +372,18 @@ $(function(){
     
     this.disableStartButtons = function(){
       $(this.shtmlid("startup")).prop("disabled", true);
-      $(this.shtmlid("startup")).css({color:"#525252"});
       $(this.shtmlid("startup")).text("-");
       $(this.shtmlid("startdown")).prop("disabled", true);
-      $(this.shtmlid("startdown")).css({color:"#525252"});
-      $(this.shtmlid("startdown")).text("-");
-      
+      $(this.shtmlid("startdown")).text("-");  
     }
+
+    this.enableStartButtons = function(){
+      $(this.shtmlid("startup")).prop("disabled", false);
+      $(this.shtmlid("startup")).html("&#9650;");
+      $(this.shtmlid("startdown")).prop("disabled", false);
+      $(this.shtmlid("startdown")).html("&#9660;");  
+    }
+
     
     this.logConfig = function(){
       console.log(this.config);
@@ -579,8 +574,7 @@ $(function(){
     }
     this.htmlid = function(value){
       return "plugboard"+(value == undefined ? "" : value);
-    }
-    
+    } 
   }
   
   /* Add listener to inputarea */

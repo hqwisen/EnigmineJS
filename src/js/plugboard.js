@@ -2,9 +2,11 @@ function Plugboard(max){
   "use strict";
   
   Plugboard.log = function(message){
-    console.log("[Plugboard] "
-                + message
-                + ".");
+    if(LOG_ENIGMA){
+      console.log("[Plugboard] "
+                  + message
+                  + ".");      
+    }
   }
   
   this.MAX = max || 10;
