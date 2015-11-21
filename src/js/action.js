@@ -43,7 +43,7 @@ $(function(){
     }
   }
   
-  InputHandler.BLOCKSIZE = 0;
+  InputHandler.BLOCKSIZE = 4;
   
   function InputHandler(inputid, outputid){
   
