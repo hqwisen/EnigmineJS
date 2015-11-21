@@ -7,6 +7,14 @@ html, body{
   font-variant:small-caps;*/
 }
 
+button{
+  outline:0;
+}
+
+textarea{
+  outline:0;
+}
+
 /* Config view */
 
 .config{

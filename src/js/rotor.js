@@ -37,6 +37,10 @@ Rotor.CHARCODEMINSET = Rotor.MINSET.charCodeAt(0);
 Rotor.CHARCODEMAXSET = Rotor.MAXSET.charCodeAt(0);
 
 
+Rotor.fullInfo = function(char){
+  return char + " - " + (Rotor.charToNumber(char)+1);
+}
+
 function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   "use strict";
   /** Numbers are between 0-25 (A-Z) */

@@ -8,6 +8,8 @@ $(function(){
   // TODO Keydown au mileu du texte
   // TODO delete of non-alpha char 
   // TODO quand ecrit texte au milieu
+  // TODO static method outside class
+  // TODO Fix behaviour plugboard (int and out !!!)
   
   /* Instanciate an enigma machine */
   
@@ -15,25 +17,51 @@ $(function(){
   
   /* InputHandler (Execute enigma) */
   
-  InputHandler.inputChange = function(event){
+  InputHandler.inputKeyDown = function(event){
     var handler = event.data.handler;
-    if (KeyCode.isAlpha(event.which)) {
-      handler.refreshOutput(KeyCode.toChar(event.keyCode), false, false);
-    }else if(event.which == KeyCode.BACKSPACE){
-      handler.refreshOutput(undefined, true, false);
-    }else if(event.which == KeyCode.DELETE){
-      handler.refreshOutput(undefined, false, true);
+    if(!handler.isControlPressed()){
+      if (KeyCode.isAlpha(event.keyCode)) {
+        handler.refreshOutput(KeyCode.toChar(event.keyCode), false, false);
+      }else if(KeyCode.isBackspace(event.keyCode)){
+        handler.refreshOutput(undefined, true, false);
+      }else if(KeyCode.isDelete(event.keyCode)){
+        handler.refreshOutput(undefined, false, true);
+      }else if(KeyCode.isControl(event.keyCode)){
+        handler.setControlPressed(true);
+      }else if(!KeyCode.isArrow(event.keyCode)){
+        event.preventDefault();
+      }
     }else{
-      //event.preventDefault();
-    }      
-  } 
+    }
+  }
+  
+  InputHandler.inputKeyUp = function(event){
+    var handler = event.data.handler;
+    handler.refreshInput(); 
+    if(KeyCode.isControl(event.keyCode)){
+      handler.setControlPressed(false);
+    }
+  }
+  
+  InputHandler.BLOCKSIZE = 0;
+  
   function InputHandler(inputid, outputid){
   
     this.inputid = inputid;
     this.outputid = outputid;
+    this.controlPressed = false;
 
     this.listen = function(){
-      $(this.shtml(inputid)).keydown({handler:this}, InputHandler.inputChange);
+      $(this.shtml(inputid)).keydown({handler:this}, InputHandler.inputKeyDown);
+      $(this.shtml(inputid)).keyup({handler:this}, InputHandler.inputKeyUp);
+    }
+    
+    this.isControlPressed = function(){
+      return this.controlPressed;
+    }
+    
+    this.setControlPressed = function(value){
+      this.controlPressed = value;
     }
     
     this.disableStartButtons = function(){
@@ -46,6 +74,10 @@ $(function(){
       for(var rname in RotorHtml.ROTORS){
         RotorHtml.ROTORS[rname].enableStartButtons();
       }
+    }
+    
+    this.refreshInput = function(){
+      //this.setInputVal(this.getInputVal());
     }
     
     this.refreshOutput = function(newChar, isBackspace, isDelete){
@@ -105,11 +137,11 @@ $(function(){
     }
     
     this.getVal = function(id){
-      return $(this.shtml(id)).val();
+      return StringUtil.removeSpace($(this.shtml(id)).val());
     }
     
     this.setVal = function(id, value){
-      $(this.shtml(id)).val(value);
+      $(this.shtml(id)).val(StringUtil.inBlock(value, InputHandler.BLOCKSIZE));
     }
     
     this.getOutputVal = function(){
@@ -289,15 +321,24 @@ $(function(){
     
     this.setStart = function(start){
       enigmaMachine.setStartRotor(this.config["rotor"], start);
-      $(this.shtmlid("startvalue")).text(start);
+      this.setStartText(start);
       this.config["start"] = start;
+    }
+    
+    this.setStartText = function(start){
+      $(this.shtmlid("startvalue")).text(Rotor.fullInfo(start));
     }
     
     this.setRing = function(ring){
       enigmaMachine.setRingRotor(this.config["rotor"], ring);
-      $(this.shtmlid("ringvalue")).text(ring);
+      this.setRingText(ring);
       this.config["ring"] = ring;
     }
+    
+    this.setRingText = function(ring){
+      $(this.shtmlid("ringvalue")).text(Rotor.fullInfo(ring));
+    }
+    
     
     this.build = function(){
       var tmp;
@@ -366,7 +407,7 @@ $(function(){
     
     this.refresh = function(){
       var start = enigmaMachine.getRotor(this.config["rotor"]).getCharStart();
-      $(this.shtmlid("startvalue")).text(start);
+      this.setStartText(start);
       this.config["start"] = start;
     }
     

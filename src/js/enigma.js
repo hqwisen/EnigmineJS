@@ -72,6 +72,7 @@ function Enigma(config, name, maxCable){
     coutput = this.processOutRotor(Enigma.LEFT_ROTOR, coutput);
     coutput = this.processOutRotor(Enigma.MIDDLE_ROTOR, coutput);
     coutput = this.processOutRotor(Enigma.RIGHT_ROTOR, coutput);
+    coutput = this.plugboard.plug(coutput);
     Enigma.log(this, "end process for '"+cinput
       +"' and product '"+coutput+"'");
     return coutput;
