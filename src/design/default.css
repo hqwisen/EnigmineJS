@@ -1,0 +1,110 @@
+/* FIXME entrelacmeent quand zoom entre toolbar et rotor */
+
+
+/* HTML */
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+
+/* containers */
+
+#toolbar-container {
+  height: 10%;
+}
+
+#rotors-container {
+  width: 80%;
+  background: blue;
+  margin: 10px auto;
+  position: relative;
+  text-align: center;
+}
+
+
+/* Toolbar */
+
+ul.toolbar {
+  box-shadow: 0px 5px 10px grey;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  padding-left: 60px;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+ul.toolbar li {
+  float: left;
+}
+
+
+/* Toolbar spans */
+
+ul.toolbar span {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+
+/* Toolbar links */
+
+ul.toolbar a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.toolbar a:hover:not(.tb-active) {
+  background-color: #111;
+}
+
+a.tb-active {
+  background-color: #4CAF50;
+}
+
+
+/* Rotor */
+
+.rotor {
+  display: inline-block;
+  background: green;
+  margin: 0;
+  padding: 0;
+  width: 30%;
+  height: 100%;
+  border: 1px solid black;
+}
+
+.rotor-button-container {
+  width: 100%;
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  background: yellow;
+}
+
+.rotor-button-container button {
+  width: 20%;
+  background: red;
+  margin: 0;
+  padding: 5px;
+  /*border: 1px solid black;*/
+}
