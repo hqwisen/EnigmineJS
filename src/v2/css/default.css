@@ -18,18 +18,23 @@ body {
 /* containers */
 
 #toolbar-container {
-  height: 10%;
+  height:100px;
 }
 
 #rotors-container {
+  float:left;
   width: 80%;
   background: blue;
-  margin: 10px auto;
-  position: relative;
   text-align: center;
 }
 
-
+#info-container{
+  width:20%;
+  background:red;
+  text-align: center;
+  position: fixed;
+  right:0;
+}
 /* Toolbar */
 
 ul.toolbar {
@@ -80,14 +85,42 @@ a.tb-active {
 }
 
 
+/* Reflector */
+
+.reflector {
+  display: inline-block;
+  background: green;
+  margin: 15px;
+  padding: 0;
+  width: 10%;
+  height: 100%;
+  border: 1px solid black;
+}
+
+.reflector-button-container {
+  width: 100%;
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
+  background: yellow;
+}
+
+.reflector-button-container button {
+  width: 50%;
+  background: red;
+  margin: 0;
+  padding: 5px;
+  /*border: 1px solid black;*/
+}
+
 /* Rotor */
 
 .rotor {
   display: inline-block;
   background: green;
-  margin: 0;
+  margin: 15px;
   padding: 0;
-  width: 30%;
+  width: 20%;
   height: 100%;
   border: 1px solid black;
 }
@@ -97,7 +130,6 @@ a.tb-active {
   padding: 0;
   margin: 0 auto;
   text-align: center;
-  position: relative;
   background: yellow;
 }
 
