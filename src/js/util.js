@@ -114,6 +114,7 @@ HtmlUtil.span = function(className, idName, content){
 HtmlUtil.button = function(className, idName, content){
   return HtmlUtil.htmlTag("button", className, idName, content);
 }
+
 /*
 var s = "HAKIM";
 console.log(s);

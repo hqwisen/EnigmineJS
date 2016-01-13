@@ -20,13 +20,24 @@ var data = {
   "V": {
     "wires": "VZBRGITYUPSDNHLXAWMJQOFECK",
     "notch": "Z"
+  },
+  "B":{
+    "wires":"YRUHQSLDPXNGOKMIEBFZCWVJAT"
+  },
+  "C":{
+    "wires":"FVPJIAOYEDRZXWGCTKUQSBNMHL"
   }
 }
+
 
 function RotorFactory() {}
 
 RotorFactory.createRotor = function(name){
   return new Rotor(name, data[name]["wires"], data[name]["notch"]);
+}
+
+RotorFactory.createReflector = function(name){
+  return new Reflector(name, data[name]["wires"]);
 }
 
 RotorFactory.createRomanOne = function(){
@@ -47,4 +58,12 @@ RotorFactory.createRomanFour = function(){
 
 RotorFactory.createRomanFive = function(){
   return RotorFactory.createRotor("V");
+}
+
+RotorFactory.createReflectorB = function(){
+  return RotorFactory.createReflector("B");
+}
+
+RotorFactory.createReflectorC = function(){
+  return RotorFactory.createReflector("C");
 }

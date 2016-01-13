@@ -39,7 +39,11 @@ body {
 }
 
 #plugboard-container{
-  
+  float:left;
+  width: 80%;
+  background: orange;
+  margin:0 auto;
+  text-align: center;  
 }
 
 /* Toolbar */
@@ -176,3 +180,11 @@ a.tb-active {
 }
 
 /* Plugboard */ 
+
+.plugboard-list{
+  
+}
+
+.plug-item{
+  
+}

@@ -8,6 +8,10 @@ function Machine(){
   this.rotors["III"] = RotorFactory.createRomanThree();
   this.rotors["IV"] = RotorFactory.createRomanFour();
   this.rotors["V"] = RotorFactory.createRomanFive();
+
+  this.reflectors = {};
+  this.reflectors["B"] = RotorFactory.createReflectorB();
+  this.reflectors["C"] = RotorFactory.createReflectorC();
   
 }
 
@@ -20,5 +24,13 @@ Machine.prototype.getRotors = function(){
 }
 
 Machine.prototype.getRotor = function(name){
-  return this.rotor[name];
+  return this.rotors[name];
+}
+
+Machine.prototype.getReflectors = function(){
+  return this.reflectors;
+}
+
+Machine.prototype.getReflector = function(name){
+  return this.reflectors[name];
 }
