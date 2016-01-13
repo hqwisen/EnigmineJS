@@ -123,6 +123,10 @@ HtmlUtil.li = function(className, idName, content){
   return HtmlUtil.htmlTag("li", className, idName, content);
 }
 
+HtmlUtil.a = function(className, idName, content){
+  return HtmlUtil.htmlTag("a", className, idName, content);
+}
+
 /*
 var s = "HAKIM";
 console.log(s);

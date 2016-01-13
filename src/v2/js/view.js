@@ -100,17 +100,24 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
   }
   
   function PlugboardView(controller){
-    
+    this.itemGenerator = 0;
     this.controller = controller;
-    $("#plugboard-container").append(HtmlUtil.ul("", "plugboard-list"));
-    $("#plugboard-container").append(HtmlUtil.button("", "plugboard-add", "Add"));
-    $("#plugboard-add").click({view:this}, addPlugClick);
-    
+    $("#plugboard-container").append(HtmlUtil.ul("plugboard-list", "plugboard-list"));
+    $("#plugboard-container").append(HtmlUtil.div("plugboard-add", "plugboard-add"));
+    $("#plugboard-add").append(HtmlUtil.button("plugboard-add", "pb-add-button", "Add"));
+    $("#pb-add-button").click({view:this}, addPlugClick);
+
   }
   
   PlugboardView.prototype.addPlug = function(value){
-    var elemLi = HtmlUtil.li("plug-item", "show", value);
+    var elemLi = HtmlUtil.li("", "pb-"+this.itemGenerator);
     $("#plugboard-list").append(elemLi);
+    $("#pb-"+this.itemGenerator).append(HtmlUtil.a("", "", "A|B"));
+    $("#pb-"+this.itemGenerator).click({view:this}, function(){
+      $(this).remove();
+    });    
+    this.itemGenerator++;
+    
   }
   
   /* MachineController */

@@ -177,14 +177,42 @@ a.tb-active {
   background:green;
   display: block;
   width:100%;
+  margin:0;
+  padding:5px;
 }
 
 /* Plugboard */ 
 
 .plugboard-list{
-  
+  background: yellow;
+  margin:0 auto;
+  padding:10px;
+  text-align: center;  
 }
 
-.plug-item{
-  
+#plugboard-add{
+  background: green;
+  margin:0 auto;
+  text-align: center;
+}
+.plugboard-add button{
+}
+
+
+.plugboard-list li{
+  display: inline-block;
+  margin:7px;
+  padding:0;
+}
+
+.plugboard-list li a{
+  background: green;
+  padding:5px;
+  border:2px solid black;
+
+}
+.plugboard-list li a:hover{
+  background: red;
+  margin:5px;
+  border:2px solid black;
 }
