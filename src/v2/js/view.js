@@ -1,6 +1,26 @@
 $(function(){
   "use strict";
   
+  /* HtmlHelper */
+  
+  function HELPER = function(){
+  
+    this.allRotorContainer = "rotors-container";
+    this.rotorContainer = "rotor";
+    this.rotorButtonContainer = "rotor-button-container";
+    this.rotorParam = "rotor-param";
+    this.rotorElement = "rotor-param-element";
+  }
+  
+  
+  /* RotorView */
+  
+  function RotorView(){
+    
+  }
+  
+  /* MachineController */
+  
   function MachineController(){
     
     this.machine = new Machine();
@@ -13,10 +33,15 @@ $(function(){
   }  
   
   MachineController.prototype.createRotorView = function(name){
-    console.log("create rotor view " + name);  
+    
   }
 
+  /* Main */
   
-  var controller = new MachineController();
-
+  function main(args){
+    var controller = new MachineController();
+  }
+  
+  main();
+  
 });
