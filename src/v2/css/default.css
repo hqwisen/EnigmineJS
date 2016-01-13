@@ -185,34 +185,67 @@ a.tb-active {
 
 .plugboard-list{
   background: yellow;
-  margin:0 auto;
-  padding:10px;
-  text-align: center;  
+  padding:0;
+  margin:0;
 }
 
 #plugboard-add{
   background: green;
   margin:0 auto;
+  padding:0;
   text-align: center;
 }
 .plugboard-add button{
 }
 
 
-.plugboard-list li{
+.plug-item{
   display: inline-block;
-  margin:7px;
-  padding:0;
-}
-
-.plugboard-list li a{
   background: green;
-  padding:5px;
+  height:50px;
+  width:50px;
+  margin:10px;
+  padding:0;
   border:2px solid black;
-
 }
-.plugboard-list li a:hover{
-  background: red;
-  margin:5px;
-  border:2px solid black;
+
+.plug-item span{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:inherit;
+  width:inherit;
+  padding:0;
+  margin:0;
+  color:yellow;
+  background:grey;
+  
+}
+.cross-panel{
+  position:absolute;
+  margin:0;
+  padding:0;
+  height:0;
+  width:0;
+  overflow:hidden;
+}
+
+.cross{
+  color:#2e0000;
+}
+
+.plug-item:hover .cross-panel{
+  display:flex;
+  align-items:center;
+  margin:0;
+  padding:0;
+  justify-content:center;
+  overflow:visible;
+  height:inherit;
+  width:inherit;
+  opacity:0.9;
+  background:#c65757;
+}
+.plug-item:hover{
+  border:2px solid blue;
 }

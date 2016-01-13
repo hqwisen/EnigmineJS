@@ -75,7 +75,7 @@ $(function(){
 $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring")));
     $(this.hid("rp-ring")).append(HtmlUtil.span("", "", "Ring"));
     $(this.hid("rp-ring")).append(HtmlUtil.button("rotor-param-element",
-                                                  this.id("ringup"), "up"));
+                                                  this.id("ringup"), "&#8634;"));
     $(this.hid("rp-ring")).append(HtmlUtil.span("rotor-param-element", "", "A"));
     $(this.hid("rp-ring")).append(HtmlUtil.button("rotor-param-element",
                                                   this.id("ringdown"), "down"));
@@ -110,9 +110,10 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
   }
   
   PlugboardView.prototype.addPlug = function(value){
-    var elemLi = HtmlUtil.li("", "pb-"+this.itemGenerator);
+    var elemLi = HtmlUtil.div("plug-item", "pb-"+this.itemGenerator);
     $("#plugboard-list").append(elemLi);
-    $("#pb-"+this.itemGenerator).append(HtmlUtil.a("", "", "A|B"));
+    $("#pb-"+this.itemGenerator).append("<div class='cross-panel'><div class='cross'>X</div></div>");
+    $("#pb-"+this.itemGenerator).append("<span>A|B</span>");
     $("#pb-"+this.itemGenerator).click({view:this}, function(){
       $(this).remove();
     });    
