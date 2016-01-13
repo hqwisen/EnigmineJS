@@ -9,12 +9,16 @@ function Machine(){
   this.rotors["IV"] = RotorFactory.createRomanFour();
   this.rotors["V"] = RotorFactory.createRomanFive();
   
+}
 
-  this.getRotors = function(){
-    return this.rotors;
-  }
+Machine.RIGHT_ROTOR = 2;
+Machine.MIDDLE_ROTOR = 1;
+Machine.LEFT_ROTOR = 0;
 
-  this.getRotor = function(name){
-    return this.rotors[name];
-  }
+Machine.prototype.getRotors = function(){
+  return this.rotors;
+}
+
+Machine.prototype.getRotor = function(name){
+  return this.rotor[name];
 }
