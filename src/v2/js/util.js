@@ -127,6 +127,10 @@ HtmlUtil.a = function(className, idName, content){
   return HtmlUtil.htmlTag("a", className, idName, content);
 }
 
+HtmlUtil.textarea = function(className, idName, content){
+  return HtmlUtil.htmlTag("textarea", className, idName, content);
+}
+
 /*
 var s = "HAKIM";
 console.log(s);

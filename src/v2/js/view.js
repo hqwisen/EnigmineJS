@@ -96,7 +96,7 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
   /* Plugboard View */ 
   
   function addPlugClick(event){
-    event.data.view.addPlug("A &#8961; B");
+    event.data.view.addPlug("Q", "Z");
   }
   
   function PlugboardView(controller){
@@ -104,18 +104,26 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
     this.controller = controller;
     $("#plugboard-container").append(HtmlUtil.ul("plugboard-list", "plugboard-list"));
     $("#plugboard-container").append(HtmlUtil.div("plugboard-add", "plugboard-add"));
-    $("#plugboard-add").append(HtmlUtil.button("plugboard-add", "pb-add-button", "Add"));
-    $("#pb-add-button").click({view:this}, addPlugClick);
+    $("#plugboard-add").append(HtmlUtil.div("plugboard-add-entries", "plugboard-add-entries"));
+    $("#plugboard-add-entries").append(HtmlUtil.textarea());
+    $("#plugboard-add-entries").append(HtmlUtil.textarea());
+    $("#plugboard-add").append(HtmlUtil.button("plugboard-add", "plugboard-add-button", "Add"));
+    $("#plugboard-add-button").click({view:this}, addPlugClick);
 
   }
   
-  PlugboardView.prototype.addPlug = function(value){
-    var elemLi = HtmlUtil.div("plug-item", "pb-"+this.itemGenerator);
-    $("#plugboard-list").append(elemLi);
-    $("#pb-"+this.itemGenerator).append("<div class='cross-panel'><div class='cross'>&#x274c;</div></div>");
-    $("#pb-"+this.itemGenerator).append("<span>A &#8961; B</span>");
-    $("#pb-"+this.itemGenerator).click({view:this}, function(){
+  PlugboardView.prototype.addPlug = function(char1, char2){
+    var elem = HtmlUtil.div("plug-item", "pb-"+this.itemGenerator);
+    $("#plugboard-list").append(elem);
+    $("#pb-"+this.itemGenerator).append(
+      HtmlUtil.div("cross-panel", "",
+                   HtmlUtil.div("cross", "", "&#x274c;" )));
+    $("#pb-"+this.itemGenerator).append("<span>"+char1+
+                                        " &#8961; "+char2+"</span>");
+    $("#pb-"+this.itemGenerator).click({view:this}, function(event){
       $(this).remove();
+      event.data.view.controller.plugboardRemove(char1, char2);
+      
     });    
     this.itemGenerator++;
     
@@ -154,6 +162,10 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
 
   MachineController.prototype.changeRing = function(side, value){
     console.log("NOT IMPLEMENTED > changeRing("+side+", "+value+").");
+  }
+  
+  MachineController.prototype.plugboardRemove = function(char1, char2){
+    console.log("NOT IMPLEMENTED > plugboardRemove("+char1+", "+char2+").");  
   }
   
   MachineController.prototype.getRotors = function(){
