@@ -291,8 +291,8 @@ a.tb-active {
   display: inline-block;
   height:50px;
   width:68px;
-  margin:10px;
-  padding:0;
+  margin:5px;
+  padding:5px;
   border:2px solid black;
   color:black;
   box-shadow: #aaaaaa 1px 1px 1px;
@@ -307,7 +307,6 @@ a.tb-active {
   justify-content: center;
   height:inherit;
   width:inherit;
-  padding:0;
   margin:0;
   border-radius: 6px;
   
