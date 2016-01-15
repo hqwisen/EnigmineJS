@@ -259,13 +259,14 @@ a.tb-active {
   width:100%;
   border-radius: 0;
   box-shadow: #aaaaaa 0px 0px 0px;
-  color:black;
-  background:#dedede;
+  color:white;
+  background:black;
 }
 
 .plugboard-add button:hover{
-  background:black;
-  color:white;
+  background:white;
+  color:black;
+  border-color: white;
 }
 
 .plugboard-add-entries{
