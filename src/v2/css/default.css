@@ -43,7 +43,7 @@ body {
   display: inline-block;
   width: 1000px;
   margin:0 auto;
-  padding-top:30px;
+  padding-top:20px;
   text-align: center;
   vertical-align: top;
 }
@@ -52,7 +52,7 @@ body {
   display: inline-block;
   width: 1000px;
   margin:0 auto;
-  padding-top:30px;
+  padding-top:20px;
   text-align: center;
   vertical-align: top;
 }
@@ -127,6 +127,7 @@ a.tb-active {
   padding: 0;
   vertical-align: top;
   margin:25px;
+  margin-bottom: 0;
   width: 50px;
   height:250px;
   border: 3px solid #004d95;
@@ -172,6 +173,7 @@ a.tb-active {
   width: 250px;
   height:250px;
   margin:25px;
+  margin-bottom: 0;
   border: 3px solid #004d95;
   border-radius: 5px;
   box-shadow: #000 0px 0px 5px 1px;
@@ -274,7 +276,7 @@ a.tb-active {
 }
 
 #plugboard-add{
-  margin:10px auto;
+  margin:25px auto;
   padding:0;
   text-align: center;
   width:150px;
