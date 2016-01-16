@@ -41,9 +41,9 @@ body {
 
 #rotors-container {
   display: inline-block;
-  width: 920px;
+  width: 1000px;
   margin:0 auto;
-  padding-top:40px;
+  padding-top:30px;
   text-align: center;
   background:blue;
   vertical-align: top;
@@ -51,9 +51,9 @@ body {
 
 #plugboard-container{
   display: inline-block;
-  width: 920px;
+  width: 1000px;
   margin:0 auto;
-  padding-top:40px;
+  padding-top:30px;
   text-align: center;
   vertical-align: top;
   background:green;
@@ -128,7 +128,7 @@ a.tb-active {
   display: inline-block;
   padding: 0;
   vertical-align: top;
-  margin:15px;
+  margin:25px;
   width: 50px;
   height:250px;
   border: 3px solid #004d95;
@@ -173,7 +173,7 @@ a.tb-active {
   vertical-align: top;
   width: 250px;
   height:250px;
-  margin:15px;
+  margin:25px;
   border: 3px solid #004d95;
   border-radius: 5px;
   box-shadow: #000 0px 0px 5px 1px;
@@ -276,7 +276,7 @@ a.tb-active {
 }
 
 #plugboard-add{
-  margin:15px auto;
+  margin:10px auto;
   padding:0;
   text-align: center;
   width:150px;
@@ -333,7 +333,10 @@ a.tb-active {
   display: inline-block;
   height:50px;
   width:65px;
-  margin:5px;
+  margin-top:25px;
+  margin-bottom: 0;
+  margin-left:9px;
+  margin-right:9px;
   padding:5px;
   border:2px solid #004d95;
   color:white;
