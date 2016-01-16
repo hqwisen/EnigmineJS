@@ -42,6 +42,7 @@ body {
 #rotors-container {
   display: inline-block;
   width: 1000px;
+  height: auto;
   margin:0 auto;
   padding-top:20px;
   text-align: center;
@@ -171,7 +172,6 @@ a.tb-active {
   padding: 0;
   vertical-align: top;
   width: 250px;
-  height:250px;
   margin:25px;
   margin-bottom: 0;
   border: 3px solid #004d95;
@@ -265,6 +265,11 @@ a.tb-active {
 
 .rotor-param button:hover{
   color:white;
+  background:inherit;
+}
+
+.rotor-param button:active{
+  color:black;
   background:inherit;
 }
 
