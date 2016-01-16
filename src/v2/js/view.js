@@ -76,7 +76,7 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
     $(this.hid("rp-ring")).append(HtmlUtil.span("", "", "Ring"));
     $(this.hid("rp-ring")).append(HtmlUtil.button("rotor-param-element",
                                                   this.id("ringup"), "&#8635;"));
-    $(this.hid("rp-ring")).append(HtmlUtil.span("rotor-param-element rotor-param-element-ring", "", "A-01"));
+    $(this.hid("rp-ring")).append(HtmlUtil.span("rotor-param-element rotor-param-element-ring", "", "A"));
     $(this.hid("rp-ring")).append(HtmlUtil.button("rotor-param-element",
                                                   this.id("ringdown"), "&#8634;"));
     $(this.hid("ringup")).click({controller:this.controller, side:this.side, value:+1},

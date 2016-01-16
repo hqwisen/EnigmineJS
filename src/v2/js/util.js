@@ -128,7 +128,10 @@ HtmlUtil.a = function(className, idName, content){
 }
 
 HtmlUtil.textarea = function(className, idName, content){
-  return HtmlUtil.htmlTag("textarea", className, idName, content);
+  return "<textarea class='"
+    +(className == undefined ? "" : className)+"' id='"
+    +(idName == undefined ? "" : idName)+"' rows='1'>"
+    +(content == undefined ? "" : content)+"</textarea>";  
 }
 
 /*
