@@ -105,8 +105,8 @@ $(this.hid("rp-container")).append(HtmlUtil.div("rotor-param", this.id("rp-ring"
     $("#plugboard-container").append(HtmlUtil.ul("plugboard-list", "plugboard-list"));
     $("#plugboard-container").append(HtmlUtil.div("plugboard-add", "plugboard-add"));
     $("#plugboard-add").append(HtmlUtil.div("plugboard-add-entries", "plugboard-add-entries"));
-    $("#plugboard-add-entries").append(HtmlUtil.textarea());
-    $("#plugboard-add-entries").append(HtmlUtil.textarea());
+    $("#plugboard-add-entries").append(HtmlUtil.textarea("", "entry-one"));
+    $("#plugboard-add-entries").append(HtmlUtil.textarea("", "entry-two"));
     $("#plugboard-add").append(HtmlUtil.button("plugboard-add", "plugboard-add-button", "Add"));
     $("#plugboard-add-button").click({view:this}, addPlugClick);
 

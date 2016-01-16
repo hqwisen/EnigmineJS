@@ -9,6 +9,7 @@ button::-moz-focus-inner {
 
 button{
   cursor:pointer;
+  font-family: inherit; 
 }
 
 html,
@@ -28,7 +29,7 @@ body {
 
 #section-config{
   width:100%;
-  background:#76bdff;
+  background:inherit;
 }
 
 /* containers */
@@ -265,14 +266,14 @@ a.tb-active {
 }
 
 .plugboard-add button{
-  display: inline-block;
   padding:10px;
   margin:0;
   border: 1px solid #004d95;
   width:100%;
-  border-radius: 0;
+  border-radius: 20px;
   color:white;
   background:#00396d;
+  margin-top: 5px;
 }
 
 .plugboard-add button:hover{
@@ -280,7 +281,6 @@ a.tb-active {
 }
 
 .plugboard-add-entries{
-  display:inline-block;
   width:100%;
   padding:0;
   margin:0;
@@ -302,10 +302,16 @@ a.tb-active {
   font-family: inherit;
   line-height: 1;
   height: auto;
-  color:black;
+  color: #004d95;
 }
 
+#entry-one{
+  border-radius: 20px 0px 0px 20px;
+}
 
+#entry-two{
+  border-radius: 0px 20px 20px 0px;
+}
 .plug-item{
   display: inline-block;
   height:50px;
