@@ -21,7 +21,7 @@ body {
   text-align: center;
   font-family: Ubuntu, Verdana, Geneva, Arial, Helvetica, sans-serif;
   font-size:22px;
-  background:#ffffff;
+  background:#c4e2ff;
 }
 
 
@@ -70,6 +70,7 @@ ul.toolbar {
   height:70px;
   justify-content: flex-start;
   align-items: center;
+  border-bottom: 5px solid #ffffff;
 
 }
 
@@ -297,7 +298,7 @@ a.tb-active {
   margin:0;
   padding-top:10px;
   border: 1px solid #004d95;
-  background:white;
+  background:inherit;
   font-size:25px;
   font-family: inherit;
   line-height: 1;
