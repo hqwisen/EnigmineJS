@@ -4,25 +4,45 @@ $(function(){
   /* ReflectorView */
   
   function changeReflectorClick(event){
-    var controller = event.data.controller;
-    controller.changeReflector(event.data.choice);
+    event.data.view.changeTo(event.data.choice);
   }
   
   function ReflectorView(controller){
     this.controller = controller;
+    this.lastId = undefined;
 
     $("<div/>", {class:"rotor", id:this.id("reflector")}).appendTo("#rotors-container");
     $("<span/>", {text:this.getName()}).appendTo(this.hid("reflector"));
     /* Rotor choices */
     $("<div/>", {class:"reflector-choice", id:this.id("reflector-choice")}).appendTo(this.hid("reflector"));
     $("<button/>", {id:this.id("choiceB"), text:"B"}).appendTo(this.hid("reflector-choice"));
-    $(this.hid("choiceB")).click({controller:this.controller,
-                                        side:this.side, choice:"B"},
-                                       changeReflectorClick);
+    $(this.hid("choiceB")).click({view:this, choice:"B"},
+                                  changeReflectorClick);
     $("<button/>", {id:this.id("choiceC"), text:"C"}).appendTo(this.hid("reflector-choice"));
-    $(this.hid("choiceC")).click({controller:this.controller,
-                                        side:this.side, choice:"C"},
-                                       changeReflectorClick);
+    $(this.hid("choiceC")).click({view:this, choice:"C"},
+                                  changeReflectorClick);
+    this.changeTo("B");
+  }
+
+  ReflectorView.prototype.changeTo = function(choice){
+    this.controller.changeReflector(choice);
+    this.changeSelector(choice);
+  }
+
+  ReflectorView.prototype.changeSelector = function(choice){
+    var reflId = choice == "B" ? "#choiceB" : "#choiceC";
+    if(reflId != this.lastId){
+      $(reflId).css({background:"#004d95", color:"white"});
+      $(reflId).hover(function(){$(reflId).css({background:"#004d95", color:"white"});},
+                      function(){$(reflId).css({background:"#004d95", color:"white"});});
+
+      if(this.lastId != undefined){
+        $(this.lastId).css({background:"inherit", color:"#3f668b"});
+        $(this.lastId).hover(function(){$(this).css({background:"#004D95", color:"white"});},
+                             function(){$(this).css({background:"inherit", color:"#3f668b"});});
+      }
+      this.lastId = reflId;
+    }
   }
 
   ReflectorView.prototype.getName = function(){
