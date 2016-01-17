@@ -1,5 +1,3 @@
-/* FIXME entrelacmeent quand zoom entre toolbar et rotor */
-
 
 /* HTML */
 
@@ -31,6 +29,8 @@ body {
   width:100%;
   background:#dddfe2;
   text-align: center;
+  height: auto;
+  padding:5px;
 }
 
 /* containers */
@@ -117,46 +117,28 @@ a.tb-active {
   background-color: #4CAF50;
 }
 
-
 /* Reflector */
 
-.reflector {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: inline-block;
-  padding: 0;
-  vertical-align: top;
-  margin:25px;
-  margin-bottom: 0;
-  width: 50px;
-  height:250px;
-  border: 3px solid #004d95;
-  background-color: #00396d;
-  border-radius: 5px;
-  box-shadow: #000 0px 0px 5px 1px;
-
-}
-
-.reflector-button-container {
+.reflector-choice {
   width: 100%;
-  height:100%;
   padding: 0;
   margin: 0 auto;
   text-align: center;
 }
 
-.reflector-button-container button {
-  width: 100%;
-  height:50%;
+.reflector-choice button {
+  width: 50%;
   margin: 0;
   padding: 5px;
   background:inherit;
-  border-width: 0;
   color:#3f668b;
+  border-width: 0;
+  border-top: 2px solid #004d95;
+  border-bottom: 2px solid #004d95;
+  /*border: 1px solid black;*/
 }
 
-.reflector-button-container button:hover {
+.reflector-choice button:hover{
   background:#004d95;
   color:white;
 }
@@ -164,167 +146,151 @@ a.tb-active {
 /* Rotor */
 
 .rotor {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   display: inline-block;
-  background:#00396d;
-  padding: 0;
-  vertical-align: top;
   width: 250px;
   margin:25px;
   margin-bottom: 0;
+  padding: 0;
+  background:#00396d;
   border: 3px solid #004d95;
   border-radius: 5px;
+  vertical-align: top;
   box-shadow: #000 0px 0px 5px 1px;
-  color:white;
-  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 20px;
 }
 
 .rotor span{
   display:block;
   padding:10px;
+  color:white;
 }
 
-.rotor-button-container {
+.rotor-choice {
   width: 100%;
   padding: 0;
   margin: 0 auto;
   text-align: center;
 }
 
-.rotor-button-container button {
+.rotor-choice button {
   width: 20%;
   margin: 0;
   padding: 5px;
   background:inherit;
+  color:#3f668b;
   border-width: 0;
   border-top: 2px solid #004d95;
   border-bottom: 2px solid #004d95;
-  color:#3f668b;
   /*border: 1px solid black;*/
 }
 
-.rotor-button-container button:hover{
+.rotor-choice button:hover{
   background:#004d95;
   color:white;
 }
 
-.rotor-param-container{
+.param-container{
   width:100%;
 }
 
-.rotor-param-container span{
+.param-container span{
   padding:0;
 }
 
-.rotor-param{
+.param{
   display:inline-block;
+  width:60px;
   margin:15px;
   margin-left:30px;
   margin-right: 30px;
   font-size: 15px;
-  width:60px;
 }
 
-.rotor-param-element{
-  display: block;
-  margin-top:10px;
-  width:100%;
-}
-
-.rotor-param-element-start{
-  color:white;
-  font-size: 25px;
-}
-
-.rotor-param-element-ring{
-  color:white;
-  font-size: 25px;
-}
-
-.rotor-param-element span{
-  display: block;
-  margin-top:10px;
-  width:100%;
-}
-
-.rotor-param button{
+.param button{
   display: block;
   width:auto;
   height:auto;
   margin:0 auto;
   margin-top:10px;
   padding:5px;
-  font-size:20px;
-  border-radius: 0%;
   color:#3f668b;
   background: inherit;
+  border-radius: 0%;
   border-width: 0;
+  font-size:20px;
 }
 
-.rotor-param button:hover{
+.param button:hover{
+  background:inherit;
   color:white;
-  background:inherit;
 }
 
-.rotor-param button:active{
-  color:black;
+.param button:active{
   background:inherit;
+  color:black;
+}
+
+.param-value{
+  display: block;
+  width:auto;
+  margin:0 auto;
+  margin-top:10px;
+  font-size: 25px;
 }
 
 /* Plugboard */ 
 
-.plugboard-list{
+#plugboard-list{
   padding:0;
   margin:0;
 }
 
-#plugboard-add{
+#plugboard-adder{
+  width:150px;
   margin:25px auto;
   padding:0;
   text-align: center;
-  width:150px;
 }
 
-.plugboard-add button{
-  padding:10px;
-  margin:0;
-  border: 1px solid #004d95;
+#add-button{
   width:100%;
-  border-radius: 20px;
-  color:white;
-  background:#00396d;
+  margin:0;
   margin-top: 5px;
+  padding:10px;
+  background:#00396d;
+  color:white;
+  border: 2px solid #004d95;
+  border-radius: 20px;
 }
 
-.plugboard-add button:hover{
+#add-button:hover{
   background:#004d95;
 }
 
-.plugboard-add-entries{
+#add-entries{
   width:100%;
   padding:0;
   margin:0;
 }
 
-.plugboard-add-entries textarea{
-  resize: none;
+#add-entries textarea{
+  width:50%;
+  height:50px;
+  margin:0;
+  padding:0;
+  background:white;
+  color: #004d95;
+  border: 2px solid #004d95;
+  font-size:25px;
+  font-family: inherit;
   text-align: center;
+  resize: none;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  width:50%;
-  padding:0;
-  margin:0;
-  padding-top:10px;
-  border: 1px solid #004d95;
-  background:inherit;
-  font-size:25px;
-  font-family: inherit;
-  line-height: 1;
-  height: auto;
-  color: #004d95;
 }
 
 #entry-one{
@@ -334,63 +300,61 @@ a.tb-active {
 #entry-two{
   border-radius: 0px 20px 20px 0px;
 }
-.plug-item{
+
+.add-item{
   display: inline-block;
-  height:50px;
   width:65px;
+  height:50px;
   margin-top:25px;
   margin-bottom: 0;
   margin-left:9px;
   margin-right:9px;
   padding:5px;
   border:2px solid #004d95;
+  background:#00396d;
   color:white;
   border-radius: 8px;
   box-shadow: #575757 0px 0px 1px 1px;
-  background:#00396d;
-  
 }
 
-.plug-item span{
+.add-item span{
   display: flex;
+  width:inherit;
+  height:inherit;
+  margin:0;
+  border-radius: 6px;
   align-items: center;
   justify-content: center;
-  height:inherit;
-  width:inherit;
-  margin:0;
-  border-radius: 6px;
-  
 }
+
 .cross-panel{
-  position:absolute;
+  display:flex;
+  width:0;
+  height:0;
   margin:0;
   padding:0;
-  height:0;
-  width:0;
-  overflow:hidden;
+  opacity:0.9;
+  background:rgba(0, 0, 0, 0);
   border-radius: 6px;
+  align-items:center;
+  justify-content:center;
+  position:absolute;
+  overflow:hidden;
 }
 
 .cross{
   color:white;
 }
 
-.plug-item:hover .cross-panel{
-  display:flex;
-  align-items:center;
-  margin:0;
-  padding:0;
-  justify-content:center;
-  overflow:visible;
-  height:inherit;
+.add-item:hover .cross-panel{
   width:inherit;
-  opacity:0.9;
-  background:rgba(0, 0, 0, 0);
+  height:inherit;
+  overflow:visible;
 }
-.plug-item:hover{
-  border-radius:8px;
+.add-item:hover{
   border:2px solid #004d95;
   box-shadow: #575757 0px 0px 2px 1px;
-  color:rgba(0, 0, 0, 0.31);
+  color:rgba(255, 255, 255, 0.31);
   cursor:pointer;
 }
+

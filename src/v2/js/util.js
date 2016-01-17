@@ -92,48 +92,6 @@ StringUtil.inBlock = function(string, blockSize){
   return result;
 }
 
-/* Html utility */
-
-function HtmlUtil(){}
-
-HtmlUtil.htmlTag = function(tag, className, idName, content){
-  return "<"+tag+" class='"
-    +(className == undefined ? "" : className)+"' id='"
-    +(idName == undefined ? "" : idName)+"'>"
-    +(content == undefined ? "" : content)+"</"+tag+">";  
-}
-  
-HtmlUtil.div = function(className, idName, content){
-  return HtmlUtil.htmlTag("div", className, idName, content);
-}
-  
-HtmlUtil.span = function(className, idName, content){
-  return HtmlUtil.htmlTag("span", className, idName, content);
-}
-  
-HtmlUtil.button = function(className, idName, content){
-  return HtmlUtil.htmlTag("button", className, idName, content);
-}
-
-HtmlUtil.ul = function(className, idName, content){
-  return HtmlUtil.htmlTag("ul", className, idName, content);
-}
-
-HtmlUtil.li = function(className, idName, content){
-  return HtmlUtil.htmlTag("li", className, idName, content);
-}
-
-HtmlUtil.a = function(className, idName, content){
-  return HtmlUtil.htmlTag("a", className, idName, content);
-}
-
-HtmlUtil.textarea = function(className, idName, content){
-  return "<textarea class='"
-    +(className == undefined ? "" : className)+"' id='"
-    +(idName == undefined ? "" : idName)+"' rows='1'>"
-    +(content == undefined ? "" : content)+"</textarea>";  
-}
-
 /*
 var s = "HAKIM";
 console.log(s);
