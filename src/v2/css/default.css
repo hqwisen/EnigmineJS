@@ -93,13 +93,13 @@ body {
 
 ul.toolbar {
   display: flex;
-  /*box-shadow: 0px 2px 3px grey;*/
+  box-shadow: 0 0 1px 1px #000;
   list-style-type: none;
   margin: 0;
   padding:0;
   padding-left: 60px;
   overflow: hidden;
-  background: #004d95;
+  background: rgba(0, 77, 149, 0.9);
   position: fixed;
   top: 0;
   width: 100%;
@@ -120,12 +120,12 @@ ul.toolbar span {
   margin:0;
   margin-right: 15px;
   text-decoration: none;
-  border-bottom:5px solid white;
+  border-bottom:0px solid black;
   height:100%;
 }
 ul.toolbar span:hover {
-  border-bottom:5px solid #00396d;
-  color:#00396d;
+  border-bottom:0px solid #00396d;
+  color:#dfdfdf;
   cursor:pointer;
 }
 
@@ -301,6 +301,13 @@ a.tb-active {
   background:#004d95;
 }
 
+#add-button:disabled{
+  background:#959595;
+  border-color:#909090;
+  color:#747474;
+  cursor:default;
+}
+
 #add-entries{
   width:100%;
   padding:0;
@@ -312,6 +319,7 @@ a.tb-active {
   height:50px;
   margin:0;
   padding:0;
+  padding-top:8px;
   background:white;
   color: #004d95;
   border: 2px solid #004d95;
@@ -334,13 +342,13 @@ a.tb-active {
 
 .add-item{
   display: inline-block;
-  width:65px;
+  width:70px;
   height:50px;
   margin-top:25px;
   margin-bottom: 0;
   margin-left:9px;
   margin-right:9px;
-  padding:5px;
+  padding:3px;
   border:2px solid #004d95;
   background:#00396d;
   color:white;
@@ -398,7 +406,7 @@ a.tb-active {
   padding:20px;
   padding-left:30px;
   padding-right:30px;
-  background:#00396d;
+  background:#004d95;
   color:white;
   font-family: inherit;
   font-size: 20px;

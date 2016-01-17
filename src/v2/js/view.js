@@ -117,9 +117,13 @@ $(function(){
   /* Plugboard View */ 
   
   function addPlugClick(event){
-    event.data.view.addPlug("Q", "Z");
-    console.log($('html').height());
-    console.log($('html').width());
+    var values = event.data.view.getEntriesValue();
+    if(!values["error"]){
+      event.data.view.addPlug(values["entry1"], values["entry2"]);
+      if(event.data.view.controller.hasMaximumPlugboardConnection()){
+        event.data.view.disableAddButton();
+      }
+    }
   }
   
   function PlugboardView(controller){
@@ -129,23 +133,79 @@ $(function(){
     $("<div/>", {id:"plugboard-adder"}).appendTo("#plugboard-container");
 
     $("<div/>", {id:"add-entries"}).appendTo("#plugboard-adder");
-    $("<textarea/>", {id:"entry-one"}).appendTo("#add-entries");
-    $("<textarea/>", {id:"entry-two"}).appendTo("#add-entries");
-    $("<button/>", {id:"add-button", text:"Add"}).appendTo("#plugboard-adder");
+    $("<textarea/>", {id:"entry-one", maxlength:1}).appendTo("#add-entries");
+    $("<textarea/>", {id:"entry-two", maxlength:1}).appendTo("#add-entries");
+    $("<button/>", {id:"add-button", text:"Add to plugboard"}).appendTo("#plugboard-adder");
     $("#add-button").click({view:this}, addPlugClick);
   }
   
-  PlugboardView.prototype.addPlug = function(char1, char2){
+  PlugboardView.prototype.addPlug = function(entry1, entry2){
+    this.controller.addPlugboardConnection(entry1, entry2);
     $("<div/>", {class:"add-item", id:"item"+this.itemGenerator}).appendTo("#plugboard-list");
     $("<div/>", {class:"cross-panel", html:"<div class='cross'>&#x274c;</div>"}).appendTo("#item"+this.itemGenerator);
-    $("<span/>", {html:char1+" &#8961; "+char2}).appendTo("#item"+this.itemGenerator);
+    $("<span/>", {html:entry1.toUpperCase()+" &#8961; "+entry2.toUpperCase()}).appendTo("#item"+this.itemGenerator);
     $("#item"+this.itemGenerator).click({view:this}, function(event){
       $(this).remove();
-      event.data.view.controller.plugboardRemove(char1, char2);
+      event.data.view.controller.removePlugboardConnection(entry1, entry2);
+      if(!event.data.view.controller.hasMaximumPlugboardConnection()){
+        event.data.view.enableAddButton();
+      }
     });    
     this.itemGenerator++;
   }
   
+  PlugboardView.prototype.getEntriesValue = function(){
+    this.unshowError("#entry-one");
+    this.unshowError("#entry-two");
+    var values = {};
+    var entry1 = this.getEntry("#entry-one");
+    var entry2 = this.getEntry("#entry-two");
+    values["error"] = true;
+    if(entry1 == undefined){
+      this.showError("#entry-one");
+    }
+    if(entry2 == undefined){
+      this.showError("#entry-two");
+    }
+    if(entry1 != undefined && entry2 != undefined){
+      values["error"] = false;
+      values["entry1"] = entry1;
+      values["entry2"] = entry2;
+      this.cleanEntry("#entry-one");
+      this.cleanEntry("#entry-two");
+
+    }
+    return values;
+  }
+
+  PlugboardView.prototype.getEntry = function(entryId){
+    var value = $(entryId).val();
+    if(value.match(/^[A-Za-z]+$/) && !this.controller.isPlugboardUsed(value)){
+      return value;
+    }else{
+      return undefined;
+    }
+  }
+
+  PlugboardView.prototype.showError = function(entryId){
+    $(entryId).css({borderColor:"rgb(211, 118, 118)"});
+  }
+
+  PlugboardView.prototype.unshowError = function(entryId){
+    $(entryId).css({borderColor:"#004d95"});
+  }
+
+  PlugboardView.prototype.cleanEntry = function(entryId){
+    $(entryId).val("");
+  }
+
+  PlugboardView.prototype.disableAddButton = function(){
+    $("#add-button").prop("disabled", true);
+  }
+  PlugboardView.prototype.enableAddButton = function(){
+    $("#add-button").prop("disabled", false);
+  }
+
   /* Input View */
 
   function InputView(controller){
@@ -171,6 +231,7 @@ $(function(){
   function MachineController(){
     
     this.machine = new Machine();
+    this.plugItemCounter = 0;
     this.rotorViewList = [];
     this.createRotorView(Machine.LEFT_ROTOR);
     this.createRotorView(Machine.MIDDLE_ROTOR);
@@ -182,6 +243,8 @@ $(function(){
     
   }  
   
+  MachineController.MAXIMUM_PLUGITEM = 10;
+
   MachineController.prototype.createRotorView = function(side){
     var rotorView = new RotorView(this, side);
     this.rotorViewList.push(rotorView);
@@ -202,9 +265,24 @@ $(function(){
   MachineController.prototype.changeRing = function(side, value){
     console.log("NOT IMPLEMENTED > changeRing("+side+", "+value+").");
   }
+
+  MachineController.prototype.addPlugboardConnection = function(entry1, entry2){
+    this.plugItemCounter++;
+    console.log("NOT IMPLEMENTED > addPlugboardConnection("+entry1+", "+entry2+").");
+  }
+
+  MachineController.prototype.removePlugboardConnection = function(entry1, entry2){
+    this.plugItemCounter--;
+    console.log("NOT IMPLEMENTED > removePlugboardConnection("+entry1+", "+entry2+").");
+  }
+
+  MachineController.prototype.isPlugboardUsed = function(char){
+    console.log("NOT IMPLEMENTED > isPlugboardUsed("+char+").");
+    return false;
+  }
   
-  MachineController.prototype.plugboardRemove = function(char1, char2){
-    console.log("NOT IMPLEMENTED > plugboardRemove("+char1+", "+char2+").");  
+  MachineController.prototype.hasMaximumPlugboardConnection = function(){
+    return this.plugItemCounter == MachineController.MAXIMUM_PLUGITEM;
   }
   
   MachineController.prototype.getRotors = function(){
