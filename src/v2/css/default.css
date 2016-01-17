@@ -51,7 +51,7 @@ body {
 
 #rotors-container {
   display: inline-block;
-  width: 70%;
+  width: 85%;
   height: auto;
   margin:0 auto;
   padding-top:20px;
@@ -61,7 +61,7 @@ body {
 
 #plugboard-container{
   display: inline-block;
-  width: 60%;
+  width: 70%;
   margin:0 auto;
   text-align: center;
   vertical-align: top;
