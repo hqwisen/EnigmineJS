@@ -7,7 +7,7 @@ $(function(){
     event.data.view.changeTo(event.data.choice);
   }
   
-  function ReflectorView(controller){
+  function ReflectorView(controller, initial){
     this.controller = controller;
     this.lastId = undefined;
 
@@ -21,7 +21,7 @@ $(function(){
     $("<button/>", {id:this.id("choiceC"), text:"C"}).appendTo(this.hid("reflector-choice"));
     $(this.hid("choiceC")).click({view:this, choice:"C"},
                                   changeReflectorClick);
-    this.changeTo("B");
+    this.changeTo(initial);
   }
 
   ReflectorView.prototype.changeTo = function(choice){
@@ -31,18 +31,7 @@ $(function(){
 
   ReflectorView.prototype.changeSelector = function(choice){
     var reflId = choice == "B" ? "#choiceB" : "#choiceC";
-    if(reflId != this.lastId){
-      $(reflId).css({background:"#004d95", color:"white"});
-      $(reflId).hover(function(){$(reflId).css({background:"#004d95", color:"white"});},
-                      function(){$(reflId).css({background:"#004d95", color:"white"});});
-
-      if(this.lastId != undefined){
-        $(this.lastId).css({background:"inherit", color:"#3f668b"});
-        $(this.lastId).hover(function(){$(this).css({background:"#004D95", color:"white"});},
-                             function(){$(this).css({background:"inherit", color:"#3f668b"});});
-      }
-      this.lastId = reflId;
-    }
+    HtmlUtil.changeSelector(this, reflId);
   }
 
   ReflectorView.prototype.getName = function(){
@@ -61,8 +50,7 @@ $(function(){
   /* RotorView */
   
   function changeRotorClick(event){
-    var controller = event.data.controller;
-    controller.changeRotor(event.data.side, event.data.choice);
+    event.data.view.changeTo(event.data.choice);
   }
   
   function changeStartClick(event){
@@ -75,17 +63,18 @@ $(function(){
     controller.changeRing(event.data.side, event.data.value);    
   }
   
-  function RotorView(controller, side){
+  function RotorView(controller, side, initial){
     this.controller = controller;
     this.side = side;
+    this.lastId = undefined;
+
     $("<div/>", {class:"rotor", id:this.id("rotor")}).appendTo("#rotors-container");
     $("<span/>", {text:this.getName()}).appendTo(this.hid("rotor"));
     /* Rotor choices */
     $("<div/>", {class:"rotor-choice", id:this.id("rotor-choice")}).appendTo(this.hid("rotor"));
     for(var name in this.controller.getRotors()){
       $("<button/>", {id:this.id("choice"+name), text:name}).appendTo(this.hid("rotor-choice"));
-      $(this.hid("choice"+name)).click({controller:this.controller,
-                                        side:this.side, choice:name},
+      $(this.hid("choice"+name)).click({view:this, choice:name},
                                        changeRotorClick);
     }
     /* Rotor parameters */
@@ -112,7 +101,18 @@ $(function(){
     $(this.hid("ringdown")).click({controller:this.controller, side:this.side, value:-1},
                                  changeRingClick);
 
+    this.changeTo(initial);
   }
+
+  RotorView.prototype.changeTo = function(choice){
+    this.controller.changeRotor(this.side, choice);
+    this.changeSelector(choice);
+  }
+
+  RotorView.prototype.changeSelector = function(choice){
+    HtmlUtil.changeSelector(this, this.hid("choice"+choice));
+  }
+
 
   RotorView.prototype.getName = function(){
     if(this.side == 0){
@@ -253,10 +253,10 @@ $(function(){
     this.machine = new Machine();
     this.plugItemCounter = 0;
     this.rotorViewList = [];
-    this.createRotorView(Machine.LEFT_ROTOR);
-    this.createRotorView(Machine.MIDDLE_ROTOR);
-    this.createRotorView(Machine.RIGHT_ROTOR);
-    this.reflectorView = new ReflectorView(this);
+    this.createRotorView(Machine.LEFT_ROTOR, "I");
+    this.createRotorView(Machine.MIDDLE_ROTOR, "II");
+    this.createRotorView(Machine.RIGHT_ROTOR, "III");
+    this.reflectorView = new ReflectorView(this, "C");
     this.plugboardView = new PlugboardView(this);
     this.inputView = new InputView(this);
     this.outputView = new OutputView(this);
@@ -265,8 +265,8 @@ $(function(){
   
   MachineController.MAXIMUM_PLUGITEM = 10;
 
-  MachineController.prototype.createRotorView = function(side){
-    var rotorView = new RotorView(this, side);
+  MachineController.prototype.createRotorView = function(side, initial){
+    var rotorView = new RotorView(this, side, initial);
     this.rotorViewList.push(rotorView);
   }
   

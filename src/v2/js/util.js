@@ -92,6 +92,23 @@ StringUtil.inBlock = function(string, blockSize){
   return result;
 }
 
+HtmlUtil = function(){}
+
+HtmlUtil.changeSelector = function(object, currentId){
+  if(currentId != object.lastId){
+    $(currentId).css({background:"#004d95", color:"white"});
+    $(currentId).hover(function(){$(currentId).css({background:"#004d95", color:"white"});},
+                      function(){$(currentId).css({background:"#004d95", color:"white"});});
+
+    if(object.lastId != undefined){
+      $(object.lastId).css({background:"inherit", color:"#3f668b"});
+      $(object.lastId).hover(function(){$(this).css({background:"#004D95", color:"white"});},
+                           function(){$(this).css({background:"inherit", color:"#3f668b"});});
+    }
+    object.lastId = currentId;
+  }
+}
+
 /*
 var s = "HAKIM";
 console.log(s);
