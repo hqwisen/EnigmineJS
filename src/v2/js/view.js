@@ -146,6 +146,26 @@ $(function(){
     this.itemGenerator++;
   }
   
+  /* Input View */
+
+  function InputView(controller){
+    this.controller = controller;
+    $("<div/>", {id:"input-toolbar"}).appendTo("#input-container");
+    $("<span/>", {text:"Your message"}).appendTo("#input-toolbar");
+    $("<textarea/>").appendTo("#input-container");
+  }
+
+    /* Output View */
+
+  function OutputView(controller){
+    this.controller = controller;
+    $("<div/>", {id:"output-toolbar"}).appendTo("#output-container");
+    $("<span/>", {text:"Encrypted message"}).appendTo("#output-toolbar");
+    $("<textarea/>", {id:"outputarea"}).appendTo("#output-container");
+    $("#outputarea").prop("readonly", false);
+  }
+
+
   /* MachineController */
   
   function MachineController(){
@@ -157,6 +177,8 @@ $(function(){
     this.createRotorView(Machine.RIGHT_ROTOR);
     this.reflectorView = new ReflectorView(this);
     this.plugboardView = new PlugboardView(this);
+    this.inputView = new InputView(this);
+    this.outputView = new OutputView(this);
     
   }  
   
