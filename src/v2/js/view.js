@@ -74,7 +74,7 @@ $(function(){
 
     $("<div/>", {class:"param", id:this.id("start-param")}).appendTo(this.hid("param-container"));
     $("<span/>", {text:"Start"}).appendTo(this.hid("start-param"));
-    $("<button/>", {id:this.id("startup"), html:"&#8634;"}).appendTo(this.hid("start-param"));
+    $("<button/>", {id:this.id("startup"), html:"&#8635;"}).appendTo(this.hid("start-param"));
     $("<span/>", {class:"param-value", text:"A"}).appendTo(this.hid("start-param"));
     $("<button/>", {id:this.id("startdown"), html:"&#8634;"}).appendTo(this.hid("start-param"));
     $(this.hid("startup")).click({controller:this.controller, side:this.side, value:+1},
@@ -84,7 +84,7 @@ $(function(){
 
     $("<div/>", {class:"param", id:this.id("ring-param")}).appendTo(this.hid("param-container"));
     $("<span/>", {text:"Ring"}).appendTo(this.hid("ring-param"));
-    $("<button/>", {id:this.id("ringup"), html:"&#8634;"}).appendTo(this.hid("ring-param"));
+    $("<button/>", {id:this.id("ringup"), html:"&#8635;"}).appendTo(this.hid("ring-param"));
     $("<span/>", {class:"param-value", text:"A"}).appendTo(this.hid("ring-param"));
     $("<button/>", {id:this.id("ringdown"), html:"&#8634;"}).appendTo(this.hid("ring-param"));
     $(this.hid("ringup")).click({controller:this.controller, side:this.side, value:+1},
