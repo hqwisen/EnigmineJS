@@ -161,8 +161,8 @@ $(function(){
     this.controller = controller;
     $("<div/>", {id:"output-toolbar"}).appendTo("#output-container");
     $("<span/>", {text:"Encrypted message"}).appendTo("#output-toolbar");
-    $("<textarea/>", {id:"outputarea"}).appendTo("#output-container");
-    $("#outputarea").prop("readonly", false);
+    $("<textarea/>", {id:"outputarea", text:"Lock text"}).appendTo("#output-container");
+    $("#outputarea").prop("readonly", true);
   }
 
 
