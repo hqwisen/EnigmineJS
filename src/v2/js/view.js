@@ -118,6 +118,8 @@ $(function(){
   
   function addPlugClick(event){
     event.data.view.addPlug("Q", "Z");
+    console.log($('html').height());
+    console.log($('html').width());
   }
   
   function PlugboardView(controller){

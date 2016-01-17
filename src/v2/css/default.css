@@ -30,7 +30,7 @@ body {
   background:#dddfe2;
   text-align: center;
   height: auto;
-  padding:5px;
+  padding:0 ;
 }
 
 /* containers */
@@ -41,7 +41,7 @@ body {
 
 #rotors-container {
   display: inline-block;
-  width: 1000px;
+  width: 70%;
   height: auto;
   margin:0 auto;
   padding-top:20px;
@@ -51,9 +51,8 @@ body {
 
 #plugboard-container{
   display: inline-block;
-  width: 1000px;
+  width: 60%;
   margin:0 auto;
-  padding-top:20px;
   text-align: center;
   vertical-align: top;
 }
@@ -147,7 +146,7 @@ a.tb-active {
 
 .rotor {
   display: inline-block;
-  width: 250px;
+  width: 300px;
   margin:25px;
   margin-bottom: 0;
   padding: 0;
