@@ -228,8 +228,9 @@ $(function(){
 
   /* Input View */
 
-  function inputKeyDownEvent(event){
-    event.data.controller.handleInput(event.which, event.key);
+  function inputChangeEvent(event){
+    var controller = event.data.controller;
+    controller.handleInput();
   }
 
   function InputView(controller){
@@ -238,15 +239,45 @@ $(function(){
     $("<span/>", {text:"Your message"}).appendTo("#input-toolbar");
     $("<textarea/>", {id:"inputarea"}).appendTo("#input-container");
 
-    $("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
+    //$("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
+    //$("#inputarea").change({controller:this.controller}, inputChangeEvent);
+    //$('#inputarea').bind('paste', {test:this}, function(event){console.log('this actually paste' + event.data.test.getSelectionStart())});
+    $('#inputarea').bind('input', {controller:this.controller},
+                         inputChangeEvent);
+
+
   }
 
-    /* Output View */
+  InputView.prototype.getContent = function(){
+    return $("#inputarea").val();
+  }
+
+  InputView.prototype.setContent = function(content){
+    return $("#inputarea").val(content);
+  }
+
+  InputView.prototype.getCharAt = function(index){
+    return this.getContent().charAt(index);
+  }
+
+  InputView.prototype.getSelectionStart = function(){
+    return $("#inputarea")[0].selectionStart;
+  }
+
+  InputView.prototype.getSelectionEnd = function(){
+    return $("#inputarea")[0].selectionEnd;
+  }
+
+  /* Output View */
 
   function OutputView(controller){
     this.controller = controller;
     $("<div/>", {id:"output-toolbar"}).appendTo("#output-container");
-    $("<span/>", {text:"Encrypted message"}).appendTo("#output-toolbar");
+    $("<div/>", {id:"output-menu"}).appendTo("#output-toolbar");
+    $("<div/>", {id:"output-title"}).appendTo("#output-toolbar");
+    $("<button/>", {html:"Copy"}).appendTo("#output-menu");
+    $("<button/>", {html:"Cut"}).appendTo("#output-menu");
+    $("<span/>", {text:"Encrypted message"}).appendTo("#output-title");
     $("<textarea/>", {id:"outputarea", text:""}).appendTo("#output-container");
     $("#outputarea").prop("readonly", true);
 
@@ -260,6 +291,24 @@ $(function(){
 
   OutputView.prototype.pushSpace = function(){
     this.push(OutputView.SPACE_TAG);
+  }
+
+  OutputView.prototype.removeFrom = function(index){
+    var content = this.getContent();
+    var removed = StringUtil.removeSeq(content, index, this.getSize());
+    this.setContent(removed);
+  }
+
+  OutputView.prototype.getContent = function(){
+    return $("#outputarea").val();
+  }
+
+  OutputView.prototype.setContent = function(content){
+    return $("#outputarea").val(content);
+  }
+
+  OutputView.prototype.getSize = function(){
+    this.getContent().length;
   }
 
   /* MachineController */
@@ -317,8 +366,16 @@ $(function(){
     return false;
   }
 
-  MachineController.prototype.handleInput = function(which, key){
+  MachineController.prototype.handleInput = function(){
+    console.log("NOT IMPLEMENTED > handleInput().");
+    this.outputView.setContent(this.inputView.getContent());
+
+  }
+
+  /*MachineController.prototype.handleInput = function(which, key){
     console.log("NOT IMPLEMENTED > handleInput("+which+", "+key+").");
+    console.log("SELECTION > " + "("+this.inputView.getSelectionStart()+","
+                                +""+this.inputView.getSelectionEnd()+").");
     if(KeyCode.isAlpha(which)){
       // encrypt
     }else if(KeyCode.isSpace(which)){
@@ -330,7 +387,7 @@ $(function(){
     }else{
       // Do nothing
     }
-  }
+  }*/
 
   MachineController.prototype.hasMaximumPlugboardConnection = function(){
     return this.plugItemCounter == MachineController.MAXIMUM_PLUGITEM;
