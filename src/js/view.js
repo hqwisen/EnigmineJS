@@ -83,9 +83,9 @@ $(function(){
 
     $("<div/>", {class:"param", id:this.id("start-param")}).appendTo(this.hid("param-container"));
     $("<span/>", {text:"Start"}).appendTo(this.hid("start-param"));
-    $("<button/>", {id:this.id("startup"), html:"&#8635;"}).appendTo(this.hid("start-param"));
+    $("<button/>", {class:"rotate-left", id:this.id("startup"), html:"&#8635;"}).appendTo(this.hid("start-param"));
     $("<span/>", {class:"param-value", text:"A"}).appendTo(this.hid("start-param"));
-    $("<button/>", {id:this.id("startdown"), html:"&#8634;"}).appendTo(this.hid("start-param"));
+    $("<button/>", {class:"rotate-right", id:this.id("startdown"), html:"&#8634;"}).appendTo(this.hid("start-param"));
     $(this.hid("startup")).click({controller:this.controller, side:this.side, value:+1},
                                  changeStartClick);
     $(this.hid("startdown")).click({controller:this.controller, side:this.side, value:-1},
@@ -93,9 +93,9 @@ $(function(){
 
     $("<div/>", {class:"param", id:this.id("ring-param")}).appendTo(this.hid("param-container"));
     $("<span/>", {text:"Ring"}).appendTo(this.hid("ring-param"));
-    $("<button/>", {id:this.id("ringup"), html:"&#8635;"}).appendTo(this.hid("ring-param"));
+    $("<button/>", {class:"rotate-left", id:this.id("ringup"), html:"&#8635;"}).appendTo(this.hid("ring-param"));
     $("<span/>", {class:"param-value", text:"A"}).appendTo(this.hid("ring-param"));
-    $("<button/>", {id:this.id("ringdown"), html:"&#8634;"}).appendTo(this.hid("ring-param"));
+    $("<button/>", {class:"rotate-right", id:this.id("ringdown"), html:"&#8634;"}).appendTo(this.hid("ring-param"));
     $(this.hid("ringup")).click({controller:this.controller, side:this.side, value:+1},
                                  changeRingClick);
     $(this.hid("ringdown")).click({controller:this.controller, side:this.side, value:-1},
@@ -230,16 +230,32 @@ $(function(){
 
   function inputChangeEvent(event){
     var controller = event.data.controller;
+    console.log("change\n"+controller.inputView.getContent());
+    console.log("change\n"+controller.inputView.getSelectionStart());
+    console.log("change\n"+controller.inputView.getSelectionEnd());
     controller.handleInput();
+  }
+
+
+  function inputKeyDownEvent(event){
+    var controller = event.data.controller;
+    console.log("down\n"+controller.inputView.getContent());
+    console.log("down\n"+controller.inputView.getSelectionStart());
+    console.log("down\n"+controller.inputView.getSelectionEnd());
+
   }
 
   function InputView(controller){
     this.controller = controller;
-    $("<div/>", {id:"input-toolbar"}).appendTo("#input-container");
-    $("<span/>", {text:"Your message"}).appendTo("#input-toolbar");
-    $("<textarea/>", {id:"inputarea"}).appendTo("#input-container");
 
-    //$("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
+    $("<div/>", {id:"input-toolbar"}).appendTo("#input-container");
+    $("<div/>", {id:"input-menu"}).appendTo("#input-toolbar");
+    $("<div/>", {id:"input-title"}).appendTo("#input-toolbar");
+    $("<button/>", {html:"PASTE", id:"intputpaste"}).appendTo("#input-menu");
+    $("<span/>", {text:"Your message"}).appendTo("#input-title");
+    $("<textarea/>", {id:"inputarea", text:""}).appendTo("#input-container");
+
+    $("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
     //$("#inputarea").change({controller:this.controller}, inputChangeEvent);
     //$('#inputarea').bind('paste', {test:this}, function(event){console.log('this actually paste' + event.data.test.getSelectionStart())});
     $('#inputarea').bind('input', {controller:this.controller},
@@ -270,16 +286,24 @@ $(function(){
 
   /* Output View */
 
+  function outputCopyEvent(event){
+    var controller = event.data.controller;
+    var start = controller.inputView.getSelectionStart();
+    console.log("copy: " + controller.inputView.getSelectionStart());
+    controller.outputView.removeFrom(start);
+  }
+
   function OutputView(controller){
     this.controller = controller;
     $("<div/>", {id:"output-toolbar"}).appendTo("#output-container");
     $("<div/>", {id:"output-menu"}).appendTo("#output-toolbar");
     $("<div/>", {id:"output-title"}).appendTo("#output-toolbar");
-    $("<button/>", {html:"Copy"}).appendTo("#output-menu");
-    $("<button/>", {html:"Cut"}).appendTo("#output-menu");
+    $("<button/>", {html:"COPY", id:"outputcopy"}).appendTo("#output-menu");
+    $("<button/>", {html:"SELECT", id:"outputselect"}).appendTo("#output-menu");
     $("<span/>", {text:"Encrypted message"}).appendTo("#output-title");
     $("<textarea/>", {id:"outputarea", text:""}).appendTo("#output-container");
     $("#outputarea").prop("readonly", true);
+    $("#outputcopy").click({controller:this.controller}, outputCopyEvent);
 
   }
 
@@ -308,7 +332,7 @@ $(function(){
   }
 
   OutputView.prototype.getSize = function(){
-    this.getContent().length;
+    return this.getContent().length;
   }
 
   /* MachineController */
@@ -368,8 +392,8 @@ $(function(){
 
   MachineController.prototype.handleInput = function(){
     console.log("NOT IMPLEMENTED > handleInput().");
-    this.outputView.setContent(this.inputView.getContent());
-
+    console.log(this.inputView.getContent());
+    this.outputView.removeFrom(this.inputView.getSelectionStart());
   }
 
   /*MachineController.prototype.handleInput = function(which, key){

@@ -19,7 +19,7 @@ body {
   text-align: center;
   font-family: Ubuntu, Verdana, Geneva, Arial, Helvetica, sans-serif;
   font-size:22px;
-  background:white;
+  background:#eaeaea;
 }
 
 
@@ -69,7 +69,7 @@ body {
 
 #input-container{
   display: block;
-  width: 50%;
+  width: 55%;
   margin:0 auto;
   margin-bottom:70px;
   border-radius:5px;
@@ -80,7 +80,7 @@ body {
 
 #output-container{
   display: block;
-  width: 50%;
+  width: 55%;
   margin:0 auto;
   margin-top:70px;
   border-radius:5px;
@@ -99,7 +99,7 @@ ul.toolbar {
   padding:0;
   padding-left: 60px;
   overflow: hidden;
-  background: rgba(0, 77, 149, 0.9);
+  background: #005dbf;
   position: fixed;
   top: 0;
   width: 100%;
@@ -259,9 +259,18 @@ a.tb-active {
   color:white;
 }
 
-.param button:active{
-  background:inherit;
-  color:black;
+.rotate-left:active{
+  -ms-transform:rotate(30deg); /* IE 9 */
+  -moz-transform:rotate(30deg); /* Firefox */
+  -webkit-transform:rotate(30deg); /* Safari and Chrome */
+  -o-transform:rotate(30deg); /* Opera */
+}
+
+.rotate-right:active{
+  -ms-transform:rotate(-30deg); /* IE 9 */
+  -moz-transform:rotate(-30deg); /* Firefox */
+  -webkit-transform:rotate(-30deg); /* Safari and Chrome */
+  -o-transform:rotate(-30deg); /* Opera */
 }
 
 .param-value{
@@ -400,30 +409,71 @@ a.tb-active {
 /* input */
 
 #input-toolbar{
-  display: flex;
-  width:100%;
-  height:80px;
+  width: 100%;
+  height: 80px;
   margin:0;
-  padding:0;
+  padding: 0;
   padding-left:30px;
   padding-right:30px;
   background:#004d95;
-  color:white;
-  font-family: inherit;
-  font-size: 20px;
-  text-align: left;
-  border: 3px solid #004d95;
-  border-bottom-width:0;
   border-radius: 5px 5px 0 0;
   vertical-align: top;
-  align-items: center;
-  justify-content: flex-start ;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-#input-toolbar span{
+#input-menu{
+  display: flex;
+  float:right;
+  width: 50%;
+  height:inherit;
+  margin:0;
+  padding:0;
+  background:inherit;
+  align-items: center;
+  justify-content: flex-end;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#input-menu button{
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  padding-right:10px;
+  background: inherit;
+  border-width: 0;
+  color:#3f7eb2;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: normal;
+
+}
+
+#input-menu button:hover{
+  color:white;
+}
+
+
+#input-title{
+  display: flex;
+  float:left;
+  width: 50%;
+  height:inherit;
+  margin:0;
+  padding:0;
+  background:inherit;
+  align-items: center;
+  justify-content: flex-start;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#input-title span{
   width:auto;
   height:auto;
   color:white;
@@ -497,15 +547,15 @@ a.tb-active {
   padding-right:10px;
   background: inherit;
   border-width: 0;
-  color:white;
+  color:#3f668b;
   font-family: inherit;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: normal;
 
 }
 
 #output-menu button:hover{
-  color:#eaeaea;
+  color:white;
 }
 
 
