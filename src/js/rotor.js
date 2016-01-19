@@ -1,36 +1,54 @@
 
-var rotorsData = {
-  "I": {
-    "wires": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-    "notch": "Q"
-  },
-  "II": {
-    "wires": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-    "notch": "E"
-  },
-  "III": {
-    "wires": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-    "notch": "V"
-  },
-  "IV": {
-    "wires": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
-    "notch": "J"
-  },
-  "V": {
-    "wires": "VZBRGITYUPSDNHLXAWMJQOFECK",
-    "notch": "Z"
+function Table(chars){
+  "use strict";
+  this.chars = chars;
+
+  this.rotateRight = function(turn){
+    for(var i=0;i<turn;i++){
+      this.chars = this.chars[this.chars.length-1]
+                 + this.chars.slice(0, this.chars.length-1);
+    }
   }
+
+  this.rotateLeft = function(turn){
+    for(var i=0;i<turn;i++){
+      this.chars = this.chars.slice(1, this.chars.length)
+                 + this.chars[0];
+    }
+  }
+
+  this.getPosFromChar = function(char){
+    for(var i=0;i<this.chars.length;++i){
+      if(this.chars[i] == char){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  this.getPosFromNumber = function(number){
+    return this.getPosFromChar(Rotor.numberToChar(number));
+  }
+
+  this.getChar = function(index){
+    return this.chars[index];
+  }
+
+  this.getNumber = function(index){
+    return Rotor.charToNumber(this.getChar(index));
+  }
+
+  this.toString = function(){
+    return this.chars;
+  }
+
+  this.getSize = function(){
+    return this.chars.length;
+  }
+
 }
 
-Rotor.NAME = ["I", "II", "III", "IV", "V"];
 
-Rotor.ROTORS = {}
-for(var rotorName in rotorsData){
-  Rotor.ROTORS[rotorName] = new Rotor(rotorName,
-                                      rotorsData[rotorName]["wires"],
-                                      rotorsData[rotorName]["notch"]);   
-}
-  
 Rotor.MINSET = "A";
 Rotor.MAXSET = "Z";
 Rotor.CHARCODEMINSET = Rotor.MINSET.charCodeAt(0);
@@ -308,6 +326,51 @@ console.log(rotors["I"].process(input));
 rotors["II"].process(input);
 rotors["III"].process(input);
 console.log(rotors);
+*/
+
+function Reflector(name, wiringTable){
+  "use strict";
+  Reflector.log = function(refl, message){
+    if(LOG_ENIGMA){
+      console.log("[Reflector]["+refl.getName()+"] "
+                  + message
+                  + ".");
+    }
+  }
+
+  Reflector.error = function(refl, message, abort){
+    var fullMessage = "[Reflector]["+refl.getName()+"] "
+                + message
+                + ".";
+    abort = abort || false;
+    if(abort){
+      throw fullMessage;
+    }
+    console.error(fullMessage);
+  }
+
+  this.wiringTable = new Table(wiringTable);
+  this.process = function(cinput){
+    Reflector.log(this, "begin process for '"+cinput+"'");
+    var index = Rotor.charToNumber(cinput);
+    var coutput =  this.wiringTable.getChar(index);
+    Reflector.log(this, "end process for '"+cinput
+      +"' and product '"+coutput+"'");
+    return coutput;
+  }
+
+  this.getName = function(){
+    return name;
+  }
+
+}
+
+/*
+console.log("> Reflector");
+var input = "I";
+reflectors = Reflector.getReflectors();
+var output = reflectors["B"].process(input);
+console.log(input+" > "+output);
 */
 
 

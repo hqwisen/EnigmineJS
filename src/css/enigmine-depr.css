@@ -24,7 +24,7 @@ textarea{
   float:left;
   width:65%;
   height:100%;
-  background:#9a9a9a; 
+  background:#9a9a9a;
   /*border: 1px solid black;*/
   padding:0;
   margin;0;
@@ -113,7 +113,7 @@ button.rotorchoice{
   padding:0;
   margin:0;
   border-width:0;
-  
+
 }
 
 div.settingblock{
@@ -139,7 +139,7 @@ div.settingname{
   align-items: center;
   justify-content: center;
   /*border:2px solid black;*/
-  
+
 }
 
 div.valuecontainer{
@@ -162,7 +162,7 @@ div.settingvalue{
   font-size:30px;
   font-weight:40px;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 
 div.settingbutton{
@@ -233,15 +233,15 @@ button.plugaddbutton{
   height:100%;
   font-size:70px;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   /*padding:0;
   margin:0;*/
   background:#505050;
   color:white;
   border-width:0;
   border:0px black solid;
-  
-  
+
+
 }
 
 div.plugcontainer{
@@ -276,7 +276,7 @@ div.plugchoicevalue{
   font-size:30px;
   font-weight:40px;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 
 div.plugchoicebutton{
@@ -330,7 +330,7 @@ div.plugvalue{
   font-size:30px;
   font-weight:40px;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 
 button.plugvaluedelete{
@@ -364,17 +364,17 @@ textarea{
   margin:0;
   background:#f0f0f0;
   resize:none;
-  text-transform:uppercase;  
+  text-transform:uppercase;
 }
 
-.data{ 
+.data{
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float:right;
   width:35%;
   height:100%;
-  background:#d0d0d0; 
+  background:#d0d0d0;
   /*border:1px solid black;*/
   padding:0;
   margin:0;
@@ -392,11 +392,11 @@ textarea.input{
   border-left:0;
 }
 
-div.output{ 
+div.output{
   float:bottom;
   width:100%;
   height:50%;
-  
+
 }
 
 textarea.output{

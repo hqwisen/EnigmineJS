@@ -1,7 +1,7 @@
 
 function Machine(){
   "use strict";
-  
+
   this.rotors = {};
   this.rotors["I"] = RotorFactory.createRomanOne();
   this.rotors["II"] = RotorFactory.createRomanTwo();
@@ -12,7 +12,7 @@ function Machine(){
   this.reflectors = {};
   this.reflectors["B"] = RotorFactory.createReflectorB();
   this.reflectors["C"] = RotorFactory.createReflectorC();
-  
+
 }
 
 Machine.RIGHT_ROTOR = 2;

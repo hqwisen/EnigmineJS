@@ -6,13 +6,14 @@ var LOG_ENIGMA = false;
 /* KeyCode utility */
 
 function KeyCode(){}
-  
+
 KeyCode.A = 65;
 KeyCode.Z = 90;
 
 KeyCode.BACKSPACE = 8;
 KeyCode.DELETE = 46;
 
+KeyCode.SPACE = 32;
 KeyCode.CONTROL = 17;
 
 KeyCode.ARROWLEFT = 37;
@@ -28,8 +29,12 @@ KeyCode.isBackspace = function(keyCode){
   return keyCode == KeyCode.BACKSPACE;
 }
 
+KeyCode.isSpace = function(keyCode){
+  return keyCode == KeyCode.SPACE;
+}
+
 KeyCode.isDelete = function(keyCode){
-  return keyCode == KeyCode.DELETE; 
+  return keyCode == KeyCode.DELETE;
 }
 
 KeyCode.isControl = function(keyCode){
@@ -92,33 +97,51 @@ StringUtil.inBlock = function(string, blockSize){
   return result;
 }
 
+/* Char utility */
+
+function CharUtil(){}
+
+CharUtil.inRegexp = function(char, regexp){
+  if(char == undefined){
+    return false;
+  }
+  char = char.charAt(0);
+  if(char.match(regexp) == null){
+    return false;
+  }else{
+    return true;
+  }
+}
+
+CharUtil.isUpperCase = function(char){
+  return CharUtil.inRegexp(char, /[A-Z]/);
+}
+
+CharUtil.isLowerCase = function(char){
+  return CharUtil.inRegexp(char, /[a-z]/);
+}
+
+CharUtil.isChar = function(char){
+  return CharUtil.inRegexp(char, /[A-Za-z]/);
+}
+
 /* Html utility */
 
 function HtmlUtil(){}
 
-HtmlUtil.htmlTag = function(tag, className, idName, content){
-  return "<"+tag+" class='"
-    +(className == undefined ? "" : className)+"' id='"
-    +(idName == undefined ? "" : idName)+"'>"
-    +(content == undefined ? "" : content)+"</"+tag+">";  
-}
-  
-HtmlUtil.div = function(className, idName, content){
-  return HtmlUtil.htmlTag("div", className, idName, content);
-}
-  
-HtmlUtil.span = function(className, idName, content){
-  return HtmlUtil.htmlTag("span", className, idName, content);
-}
-  
-HtmlUtil.button = function(className, idName, content){
-  return HtmlUtil.htmlTag("button", className, idName, content);
+HtmlUtil.changeSelector = function(object, currentId){
+  if(currentId != object.lastId){
+    $(currentId).css({background:"#004d95", color:"white"});
+    $(currentId).hover(function(){$(currentId).css({background:"#004d95", color:"white"});},
+                      function(){$(currentId).css({background:"#004d95", color:"white"});});
+
+    if(object.lastId != undefined){
+      $(object.lastId).css({background:"inherit", color:"#3f668b"});
+      $(object.lastId).hover(function(){$(this).css({background:"#004D95", color:"white"});},
+                           function(){$(this).css({background:"inherit", color:"#3f668b"});});
+    }
+    object.lastId = currentId;
+  }
 }
 
-/*
-var s = "HAKIM";
-console.log(s);
-s = StringUtil.removeSeq(s, 0, 5);
-console.log(s);
-*/
 

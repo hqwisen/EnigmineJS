@@ -1,5 +1,5 @@
 // TODO Static method outside definition
-Enigma.DEFAULT_CONFIG = 
+Enigma.DEFAULT_CONFIG =
 {
   "rotors":["I", "II", "III"],
   "reflector":"B",
@@ -18,10 +18,10 @@ function Enigma(config, name, maxCable){
     if(LOG_ENIGMA){
       console.log("[Enigma]["+enig.getName()+"] "
                   + message
-                  + ".");      
+                  + ".");
     }
   }
-  
+
   Enigma.error = function(enig, message, abort){
     var fullMessage = "[Enigma]["+enig.getName()+"] "
                 + message
@@ -37,7 +37,7 @@ function Enigma(config, name, maxCable){
   this.config = config || Enigma.DEFAULT_CONFIG;
   this.name = name || "Enigma I";
   this.plugboard = new Plugboard(this.MAXCABLE);
-  
+
   this.applyConfig = function(config){
     this.setStartRotor(Enigma.RIGHT_ROTOR,
                        this.config["starts"][Enigma.RIGHT_ROTOR]);
@@ -90,14 +90,14 @@ function Enigma(config, name, maxCable){
         this.reverseRotateRotor(Enigma.MIDDLE_ROTOR);
         this.reverseRotateRotor(Enigma.LEFT_ROTOR);
       }
-      Enigma.log(this, "end reverseProcess");         
+      Enigma.log(this, "end reverseProcess");
     }
   }
-  
+
   this.processInRotor = function(r, cinput){
     return this.getRotor(r).processIn(cinput);
   }
-  
+
   this.processOutRotor = function(r, cinput){
     return this.getRotor(r).processOut(cinput);
   }
@@ -105,42 +105,42 @@ function Enigma(config, name, maxCable){
   this.matchNotchRotor = function(r){
     return this.getRotor(r).matchNotch();
   }
-  
+
   this.matchNotchBeforeRotor = function(r){
     return this.getRotor(r).matchNotchBefore();
   }
-  
-  
+
+
   this.rotateRotor = function(r){
     this.getRotor(r).rotate();
   }
-  
+
   this.reverseRotateRotor = function(r){
     this.getRotor(r).reverseRotate();
   }
 
   this.setRingRotor = function(r, ring){
-    this.config["rings"][r] = ring; 
+    this.config["rings"][r] = ring;
     this.getRotor(r).setRing(ring);
   }
 
   this.setStartRotor = function(r, start){
-    this.config["starts"][r] = start; 
+    this.config["starts"][r] = start;
     this.getRotor(r).setStart(start);
   }
 
   this.getRotor = function(r){
-    return Rotor.ROTORS[this.config["rotors"][r]];	
+    return Rotor.ROTORS[this.config["rotors"][r]];
   }
 
   this.setRotor = function(r, rotor){
     this.config["rotors"][r] = rotor;
   }
-  
+
   this.setRotorHtml = function(r, rhtml){
     this.getRotor(r).setRotorHtml(rhtml);
   }
-  
+
   this.getReflector = function(){
     return Reflector.REFLECTORS[this.config["reflector"]];
   }
@@ -155,23 +155,23 @@ function Enigma(config, name, maxCable){
   this.addToPlugboard = function(charIn, charOut){
     this.plugboard.add(charIn, charOut);
   }
-  
+
   this.deleteToPlugboard = function(charIn, charOut){
     this.plugboard.delete(charIn, charOut);
   }
-  
+
   this.plugToStr = function(charIn, charOut){
     return this.plugboard.combToStr(charIn, charOut);
   }
-  
+
   this.isPlugboardUsed = function(char){
     return this.plugboard.used(char);
   }
-  
+
   this.setPlugboardHtml = function(phtml){
     this.plugboard.setPlugboarHtml(phtml);
   }
-  
+
   this.getConfig = function(){
     return this.config;
   }

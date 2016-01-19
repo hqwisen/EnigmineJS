@@ -7,7 +7,7 @@ button::-moz-focus-inner {
 
 button{
   cursor:pointer;
-  font-family: inherit; 
+  font-family: inherit;
 }
 
 html,
@@ -178,7 +178,7 @@ a.tb-active {
 
 .rotor {
   display: inline-block;
-  width: 300px;
+  width: 270px;
   margin:25px;
   margin-bottom: 0;
   padding: 0;
@@ -272,7 +272,7 @@ a.tb-active {
   font-size: 25px;
 }
 
-/* Plugboard */ 
+/* Plugboard */
 
 #plugboard-list{
   padding:0;

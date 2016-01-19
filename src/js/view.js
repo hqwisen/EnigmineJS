@@ -2,11 +2,11 @@ $(function(){
   "use strict";
 
   /* ReflectorView */
-  
+
   function changeReflectorClick(event){
     event.data.view.changeTo(event.data.choice);
   }
-  
+
   function ReflectorView(controller, initial){
     this.controller = controller;
     this.lastId = undefined;
@@ -37,32 +37,32 @@ $(function(){
   ReflectorView.prototype.getName = function(){
     return "Reflector";
   }
-  
+
   ReflectorView.prototype.id = function(name){
     return name;
   }
-  
+
   ReflectorView.prototype.hid = function(name){
     return "#"+this.id(name);
   }
 
-  
+
   /* RotorView */
-  
+
   function changeRotorClick(event){
     event.data.view.changeTo(event.data.choice);
   }
-  
+
   function changeStartClick(event){
     var controller = event.data.controller;
-    controller.changeStart(event.data.side, event.data.value);    
+    controller.changeStart(event.data.side, event.data.value);
   }
 
   function changeRingClick(event){
     var controller = event.data.controller;
-    controller.changeRing(event.data.side, event.data.value);    
+    controller.changeRing(event.data.side, event.data.value);
   }
-  
+
   function RotorView(controller, side, initial){
     this.controller = controller;
     this.side = side;
@@ -125,17 +125,17 @@ $(function(){
       return "Right Rotor";
     }
   }
-  
+
   RotorView.prototype.id = function(name){
     return name+this.side;
   }
-  
+
   RotorView.prototype.hid = function(name){
     return "#"+this.id(name);
   }
-  
-  /* Plugboard View */ 
-  
+
+  /* Plugboard View */
+
   function addPlugClick(event){
     var values = event.data.view.getEntriesValue();
     if(!values["error"]){
@@ -145,7 +145,7 @@ $(function(){
       }
     }
   }
-  
+
   function PlugboardView(controller){
     this.itemGenerator = 0;
     this.controller = controller;
@@ -158,7 +158,7 @@ $(function(){
     $("<button/>", {id:"add-button", text:"Add to plugboard"}).appendTo("#plugboard-adder");
     $("#add-button").click({view:this}, addPlugClick);
   }
-  
+
   PlugboardView.prototype.addPlug = function(entry1, entry2){
     this.controller.addPlugboardConnection(entry1, entry2);
     $("<div/>", {class:"add-item", id:"item"+this.itemGenerator}).appendTo("#plugboard-list");
@@ -170,10 +170,10 @@ $(function(){
       if(!event.data.view.controller.hasMaximumPlugboardConnection()){
         event.data.view.enableAddButton();
       }
-    });    
+    });
     this.itemGenerator++;
   }
-  
+
   PlugboardView.prototype.getEntriesValue = function(){
     this.unshowError("#entry-one");
     this.unshowError("#entry-two");
@@ -200,7 +200,7 @@ $(function(){
 
   PlugboardView.prototype.getEntry = function(entryId){
     var value = $(entryId).val();
-    if(value.match(/^[A-Za-z]+$/) && !this.controller.isPlugboardUsed(value)){
+    if(CharUtil.isChar(value) && !this.controller.isPlugboardUsed(value)){
       return value;
     }else{
       return undefined;
@@ -216,7 +216,7 @@ $(function(){
   }
 
   PlugboardView.prototype.cleanEntry = function(entryId){
-    $(entryId).val("");
+    //$(entryId).val("");
   }
 
   PlugboardView.prototype.disableAddButton = function(){
@@ -228,11 +228,17 @@ $(function(){
 
   /* Input View */
 
+  function inputKeyDownEvent(event){
+    event.data.controller.handleInput(event.which, event.key);
+  }
+
   function InputView(controller){
     this.controller = controller;
     $("<div/>", {id:"input-toolbar"}).appendTo("#input-container");
     $("<span/>", {text:"Your message"}).appendTo("#input-toolbar");
-    $("<textarea/>").appendTo("#input-container");
+    $("<textarea/>", {id:"inputarea"}).appendTo("#input-container");
+
+    $("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
   }
 
     /* Output View */
@@ -241,15 +247,25 @@ $(function(){
     this.controller = controller;
     $("<div/>", {id:"output-toolbar"}).appendTo("#output-container");
     $("<span/>", {text:"Encrypted message"}).appendTo("#output-toolbar");
-    $("<textarea/>", {id:"outputarea", text:"Lock text"}).appendTo("#output-container");
+    $("<textarea/>", {id:"outputarea", text:""}).appendTo("#output-container");
     $("#outputarea").prop("readonly", true);
+
   }
 
+  OutputView.SPACE_TAG = " ";
+
+  OutputView.prototype.push = function(element){
+    $("#outputarea").val($("#outputarea").val() + element);
+  }
+
+  OutputView.prototype.pushSpace = function(){
+    this.push(OutputView.SPACE_TAG);
+  }
 
   /* MachineController */
-  
+
   function MachineController(){
-    
+
     this.machine = new Machine();
     this.plugItemCounter = 0;
     this.rotorViewList = [];
@@ -260,16 +276,16 @@ $(function(){
     this.plugboardView = new PlugboardView(this);
     this.inputView = new InputView(this);
     this.outputView = new OutputView(this);
-    
-  }  
-  
+
+  }
+
   MachineController.MAXIMUM_PLUGITEM = 10;
 
   MachineController.prototype.createRotorView = function(side, initial){
     var rotorView = new RotorView(this, side, initial);
     this.rotorViewList.push(rotorView);
   }
-  
+
   MachineController.prototype.changeReflector = function(name){
     console.log("NOT IMPLEMENTED > changeReflector("+name+").");
   }
@@ -277,7 +293,7 @@ $(function(){
   MachineController.prototype.changeRotor = function(side, name){
     console.log("NOT IMPLEMENTED > changeRotor("+side+", "+name+").");
   }
- 
+
   MachineController.prototype.changeStart = function(side, value){
     console.log("NOT IMPLEMENTED > changeStart("+side+", "+value+").");
   }
@@ -300,21 +316,36 @@ $(function(){
     console.log("NOT IMPLEMENTED > isPlugboardUsed("+char+").");
     return false;
   }
-  
+
+  MachineController.prototype.handleInput = function(which, key){
+    console.log("NOT IMPLEMENTED > handleInput("+which+", "+key+").");
+    if(KeyCode.isAlpha(which)){
+      // encrypt
+    }else if(KeyCode.isSpace(which)){
+      // push space
+    }else if(KeyCode.isBackspace(which)){
+     // bs delete
+    }else if(KeyCode.isDelete(which)){
+      // delete
+    }else{
+      // Do nothing
+    }
+  }
+
   MachineController.prototype.hasMaximumPlugboardConnection = function(){
     return this.plugItemCounter == MachineController.MAXIMUM_PLUGITEM;
   }
-  
+
   MachineController.prototype.getRotors = function(){
     return this.machine.getRotors();
   }
 
   /* Main */
-  
+
   function main(args){
     var controller = new MachineController();
   }
-  
+
   main();
-  
+
 });
