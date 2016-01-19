@@ -22,7 +22,6 @@ body {
   background:#eaeaea;
 }
 
-
 /* sections */
 
 #section-config{
@@ -41,6 +40,30 @@ body {
   background:#eaeaea;
   border-top: 2px solid #e0e0e0;
   text-align: center;
+}
+
+/* Notifications */
+
+.notification{
+  position:fixed;
+  margin-bottom:20px;
+  bottom: 0;
+  left:50%;
+}
+
+.notif-message{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding:20px;
+  font-size: 15px;
+  position: relative;
+  left: -50%;
+  background:rgba(80, 80, 80, 0.86);
+  color:white;
+    box-shadow: rgba(80, 80, 80, 0.67) 0px 0px 5px 2px;
+  border-radius: 20px;
 }
 
 /* containers */

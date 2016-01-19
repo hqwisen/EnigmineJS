@@ -245,15 +245,22 @@ $(function(){
 
   }
 
+  function inputPasteEvent(event){
+    var view = event.data.view;
+    view.addContent("<PASTING NOT IMPLEMENTED>");
+  }
+
   function InputView(controller){
     this.controller = controller;
 
     $("<div/>", {id:"input-toolbar"}).appendTo("#input-container");
     $("<div/>", {id:"input-menu"}).appendTo("#input-toolbar");
     $("<div/>", {id:"input-title"}).appendTo("#input-toolbar");
-    $("<button/>", {html:"PASTE", id:"intputpaste"}).appendTo("#input-menu");
+    $("<button/>", {html:"PASTE", id:"inputpaste"}).appendTo("#input-menu");
     $("<span/>", {text:"Your message"}).appendTo("#input-title");
     $("<textarea/>", {id:"inputarea", text:""}).appendTo("#input-container");
+    $("#inputpaste").click({view:this}, inputPasteEvent);
+
 
     $("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
     //$("#inputarea").change({controller:this.controller}, inputChangeEvent);
@@ -270,6 +277,10 @@ $(function(){
 
   InputView.prototype.setContent = function(content){
     return $("#inputarea").val(content);
+  }
+
+  InputView.prototype.addContent = function(content){
+    this.setContent(this.getContent() + content);
   }
 
   InputView.prototype.getCharAt = function(index){
