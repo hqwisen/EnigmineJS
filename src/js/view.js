@@ -208,7 +208,7 @@ $(function(){
   }
 
   PlugboardView.prototype.showError = function(entryId){
-    $(entryId).css({borderColor:"rgb(211, 118, 118)"});
+    $(entryId).css({borderColor:"rgb(199, 0, 0)"});
   }
 
   PlugboardView.prototype.unshowError = function(entryId){
@@ -230,24 +230,20 @@ $(function(){
 
   function inputChangeEvent(event){
     var controller = event.data.controller;
-    console.log("change\n"+controller.inputView.getContent());
-    console.log("change\n"+controller.inputView.getSelectionStart());
-    console.log("change\n"+controller.inputView.getSelectionEnd());
+    var view = event.data.view;
     controller.handleInput();
   }
 
 
   function inputKeyDownEvent(event){
     var controller = event.data.controller;
-    console.log("down\n"+controller.inputView.getContent());
-    console.log("down\n"+controller.inputView.getSelectionStart());
-    console.log("down\n"+controller.inputView.getSelectionEnd());
-
+    var view = event.data.view;
+    controller.setStart(view.getSelectionStart());
   }
 
   function inputPasteEvent(event){
     var view = event.data.view;
-    view.addContent("<PASTING NOT IMPLEMENTED>");
+    console.log("NOT IMPLEMENTED > <PASTING NOT IMPLEMENTED>");
   }
 
   function InputView(controller){
@@ -262,10 +258,10 @@ $(function(){
     $("#inputpaste").click({view:this}, inputPasteEvent);
 
 
-    $("#inputarea").keydown({controller:this.controller}, inputKeyDownEvent);
+    $("#inputarea").keydown({controller:this.controller, view:this}, inputKeyDownEvent);
     //$("#inputarea").change({controller:this.controller}, inputChangeEvent);
     //$('#inputarea').bind('paste', {test:this}, function(event){console.log('this actually paste' + event.data.test.getSelectionStart())});
-    $('#inputarea').bind('input', {controller:this.controller},
+    $('#inputarea').bind('input', {controller:this.controller, view:this},
                          inputChangeEvent);
 
 
@@ -281,6 +277,10 @@ $(function(){
 
   InputView.prototype.addContent = function(content){
     this.setContent(this.getContent() + content);
+  }
+
+  InputView.prototype.getSize = function(){
+    return this.getContent().length;
   }
 
   InputView.prototype.getCharAt = function(index){
@@ -299,9 +299,12 @@ $(function(){
 
   function outputCopyEvent(event){
     var controller = event.data.controller;
-    var start = controller.inputView.getSelectionStart();
-    console.log("copy: " + controller.inputView.getSelectionStart());
-    controller.outputView.removeFrom(start);
+    console.log("NOT IMPLEMENTED > outputCopyEvent");
+  }
+
+  function outputSelectEvent(event){
+    var controller = event.data.controller;
+    console.log("NOT IMPLEMENTED > outputSelectEvent");
   }
 
   function OutputView(controller){
@@ -315,18 +318,11 @@ $(function(){
     $("<textarea/>", {id:"outputarea", text:""}).appendTo("#output-container");
     $("#outputarea").prop("readonly", true);
     $("#outputcopy").click({controller:this.controller}, outputCopyEvent);
+    $("#outputselect").click({controller:this.controller}, outputSelectEvent);
 
   }
 
   OutputView.SPACE_TAG = " ";
-
-  OutputView.prototype.push = function(element){
-    $("#outputarea").val($("#outputarea").val() + element);
-  }
-
-  OutputView.prototype.pushSpace = function(){
-    this.push(OutputView.SPACE_TAG);
-  }
 
   OutputView.prototype.removeFrom = function(index){
     var content = this.getContent();
@@ -342,6 +338,14 @@ $(function(){
     return $("#outputarea").val(content);
   }
 
+  OutputView.prototype.addContent = function(content){
+    this.setContent(this.getContent() + content);
+  }
+
+  OutputView.prototype.addSpace = function(){
+    this.addContent(OutputView.SPACE_TAG);
+  }
+
   OutputView.prototype.getSize = function(){
     return this.getContent().length;
   }
@@ -352,6 +356,7 @@ $(function(){
 
     this.machine = new Machine();
     this.plugItemCounter = 0;
+    this.startIndex = -1;
     this.rotorViewList = [];
     this.createRotorView(Machine.LEFT_ROTOR, "I");
     this.createRotorView(Machine.MIDDLE_ROTOR, "II");
@@ -403,8 +408,17 @@ $(function(){
 
   MachineController.prototype.handleInput = function(){
     console.log("NOT IMPLEMENTED > handleInput().");
-    console.log(this.inputView.getContent());
-    this.outputView.removeFrom(this.inputView.getSelectionStart());
+    this.outputView.removeFrom(this.startIndex);
+    var block = this.inputView.getContent().substr(this.startIndex, this.inputView.getSize());
+    console.log(this.startIndex + " - "+ block);
+  }
+
+  MachineController.prototype.setStart = function(index){
+    this.startIndex = index;
+  }
+
+  MachineController.prototype.getStart = function(index){
+    return this.startIndex;
   }
 
   /*MachineController.prototype.handleInput = function(which, key){

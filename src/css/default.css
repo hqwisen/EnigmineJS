@@ -8,6 +8,17 @@ button::-moz-focus-inner {
 button{
   cursor:pointer;
   font-family: inherit;
+  outline:none;
+  transition:ease .2s;
+
+  -webkit-transition:ease-out .4s;
+  -ms-transition:ease-out .4s;
+  -moz-transition:ease-out .4s;
+  -o-transition:ease-out .4s;
+}
+
+textarea{
+  outline:none;
 }
 
 html,
@@ -135,7 +146,7 @@ ul.toolbar {
 
 ul.toolbar span {
   display: block;
-  color: white;
+  color: #afd6ff;
   text-align: center;
   padding:20px;
   padding-left: 0;
@@ -148,7 +159,7 @@ ul.toolbar span {
 }
 ul.toolbar span:hover {
   border-bottom:0px solid #00396d;
-  color:#dfdfdf;
+  color:white;
   cursor:pointer;
 }
 
@@ -473,11 +484,10 @@ a.tb-active {
   font-family: inherit;
   font-size: 20px;
   font-weight: normal;
-
 }
 
 #input-menu button:hover{
-  color:white;
+  color:#1f96ff;
 }
 
 
@@ -578,7 +588,7 @@ a.tb-active {
 }
 
 #output-menu button:hover{
-  color:white;
+  color:#0088ff;
 }
 
 
