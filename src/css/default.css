@@ -294,17 +294,28 @@ a.tb-active {
 }
 
 .rotate-left:active{
-  -ms-transform:rotate(30deg); /* IE 9 */
-  -moz-transform:rotate(30deg); /* Firefox */
-  -webkit-transform:rotate(30deg); /* Safari and Chrome */
-  -o-transform:rotate(30deg); /* Opera */
+  -ms-transform:rotate(150deg); /* IE 9 */
+  -moz-transform:rotate(150deg); /* Firefox */
+  -webkit-transform:rotate(150deg); /* Safari and Chrome */
+  -o-transform:rotate(150deg); /* Opera */
+
+  -webkit-transition:ease-in-out 0.2s;
+  -ms-transition:ease-in-out 0.2s;
+  -moz-transition:ease-in-out 0.2s;
+  -o-transition:ease-in-out 0.2s;
+
 }
 
 .rotate-right:active{
-  -ms-transform:rotate(-30deg); /* IE 9 */
-  -moz-transform:rotate(-30deg); /* Firefox */
-  -webkit-transform:rotate(-30deg); /* Safari and Chrome */
-  -o-transform:rotate(-30deg); /* Opera */
+  -ms-transform:rotate(-150deg); /* IE 9 */
+  -moz-transform:rotate(-150deg); /* Firefox */
+  -webkit-transform:rotate(-150deg); /* Safari and Chrome */
+  -o-transform:rotate(-150deg); /* Opera */
+
+  -webkit-transition:ease-in-out 0.2s;
+  -ms-transition:ease-in-out 0.2s;
+  -moz-transition:ease-in-out 0.2s;
+  -o-transition:ease-in-out 0.2s;
 }
 
 .param-value{
