@@ -229,11 +229,18 @@ $(function(){
   /* Input View */
 
   function inputChangeEvent(event){
+    console.log("Call to change event.");
     var controller = event.data.controller;
     var view = event.data.view;
     controller.handleInput();
   }
 
+
+  function inputKeyDownEvent(event){
+    var controller = event.data.controller;
+    var view = event.data.view;
+    controller.setStart(view.getSelectionStart());
+  }
 
   function inputKeyDownEvent(event){
     var controller = event.data.controller;
@@ -259,6 +266,7 @@ $(function(){
 
 
     $("#inputarea").keydown({controller:this.controller, view:this}, inputKeyDownEvent);
+    $("#inputarea").mousedown({controller:this.controller, view:this}, inputKeyDownEvent);
     //$("#inputarea").change({controller:this.controller}, inputChangeEvent);
     //$('#inputarea').bind('paste', {test:this}, function(event){console.log('this actually paste' + event.data.test.getSelectionStart())});
     $('#inputarea').bind('input', {controller:this.controller, view:this},
@@ -411,6 +419,7 @@ $(function(){
     this.outputView.removeFrom(this.startIndex);
     var block = this.inputView.getContent().substr(this.startIndex, this.inputView.getSize());
     console.log(this.startIndex + " - "+ block);
+    this.outputView.addContent(block);
   }
 
   MachineController.prototype.setStart = function(index){
