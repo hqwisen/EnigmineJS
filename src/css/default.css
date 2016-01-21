@@ -20,10 +20,10 @@ button{
 textarea{
   outline:none;
 
-  -webkit-transition:ease-in .4s;
-  -ms-transition:ease-in .4s;
-  -moz-transition:ease-in .4s;
-  -o-transition:ease-in .4s;
+  -webkit-transition:ease-in .2s;
+  -ms-transition:ease-in .2s;
+  -moz-transition:ease-in .2s;
+  -o-transition:ease-in .2s;
 }
 
 html,
@@ -225,7 +225,7 @@ a.tb-active {
   border: 3px solid #004d95;
   border-radius: 5px;
   vertical-align: top;
-  box-shadow: #000 0px 0px 5px 1px;
+  box-shadow: #000000 0px 0px 5px 1px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -339,7 +339,7 @@ a.tb-active {
 }
 
 #plugboard-adder{
-  width:150px;
+  width:185px;
   margin:25px auto;
   padding:0;
   text-align: center;
@@ -393,10 +393,24 @@ a.tb-active {
 
 #entry-one{
   border-radius: 20px 0px 0px 20px;
+
 }
+
 
 #entry-two{
   border-radius: 0px 20px 20px 0px;
+}
+
+#entry-one:disabled{
+  background:#959595;
+  border-width: 0;
+  cursor:default;
+}
+
+#entry-two:disabled{
+  background:#959595;
+  border-width: 0;
+  cursor:default;
 }
 
 .add-item{

@@ -163,7 +163,7 @@ $(function(){
     $("<div/>", {id:"add-entries"}).appendTo("#plugboard-adder");
     $("<textarea/>", {id:"entry-one", maxlength:1}).appendTo("#add-entries");
     $("<textarea/>", {id:"entry-two", maxlength:1}).appendTo("#add-entries");
-    $("<button/>", {id:"add-button", text:"Add to plugboard"}).appendTo("#plugboard-adder");
+    $("<button/>", {id:"add-button", text:this.getAddButtonName()}).appendTo("#plugboard-adder");
     $("#add-button").click({view:this}, addPlugClick);
   }
 
@@ -177,8 +177,10 @@ $(function(){
       event.data.view.controller.removePlugboardConnection(entry1, entry2);
       if(!event.data.view.controller.hasMaximumPlugboardConnection()){
         event.data.view.enableAddButton();
+        event.data.view.refreshAddButton();
       }
     });
+    this.refreshAddButton();
     this.itemGenerator++;
   }
 
@@ -227,10 +229,22 @@ $(function(){
     $(entryId).val("");
   }
 
+  PlugboardView.prototype.getAddButtonName = function(){
+    return "Add to plugboard ("+this.controller.getRemainingConnection()+")";
+  }
+
+  PlugboardView.prototype.refreshAddButton = function(){
+    $("#add-button").text(this.getAddButtonName());
+  }
+
   PlugboardView.prototype.disableAddButton = function(){
+    $("#entry-one").prop("disabled", true);
+    $("#entry-two").prop("disabled", true);
     $("#add-button").prop("disabled", true);
   }
   PlugboardView.prototype.enableAddButton = function(){
+    $("#entry-one").prop("disabled", false);
+    $("#entry-two").prop("disabled", false);
     $("#add-button").prop("disabled", false);
   }
 
@@ -534,6 +548,10 @@ $(function(){
 
   MachineController.prototype.hasMaximumPlugboardConnection = function(){
     return this.plugItemCounter == this.machine.getMaxCable();
+  }
+
+  MachineController.prototype.getRemainingConnection = function(){
+    return this.machine.getMaxCable() - this.plugItemCounter;
   }
 
   MachineController.prototype.getRotors = function(){
