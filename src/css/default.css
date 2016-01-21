@@ -40,12 +40,20 @@ body {
 
 /* sections */
 
+#toolbar-section{
+  width: 100%;
+  height: auto;
+  background:#f4f4f4;
+}
+
 #section-config{
   width:100%;
+  height: auto;
+  padding:0;
+  padding-top:70px;
+  padding-bottom:50px;
   background:#f4f4f4;
   text-align: center;
-  height: auto;
-  padding:0 ;
 }
 
 #section-input{
@@ -84,10 +92,6 @@ body {
 
 /* containers */
 
-#toolbar-container {
-  height:70px;
-}
-
 #rotors-container {
   display: inline-block;
   width: 70%;
@@ -102,6 +106,7 @@ body {
   display: inline-block;
   width: 60%;
   margin:0 auto;
+  margin-top:20px;
   text-align: center;
   vertical-align: top;
 }
@@ -130,61 +135,71 @@ body {
 
 /* Toolbar */
 
-ul.toolbar {
-  display: flex;
-  box-shadow: 0 0 1px 1px #000;
-  list-style-type: none;
-  margin: 0;
-  padding:0;
-  padding-left: 60px;
-  overflow: hidden;
-  background: #005dbf;
+#toolbar{
   position: fixed;
-  top: 0;
-  width: 100%;
+  width:100%;
   height:70px;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-/* Toolbar spans */
-
-ul.toolbar span {
-  display: block;
-  color: #afd6ff;
-  text-align: center;
-  padding:20px;
-  padding-left: 0;
-  padding-right:0;
   margin:0;
-  margin-right: 15px;
-  text-decoration: none;
-  border-bottom:0px solid black;
-  height:100%;
+  padding:0;
+  background: #005dbf;
+  box-shadow: 0 0 1px 1px #000;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
-ul.toolbar span:hover {
-  border-bottom:0px solid #00396d;
+
+.tabs{
+  display: flex;
+  width:100%;
+  height: 93%;
+  margin:0;
+  padding:0;
+  padding-left:20px;
+  padding-right:20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+}
+
+.tab{
+  display: flex;
+  height: 100%;
+  width: auto;
+  align-items: center;
+  justify-content: center;
+  padding-left:10px;
+  padding-right:10px;
+  cursor: pointer;
+}
+
+.tab span{
+  display: inline;
+  width: auto;
+  height: auto;
   color:white;
-  cursor:pointer;
+  font-size: 27px;
+  font-variant: small-caps;
 }
 
+#tabbar{
+  width:100%;
+  height:7%;
+  margin:0;
+  padding:0;
+  padding-left:20px;
+  padding-right:20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 
-/* Toolbar links */
-
-ul.toolbar a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
 }
 
-ul.toolbar a:hover:not(.tb-active) {
-  background-color: #111;
-}
-
-a.tb-active {
-  background-color: #4CAF50;
+#bar{
+  position: relative;
+  width:0;
+  height:100%;
+  background:white;
 }
 
 /* Reflector */
@@ -341,6 +356,7 @@ a.tb-active {
 #plugboard-adder{
   width:185px;
   margin:25px auto;
+  margin-bottom:0;
   padding:0;
   text-align: center;
 }

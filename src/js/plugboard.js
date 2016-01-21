@@ -13,6 +13,7 @@ function Plugboard(max){
   this.combMap= {};
   
   this.plug = function(char){
+    char = this.std(char);
     var value;
     if(this.combMap[char] == undefined){
       value = char;
@@ -24,6 +25,8 @@ function Plugboard(max){
   }
   
   this.add = function(charIn, charOut){
+    charIn = this.std(charIn);
+    charOut = this.std(charOut);
     Plugboard.log("add "+charIn+" | " + charOut);
     if(this.combMap.length == 10){
       throw "Can't plug more than "+this.MAX+" combinaitions.";
@@ -33,21 +36,30 @@ function Plugboard(max){
   }
   
   this.delete = function(charIn, charOut){
+    charIn = this.std(charIn);
+    charOut = this.std(charOut);
     Plugboard.log("delete "+charIn+" | " + charOut);
     delete this.combMap[charIn];
     delete this.combMap[charOut];
   }
   
   this.combToStr = function(charIn, charOut){
+    charIn = this.std(charIn);
+    charOut = this.std(charOut);
     return charIn + " | " + this.combMap[charIn];
   }
   
   this.used = function(char){
+    char = this.std(char);
     return this.combMap[char] != undefined;
   }
   
   this.getMaxCable = function(){
     return this.MAX;
+  }
+
+  this.std = function(char){
+    return char.toUpperCase();
   }
 
 }

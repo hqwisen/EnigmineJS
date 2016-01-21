@@ -1,4 +1,4 @@
-// FIXME Plugboard fait tout bugger
+// fixem ctrl+z, ctrl+y
 
 
 $(function(){

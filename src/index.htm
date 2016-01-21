@@ -9,13 +9,16 @@
 </head>
 
 <body>
-
-  <div id="toolbar-container">
-    <ul class="toolbar">
-      <li><span>Utility</span></li>
-      <li><span>Graphic</span></li>
-    </ul>
+  <section id="toolbar-section">
+  <div id="toolbar">
+    <div class="tabs">
+      <div class="tab" id="utility"><span>utility</span></div>
+      <div class="tab" id="graphic"><span>graphic</span></div>
+      <div class="tab" id="about"><span>about</span></div>
+    </div>
+    <div id="tabbar"><div id="bar"/></div>
   </div>
+  </section>
   <section id="section-config">
     <div id="rotors-container">
     </div>
@@ -29,8 +32,42 @@
     </div>
   </section>
   <!--div class="notification"><div class="notif-message">Notification test</div></div-->
-
   <script src="js/jquery.js" type="text/javascript"></script>
+  <script>
+    $(function(){
+      "use strict";
+      var tabList = ["#utility", "#graphic", "#about"];
+
+      function beforeTabWidth(index){
+        var width = 0;
+        for(var i=0;i<index;i++){
+          width += $(tabList[i]).outerWidth();
+        }
+        return width;
+      }
+
+      function tabWidth(index){
+        return $(tabList[index]).outerWidth();
+      }
+
+      function tabEvent(event){
+        var index = event.data.index;
+        $("#bar").animate({width:tabWidth(index), left:beforeTabWidth(index)}, 300);
+        console.log(event.data.test);
+
+      }
+
+      function initialTab(index){
+        $("#bar").css({width:tabWidth(index), left:beforeTabWidth(index)});
+      }
+
+      for(var i=0;i<tabList.length;i++){
+        $(tabList[i]).click({index:i}, tabEvent);
+      }
+      initialTab(0  );
+
+    });
+  </script>
   <script src="js/util.js" type="text/javascript"></script>
   <script src="js/rotor.js" type="text/javascript"></script>
   <script src="js/plugboard.js" type="text/javascript"></script>
