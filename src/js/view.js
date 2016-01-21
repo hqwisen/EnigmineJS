@@ -21,12 +21,11 @@ $(function(){
     $("<button/>", {id:this.id("choiceC"), text:"C"}).appendTo(this.hid("reflector-choice"));
     $(this.hid("choiceC")).click({view:this, choice:"C"},
                                   changeReflectorClick);
-    this.changeTo(initial);
+    this.changeSelector(initial);
   }
 
   ReflectorView.prototype.changeTo = function(choice){
     this.controller.changeReflector(choice);
-    this.changeSelector(choice);
   }
 
   ReflectorView.prototype.changeSelector = function(choice){
@@ -84,7 +83,7 @@ $(function(){
     $("<div/>", {class:"param", id:this.id("start-param")}).appendTo(this.hid("param-container"));
     $("<span/>", {text:"Start"}).appendTo(this.hid("start-param"));
     $("<button/>", {class:"rotate-left", id:this.id("startup"), html:"&#8635;"}).appendTo(this.hid("start-param"));
-    $("<span/>", {class:"param-value", text:"A"}).appendTo(this.hid("start-param"));
+    $("<span/>", {class:"param-value", id:this.id("startvalue"), text:"#"}).appendTo(this.hid("start-param"));
     $("<button/>", {class:"rotate-right", id:this.id("startdown"), html:"&#8634;"}).appendTo(this.hid("start-param"));
     $(this.hid("startup")).click({controller:this.controller, side:this.side, value:+1},
                                  changeStartClick);
@@ -94,25 +93,31 @@ $(function(){
     $("<div/>", {class:"param", id:this.id("ring-param")}).appendTo(this.hid("param-container"));
     $("<span/>", {text:"Ring"}).appendTo(this.hid("ring-param"));
     $("<button/>", {class:"rotate-left", id:this.id("ringup"), html:"&#8635;"}).appendTo(this.hid("ring-param"));
-    $("<span/>", {class:"param-value", text:"A"}).appendTo(this.hid("ring-param"));
+    $("<span/>", {class:"param-value", id:this.id("ringvalue"), text:"#"}).appendTo(this.hid("ring-param"));
     $("<button/>", {class:"rotate-right", id:this.id("ringdown"), html:"&#8634;"}).appendTo(this.hid("ring-param"));
     $(this.hid("ringup")).click({controller:this.controller, side:this.side, value:+1},
                                  changeRingClick);
     $(this.hid("ringdown")).click({controller:this.controller, side:this.side, value:-1},
                                  changeRingClick);
 
-    this.changeTo(initial);
+    this.changeSelector(initial);
   }
 
   RotorView.prototype.changeTo = function(choice){
     this.controller.changeRotor(this.side, choice);
-    this.changeSelector(choice);
   }
 
   RotorView.prototype.changeSelector = function(choice){
     HtmlUtil.changeSelector(this, this.hid("choice"+choice));
   }
 
+  RotorView.prototype.refreshStart = function(value){
+    $(this.hid("startvalue")).text(value);
+  }
+
+  RotorView.prototype.refreshRing = function(value){
+    $(this.hid("ringvalue")).text(value);
+  }
 
   RotorView.prototype.getName = function(){
     if(this.side == 0){
@@ -216,7 +221,7 @@ $(function(){
   }
 
   PlugboardView.prototype.cleanEntry = function(entryId){
-    //$(entryId).val("");
+    $(entryId).val("");
   }
 
   PlugboardView.prototype.disableAddButton = function(){
@@ -236,16 +241,17 @@ $(function(){
   }
 
 
-  function inputKeyDownEvent(event){
+  function inputDownEvent(event){
     var controller = event.data.controller;
     var view = event.data.view;
-    controller.setStart(view.getSelectionStart());
-  }
+    var start = view.getSelectionStart();
+    var end = view.getSelectionEnd();
+    if(KeyCode.isBackspace(event.which) && start == end){
+      start--;
+    }
+    controller.setStart(start);
+    controller.setBeforeBlock(view.getLastBlock(start));
 
-  function inputKeyDownEvent(event){
-    var controller = event.data.controller;
-    var view = event.data.view;
-    controller.setStart(view.getSelectionStart());
   }
 
   function inputPasteEvent(event){
@@ -265,8 +271,8 @@ $(function(){
     $("#inputpaste").click({view:this}, inputPasteEvent);
 
 
-    $("#inputarea").keydown({controller:this.controller, view:this}, inputKeyDownEvent);
-    $("#inputarea").mousedown({controller:this.controller, view:this}, inputKeyDownEvent);
+    $("#inputarea").keydown({controller:this.controller, view:this}, inputDownEvent);
+    $("#inputarea").mousedown({controller:this.controller, view:this}, inputDownEvent);
     //$("#inputarea").change({controller:this.controller}, inputChangeEvent);
     //$('#inputarea').bind('paste', {test:this}, function(event){console.log('this actually paste' + event.data.test.getSelectionStart())});
     $('#inputarea').bind('input', {controller:this.controller, view:this},
@@ -302,6 +308,15 @@ $(function(){
   InputView.prototype.getSelectionEnd = function(){
     return $("#inputarea")[0].selectionEnd;
   }
+  InputView.prototype.getBlock = function(start, end){
+    return this.getContent().substr(start, end);
+  }
+
+  InputView.prototype.getLastBlock = function(start){
+    return this.getBlock(start, this.getSize());
+  }
+
+
 
   /* Output View */
 
@@ -362,14 +377,16 @@ $(function(){
 
   function MachineController(){
 
-    this.machine = new Machine();
+    this.machine = new Machine("Enigma 1",
+                               MachineController.MAXIMUM_PLUGITEM);
     this.plugItemCounter = 0;
     this.startIndex = -1;
-    this.rotorViewList = [];
-    this.createRotorView(Machine.LEFT_ROTOR, "I");
-    this.createRotorView(Machine.MIDDLE_ROTOR, "II");
-    this.createRotorView(Machine.RIGHT_ROTOR, "III");
-    this.reflectorView = new ReflectorView(this, "C");
+    this.beforeBlock = "";
+    this.rotorViewList = {};
+    this.createRotorView(Machine.LEFT_ROTOR);
+    this.createRotorView(Machine.MIDDLE_ROTOR);
+    this.createRotorView(Machine.RIGHT_ROTOR);
+    this.reflectorView = new ReflectorView(this, this.machine.getActiveReflector().getName());
     this.plugboardView = new PlugboardView(this);
     this.inputView = new InputView(this);
     this.outputView = new OutputView(this);
@@ -378,77 +395,123 @@ $(function(){
 
   MachineController.MAXIMUM_PLUGITEM = 10;
 
-  MachineController.prototype.createRotorView = function(side, initial){
-    var rotorView = new RotorView(this, side, initial);
-    this.rotorViewList.push(rotorView);
+  MachineController.prototype.createRotorView = function(side){
+    var rotorView = new RotorView(this, side, this.machine.getRotorOnSide(side).getName());
+    rotorView.refreshStart(this.machine.getStartRotor(side));
+    rotorView.refreshRing(this.machine.getRingRotor(side));
+    this.rotorViewList[side] = (rotorView);
   }
 
   MachineController.prototype.changeReflector = function(name){
-    console.log("NOT IMPLEMENTED > changeReflector("+name+").");
+    console.log("^^ IMPL > changeReflector("+name+").");
+    this.machine.setActiveReflector(name);
+    this.reflectorView.changeSelector(name);
   }
 
   MachineController.prototype.changeRotor = function(side, name){
-    console.log("NOT IMPLEMENTED > changeRotor("+side+", "+name+").");
+    console.log("^^ IMPL > changeRotor("+side+", "+name+").");
+    var old = this.machine.getRotorOnSide(side).getName();
+    this.machine.setRotorOnSide(side, name);
+    this.rotorViewList[side].changeSelector(name);
+    this.rotorViewList[side].refreshStart(this.machine.getStartRotor(side));
+    this.rotorViewList[side].refreshRing(this.machine.getRingRotor(side));
+    for(var otherSide in [Machine.LEFT_ROTOR, Machine.MIDDLE_ROTOR, Machine.RIGHT_ROTOR]){
+      if(side != otherSide && this.machine.getRotorOnSide(otherSide).getName() == name){
+        this.machine.setRotorOnSide(otherSide, old);
+        this.rotorViewList[otherSide].changeSelector(old);
+        this.rotorViewList[otherSide].refreshStart(this.machine.getStartRotor(otherSide));
+        this.rotorViewList[otherSide].refreshRing(this.machine.getRingRotor(otherSide));
+      }
+    }
   }
 
+  // FIXME to avoid conflict, |value| = 1
   MachineController.prototype.changeStart = function(side, value){
-    console.log("NOT IMPLEMENTED > changeStart("+side+", "+value+").");
+    console.log("^^ IMPL > changeStart("+side+", "+value+").");
+    var char = this.machine.getStartRotor(side);
+    var charCode = char.charCodeAt(0);
+    if(value == 1 && charCode >= Rotor.CHARCODEMAXSET){
+      charCode = Rotor.CHARCODEMINSET;
+    }else if(value == -1 && charCode <= Rotor.CHARCODEMINSET){
+      charCode = Rotor.CHARCODEMAXSET;
+    }else{
+      charCode += (value);
+    }
+    var newStart = String.fromCharCode(charCode);
+    this.machine.setStartRotor(side, newStart);
+    this.rotorViewList[side].refreshStart(newStart);
   }
 
+  // FIXME to avoid conflict, |value| = 1
   MachineController.prototype.changeRing = function(side, value){
-    console.log("NOT IMPLEMENTED > changeRing("+side+", "+value+").");
+    console.log("^^ IMPL > changeRing("+side+", "+value+").");
+    var char = this.machine.getRingRotor(side);
+    var charCode = char.charCodeAt(0);
+    if(value == 1 && charCode >= Rotor.CHARCODEMAXSET){
+      charCode = Rotor.CHARCODEMINSET;
+    }else if(value == -1 && charCode <= Rotor.CHARCODEMINSET){
+      charCode = Rotor.CHARCODEMAXSET;
+    }else{
+      charCode += (value);
+    }
+    var newRing = String.fromCharCode(charCode);
+    this.machine.setRingRotor(side, newRing);
+    this.rotorViewList[side].refreshRing(newRing);
   }
 
   MachineController.prototype.addPlugboardConnection = function(entry1, entry2){
+    console.log("^^ IMPL > addPlugboardConnection("+entry1+", "+entry2+").");
     this.plugItemCounter++;
-    console.log("NOT IMPLEMENTED > addPlugboardConnection("+entry1+", "+entry2+").");
+    this.machine.addPlugboardConnection(entry1, entry2);
   }
 
   MachineController.prototype.removePlugboardConnection = function(entry1, entry2){
+    console.log("^^ IMPL > removePlugboardConnection("+entry1+", "+entry2+").");
     this.plugItemCounter--;
-    console.log("NOT IMPLEMENTED > removePlugboardConnection("+entry1+", "+entry2+").");
+    this.machine.removePlugboardConnection(entry1, entry2);
   }
 
   MachineController.prototype.isPlugboardUsed = function(char){
-    console.log("NOT IMPLEMENTED > isPlugboardUsed("+char+").");
-    return false;
+    console.log("^^ IMPL > isPlugboardUsed("+char+").");
+    return this.machine.isPlugboardUsed(char);
   }
 
   MachineController.prototype.handleInput = function(){
-    console.log("NOT IMPLEMENTED > handleInput().");
+    console.log("^^ IMPL > handleInput().");
+    this.reverse(this.getBeforeBlock());
+    var block = this.inputView.getLastBlock(this.startIndex);
+    var cryptedBlock = this.crypt(block);
     this.outputView.removeFrom(this.startIndex);
-    var block = this.inputView.getContent().substr(this.startIndex, this.inputView.getSize());
-    console.log(this.startIndex + " - "+ block);
-    this.outputView.addContent(block);
+    this.outputView.setContent(block);
+  }
+
+  MachineController.prototype.reverse = function(block){
+    console.log("NOT IMPLEMENTED > reversing: " + block);
+  }
+
+  MachineController.prototype.crypt = function(block){
+    console.log("NOT IMPLEMENTED > crypt:" + block);
+    return block;
   }
 
   MachineController.prototype.setStart = function(index){
     this.startIndex = index;
   }
 
-  MachineController.prototype.getStart = function(index){
+  MachineController.prototype.getStart = function(){
     return this.startIndex;
   }
 
-  /*MachineController.prototype.handleInput = function(which, key){
-    console.log("NOT IMPLEMENTED > handleInput("+which+", "+key+").");
-    console.log("SELECTION > " + "("+this.inputView.getSelectionStart()+","
-                                +""+this.inputView.getSelectionEnd()+").");
-    if(KeyCode.isAlpha(which)){
-      // encrypt
-    }else if(KeyCode.isSpace(which)){
-      // push space
-    }else if(KeyCode.isBackspace(which)){
-     // bs delete
-    }else if(KeyCode.isDelete(which)){
-      // delete
-    }else{
-      // Do nothing
-    }
-  }*/
+  MachineController.prototype.setBeforeBlock = function(block){
+    this.beforeBlock = block;
+  }
+
+  MachineController.prototype.getBeforeBlock = function(){
+    return this.beforeBlock;
+  }
 
   MachineController.prototype.hasMaximumPlugboardConnection = function(){
-    return this.plugItemCounter == MachineController.MAXIMUM_PLUGITEM;
+    return this.plugItemCounter == this.machine.getMaxCable();
   }
 
   MachineController.prototype.getRotors = function(){

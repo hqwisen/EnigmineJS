@@ -1,7 +1,7 @@
 
 /* CONST */
 
-var LOG_ENIGMA = false;
+var LOG_ENIGMA = true;
 
 /* KeyCode utility */
 

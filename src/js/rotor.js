@@ -1,4 +1,6 @@
 
+// FIXME better implementation (this one is to hard to understand & bad impl)
+
 function Table(chars){
   "use strict";
   this.chars = chars;
@@ -103,7 +105,6 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   this.current = Rotor.charToNumber(startChar) || 0;
   this.ring = Rotor.charToNumber(ringChar) || 0;
   this.notch = Rotor.charToNumber(notchChar);
-  this.rhtml = undefined;
   
   this.getName = function(){
     return name;
@@ -130,7 +131,7 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
       this.ring = ring;
     }
   }
-  // TODO ambiguité entre setStart et rotation pour rotorhtml
+
   this.setStart = function(start){
     Rotor.log(this, "setStart " + start);
     if(typeof start == "string"){
@@ -254,9 +255,6 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     }else{
       this.current += 1;
     }
-    if(this.rhtml != undefined){
-      this.rhtml.refresh();
-    }
   }
   
   this.reverseRotate = function(){
@@ -268,19 +266,6 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
     }else{
       this.current -= 1;
     }
-    if(this.rhtml != undefined){
-      this.rhtml.refresh();
-    }
-  }
-  
-  this.setRotorHtml = function(rhtml){
-    Rotor.log(this, "setRotorHtml");
-    this.rhtml = rhtml;
-  }
-  
-  this.unsetRotorHtml = function(){
-    Rotor.log(this, "unsetRotorHtml");
-    this.rhtml = undefined;
   }
   
   this.matchNotch = function(){

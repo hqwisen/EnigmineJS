@@ -10,8 +10,7 @@ function Plugboard(max){
   }
   
   this.MAX = max || 10;
-  this.combMap= {}; 
-  this.phtml = undefined;
+  this.combMap= {};
   
   this.plug = function(char){
     var value;
@@ -50,16 +49,7 @@ function Plugboard(max){
   this.getMaxCable = function(){
     return this.MAX;
   }
-  
-  this.setPlugboardHtml = function(phtml){
-    this.phtml = phtml;
-  }
-  
-  this.unsetPlugboardHtml = function(){
-    this.phtml = undefined;
-  }
-  
-  
+
 }
 /*
 var pb = new Plugboard(2);
