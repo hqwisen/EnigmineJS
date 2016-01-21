@@ -269,7 +269,7 @@ $(function(){
     $("<div/>", {id:"input-menu"}).appendTo("#input-toolbar");
     $("<div/>", {id:"input-title"}).appendTo("#input-toolbar");
     $("<button/>", {html:"PASTE", id:"inputpaste"}).appendTo("#input-menu");
-    $("<span/>", {text:"Your message"}).appendTo("#input-title");
+    $("<span/>", {text:"Message to crypt / decrypt"}).appendTo("#input-title");
     $("<textarea/>", {id:"inputarea", text:""}).appendTo("#input-container");
     $("#inputpaste").click({view:this}, inputPasteEvent);
 
