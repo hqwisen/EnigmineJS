@@ -413,6 +413,12 @@ a.tb-active {
   color:white;
   border-radius: 8px;
   box-shadow: #575757 0px 0px 1px 1px;
+
+
+  -webkit-transition:ease-in-out .2s;
+  -ms-transition:ease-in-out .2s;
+  -moz-transition:ease-in-out .2s;
+  -o-transition:ease-in-out .2s;
 }
 
 .add-item span{
@@ -426,9 +432,9 @@ a.tb-active {
 }
 
 .cross-panel{
-  display:flex;
-  width:0;
-  height:0;
+  display:none;
+  width:inherit;
+  height:inherit;
   margin:0;
   padding:0;
   opacity:0.9;
@@ -437,7 +443,8 @@ a.tb-active {
   align-items:center;
   justify-content:center;
   position:absolute;
-  overflow:hidden;
+
+
 }
 
 .cross{
@@ -445,10 +452,9 @@ a.tb-active {
 }
 
 .add-item:hover .cross-panel{
-  width:inherit;
-  height:inherit;
-  overflow:visible;
+  display:flex;
 }
+
 .add-item:hover{
   border:2px solid #004d95;
   box-shadow: #575757 0px 0px 2px 1px;

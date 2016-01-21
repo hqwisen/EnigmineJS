@@ -1,3 +1,6 @@
+// FIXME Plugboard fait tout bugger
+
+
 $(function(){
   "use strict";
 
@@ -205,7 +208,7 @@ $(function(){
 
   PlugboardView.prototype.getEntry = function(entryId){
     var value = $(entryId).val();
-    if(CharUtil.isChar(value) && !this.controller.isPlugboardUsed(value)){
+    if(CharUtil.isAlpha(value) && !this.controller.isPlugboardUsed(value)){
       return value;
     }else{
       return undefined;
@@ -482,16 +485,35 @@ $(function(){
     var block = this.inputView.getLastBlock(this.startIndex);
     var cryptedBlock = this.crypt(block);
     this.outputView.removeFrom(this.startIndex);
-    this.outputView.setContent(block);
+    this.outputView.addContent(cryptedBlock);
   }
 
   MachineController.prototype.reverse = function(block){
-    console.log("NOT IMPLEMENTED > reversing: " + block);
+    var counter = 0;
+    for(var i=0; i<block.length;i++){
+      if(CharUtil.isAlpha(block[i])){
+        counter++;
+        this.machine.reverse(1);
+        this.refreshParameters();
+      }
+    }
+    console.log("NOT IMPLEMENTED > reversing: " + block + "; counter = "+counter);
   }
 
   MachineController.prototype.crypt = function(block){
-    console.log("NOT IMPLEMENTED > crypt:" + block);
-    return block;
+    var cryptedBlock = "";
+    var crypted = "";
+    for(var i=0; i<block.length;i++){
+      if(CharUtil.isAlpha(block[i])){
+        crypted = this.machine.crypt(block[i]);
+        cryptedBlock += CharUtil.isLowerCase(block[i]) ? crypted.toLowerCase() : crypted.toUpperCase() ;
+        this.refreshParameters();
+      }else{
+        cryptedBlock += block[i];
+      }
+    }
+    console.log("NOT IMPLEMENTED > crypt:" + block + " -> " + cryptedBlock);
+    return cryptedBlock;
   }
 
   MachineController.prototype.setStart = function(index){
@@ -516,6 +538,13 @@ $(function(){
 
   MachineController.prototype.getRotors = function(){
     return this.machine.getRotors();
+  }
+
+  MachineController.prototype.refreshParameters = function(){
+    for(var side in this.rotorViewList){
+      this.rotorViewList[side].refreshStart(this.machine.getStartRotor(side));
+      this.rotorViewList[side].refreshRing(this.machine.getRingRotor(side));
+    }
   }
 
   /* Main */

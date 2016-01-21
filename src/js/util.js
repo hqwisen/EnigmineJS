@@ -121,7 +121,7 @@ CharUtil.isLowerCase = function(char){
   return CharUtil.inRegexp(char, /[a-z]/);
 }
 
-CharUtil.isChar = function(char){
+CharUtil.isAlpha = function(char){
   return CharUtil.inRegexp(char, /[A-Za-z]/);
 }
 

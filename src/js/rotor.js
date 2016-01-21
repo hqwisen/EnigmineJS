@@ -80,11 +80,11 @@ function Rotor(name, wiringTable, notchChar, startChar, ringChar){
   }
   
   Rotor.log = function(rotor, message){
-    if(LOG_ENIGMA){
+    /*if(LOG_ENIGMA){
       console.log("[Rotor]["+rotor.getName()+"] "
                   + message
                   + ".");
-    }
+    }*/
   }
   
   Rotor.error = function(rotor, message, abort){

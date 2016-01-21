@@ -20,10 +20,10 @@ function Machine(name, maxCable, config) {
 }
 
 Machine.DEFAULT_CONFIG = {
-  "rotors": ["IV", "V", "III"],
-  "reflector": "C",
-  "starts": ["A", "B", "C"],
-  "rings": ["X", "Y", "Z"]
+  "rotors": ["I", "II", "III"],
+  "reflector": "B",
+  "starts": ["A", "A", "A"],
+  "rings": ["A", "A", "A"]
 }
 
 Machine.RIGHT_ROTOR = 2;
@@ -130,7 +130,7 @@ Machine.prototype.reverse = function (loop) {
   loop = loop || 1;
   Machine.log(this, "begin a " + loop + " loop reverse");
   for (var i = 0; i < loop; i++) {
-    Machine.log(this, "begin reverse");
+    Machine.log(this, "begin reverse ("+i+").");
     this.reverseRotateRotor(Machine.RIGHT_ROTOR);
     if (this.matchNotchRotor(Machine.RIGHT_ROTOR)) {
       this.reverseRotateRotor(Machine.MIDDLE_ROTOR);
@@ -138,7 +138,7 @@ Machine.prototype.reverse = function (loop) {
       this.reverseRotateRotor(Machine.MIDDLE_ROTOR);
       this.reverseRotateRotor(Machine.LEFT_ROTOR);
     }
-    Machine.log(this, "end reverse");
+    Machine.log(this, "end reverse ("+i+").");
   }
 }
 
