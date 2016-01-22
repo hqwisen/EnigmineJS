@@ -38,32 +38,120 @@ body {
   background:#eaeaea;
 }
 
+/* Toolbar */
+
+#toolbar{
+  position: fixed;
+  width:100%;
+  height:70px;
+  margin:0;
+  padding:0;
+  background: #005dbf;
+  box-shadow: 0 0 1px 1px #000;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tabs{
+  display: flex;
+  width:100%;
+  height: 93%;
+  margin:0;
+  padding:0;
+  padding-left:20px;
+  padding-right:20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+}
+
+.tab{
+  display: flex;
+  height: 100%;
+  width: auto;
+  align-items: center;
+  justify-content: center;
+  padding-left:10px;
+  padding-right:10px;
+  cursor: pointer;
+}
+
+.tab a{
+  display: inline;
+  width: auto;
+  height: auto;
+  color:white;
+  font-size: 27px;
+  font-variant: small-caps;
+  text-decoration: none;
+}
+
+#tabbar{
+  width:100%;
+  height:7%;
+  margin:0;
+  padding:0;
+  padding-left:20px;
+  padding-right:20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+}
+
+#bar{
+  position: relative;
+  width:0;
+  height:100%;
+  background:white;
+}
+
 /* sections */
 
-#toolbar-section{
-  width: 100%;
-  height: auto;
-  background:#f4f4f4;
-}
-
-#section-config{
+#utility{
+  display: block;
   width:100%;
   height: auto;
+  margin: 0;
   padding:0;
   padding-top:70px;
-  padding-bottom:50px;
-  background:#f4f4f4;
-  text-align: center;
+  border-radius: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+
 }
 
-#section-input{
+#graphic{
+  display: block;
   width:100%;
   height: auto;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  background:#eaeaea;
-  border-top: 2px solid #e0e0e0;
-  text-align: center;
+  padding-top:70px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#about{
+  display: block;
+  width:100%;
+  height: auto;
+  padding-top:70px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.separator{
+  display: block;
+  background: #ffffff;
+  height:3px;
+}
+
+#about:hover{
+  background:green;
 }
 
 /* Notifications */
@@ -90,7 +178,34 @@ body {
   border-radius: 20px;
 }
 
-/* containers */
+
+/* utility sections */
+
+#toolbar-section{
+  width: 100%;
+  height: auto;
+}
+
+#section-config{
+  width:100%;
+  height: auto;
+  padding:0;
+  padding-bottom:50px;
+  background:#f4f4f4;
+  text-align: center;
+}
+
+#section-input{
+  width:100%;
+  height: auto;
+  padding-top:50px;
+  background:#eaeaea;
+  border-top: 2px solid #e0e0e0;
+  text-align: center;
+}
+
+
+/* utility containers */
 
 #rotors-container {
   display: inline-block;
@@ -133,76 +248,7 @@ body {
   box-shadow: #000 0px 0px 5px 1px;
 }
 
-/* Toolbar */
-
-#toolbar{
-  position: fixed;
-  width:100%;
-  height:70px;
-  margin:0;
-  padding:0;
-  background: #005dbf;
-  box-shadow: 0 0 1px 1px #000;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.tabs{
-  display: flex;
-  width:100%;
-  height: 93%;
-  margin:0;
-  padding:0;
-  padding-left:20px;
-  padding-right:20px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-
-}
-
-.tab{
-  display: flex;
-  height: 100%;
-  width: auto;
-  align-items: center;
-  justify-content: center;
-  padding-left:10px;
-  padding-right:10px;
-  cursor: pointer;
-}
-
-.tab span{
-  display: inline;
-  width: auto;
-  height: auto;
-  color:white;
-  font-size: 27px;
-  font-variant: small-caps;
-}
-
-#tabbar{
-  width:100%;
-  height:7%;
-  margin:0;
-  padding:0;
-  padding-left:20px;
-  padding-right:20px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-
-}
-
-#bar{
-  position: relative;
-  width:0;
-  height:100%;
-  background:white;
-}
-
-/* Reflector */
+/* utility reflector */
 
 .reflector-choice {
   width: 100%;
@@ -228,7 +274,7 @@ body {
   color:white;
 }
 
-/* Rotor */
+/* utility rotor */
 
 .rotor {
   display: inline-block;
@@ -346,7 +392,7 @@ body {
   font-size: 25px;
 }
 
-/* Plugboard */
+/* utitility plugboard */
 
 #plugboard-list{
   padding:0;
