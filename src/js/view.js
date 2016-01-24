@@ -24,6 +24,24 @@ $(function(){
     $("<button/>", {id:this.id("choiceC"), text:"C"}).appendTo(this.hid("reflector-choice"));
     $(this.hid("choiceC")).click({view:this, choice:"C"},
                                   changeReflectorClick);
+    /* Rotor parameters */
+    $("<div/>", {class:"param-container", id:this.id("param-container")}).appendTo(this.hid("reflector"));
+    $("<div/>", {class:"param", id:this.id("start-param")}).appendTo(this.hid("param-container"));
+    $("<span/>", {text:"Start"}).appendTo(this.hid("start-param"));
+    $("<button/>", {class:"rotate-left", id:this.id("startup"), html:"&#8635;"}).appendTo(this.hid("start-param"));
+    $("<span/>", {class:"param-value", id:this.id("startvalue"), text:"#"}).appendTo(this.hid("start-param"));
+    $("<button/>", {class:"rotate-right", id:this.id("startdown"), html:"&#8634;"}).appendTo(this.hid("start-param"));
+    $(this.hid("startup")).attr("disabled", true);
+    $(this.hid("startdown")).attr("disabled", true);
+    $("<div/>", {class:"param", id:this.id("ring-param")}).appendTo(this.hid("param-container"));
+    $("<span/>", {text:"Ring"}).appendTo(this.hid("ring-param"));
+    $("<button/>", {class:"rotate-left", id:this.id("ringup"), html:"&#8635;"}).appendTo(this.hid("ring-param"));
+    $("<span/>", {class:"param-value", id:this.id("ringvalue"), text:"#"}).appendTo(this.hid("ring-param"));
+    $("<button/>", {class:"rotate-right", id:this.id("ringdown"), html:"&#8634;"}).appendTo(this.hid("ring-param"));
+    $(this.hid("ringup")).attr("disabled", true);
+    $(this.hid("ringdown")).attr("disabled", true);
+
+
     this.changeSelector(initial);
   }
 
@@ -400,10 +418,10 @@ $(function(){
     this.startIndex = -1;
     this.beforeBlock = "";
     this.rotorViewList = {};
+    this.reflectorView = new ReflectorView(this, this.machine.getActiveReflector().getName());
     this.createRotorView(Machine.LEFT_ROTOR);
     this.createRotorView(Machine.MIDDLE_ROTOR);
     this.createRotorView(Machine.RIGHT_ROTOR);
-    this.reflectorView = new ReflectorView(this, this.machine.getActiveReflector().getName());
     this.plugboardView = new PlugboardView(this);
     this.inputView = new InputView(this);
     this.outputView = new OutputView(this);

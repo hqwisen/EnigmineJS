@@ -13,17 +13,17 @@
 <body>
   <section id="toolbar-section">
     <div id="toolbar">
-      <div class="tabs">
-        <div class="tab" id="utility-tab"><a href="#utility">utility</a></div>
-        <div class="tab" id="graphic-tab"><a href="#graphic">graphic</a></div>
-        <div class="tab" id="about-tab"><a href="#about">about</a></div>
-      </div>
+      <ul class="tabs">
+        <li class="tab" id="utilitytab"><a id="utilitylink" href="#utility">utility</a></li>
+        <li class="tab" id="graphictab"><a id="graphiclink" href="#graphic">graphic</a></li>
+        <li class="tab" id="abouttab"><a id="aboutlink" href="#about">about</a></li>
+      </ul>
       <div id="tabbar">
         <div id="bar" /></div>
     </div>
   </section>
 
-  <section id="utility">
+  <div id="utility">
     <section id="section-config">
       <div id="rotors-container">
       </div>
@@ -36,15 +36,13 @@
       <div id="output-container">
       </div>
     </section>
-  </section>
-  <section id="graphic">
-    <div class="separator"></div>
+  </div>
+  <div id="graphic">
     Grapic interfaace not implement.
-  </section>
-  <section id="about">
-    <div class="separator"></div>
+  </div>
+  <div id="about">
     Hakim.Boulahya@ulb.ac.be
-  </section>
+  </div>
 
 
   <!--div class="notification"><div class="notif-message">Notification test</div></div-->
@@ -52,41 +50,57 @@
   <script>
     $(function () {
       "use strict";
-      var tabList = ["#utility-tab", "#graphic-tab", "#about-tab"];
-
+      var INITIAL_TAB = 0;
+      var tabList = ["#utilitytab", "#graphictab", "#abouttab"];
+      var linkList = ["#utilitylink", "#graphiclink", "#aboutlink"];
+      var widthList = [];
+      for(var i=0;i<tabList.length;i++){
+        widthList.push($(tabList[i]).outerWidth());
+      }
       function beforeTabWidth(index) {
         var width = 0;
         for (var i = 0; i < index; i++) {
-          width += $(tabList[i]).outerWidth();
+          width += widthList[i];
         }
         return width;
       }
-
       function tabWidth(index) {
-        return $(tabList[index]).outerWidth();
+        return widthList[index];
       }
-
-      function tabEvent(event) {
-        var index = event.data.index;
+      function activeLink(id) {
+        id = "#" + id;
+        var index = -1;
+        for(var i=0;i<linkList.length;i++){
+          if(id == linkList[i]){index = i;break;};
+        }
         $("#bar").animate({
           width: tabWidth(index),
           left: beforeTabWidth(index)
         }, 300);
       }
-
+      $('ul.tabs').each(function () {
+        var $active, $content, $links = $(this).find('a');
+        $active = $($links[INITIAL_TAB]);
+        $content = $($active[0].hash);
+        $links.not($active).each(function () {
+          $(this.hash).hide();
+        });
+        $(this).on('click', 'a', function (e) {
+          $content.hide();
+          $active = $(this);
+          $content = $(this.hash);
+          $content.show();
+          e.preventDefault();
+          activeLink($(this).attr('id'));
+        });
+      });
       function initialTab(index) {
         $("#bar").css({
           width: tabWidth(index),
           left: beforeTabWidth(index)
         });
       }
-
-      for (var i = 0; i < tabList.length; i++) {
-        $(tabList[i]).click({
-          index: i
-        }, tabEvent);
-      }
-      initialTab(0);
+      initialTab(INITIAL_TAB);
 
     });
   </script>

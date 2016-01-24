@@ -75,7 +75,7 @@ body {
   justify-content: center;
   padding-left:10px;
   padding-right:10px;
-  cursor: pointer;
+  cursor: default;
 }
 
 .tab a{
@@ -86,6 +86,8 @@ body {
   font-size: 27px;
   font-variant: small-caps;
   text-decoration: none;
+  outline: none;
+  cursor:pointer;
 }
 
 #tabbar{
@@ -117,6 +119,7 @@ body {
   margin: 0;
   padding:0;
   padding-top:70px;
+  padding-bottom:70px;
   border-radius: 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -130,6 +133,7 @@ body {
   width:100%;
   height: auto;
   padding-top:70px;
+  padding-bottom:70px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -140,20 +144,11 @@ body {
   width:100%;
   height: auto;
   padding-top:70px;
+  padding-bottom:70px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.separator{
-  display: block;
-  background: #ffffff;
-  height:3px;
-}
-
-#about:hover{
-  background:green;
-}
-
 /* Notifications */
 
 .notification{
@@ -209,7 +204,7 @@ body {
 
 #rotors-container {
   display: inline-block;
-  width: 70%;
+  width: 80%;
   height: auto;
   margin:0 auto;
   padding-top:20px;
@@ -359,6 +354,12 @@ body {
   color:white;
 }
 
+.param button:disabled{
+  background:inherit;
+  color:#004d95;
+  cursor: default;
+}
+
 .rotate-left:active{
   -ms-transform:rotate(150deg); /* IE 9 */
   -moz-transform:rotate(150deg); /* Firefox */
@@ -371,6 +372,13 @@ body {
   -o-transition:ease-in-out 0.2s;
 
 }
+.rotate-left:disabled{
+  color:blue;
+  -ms-transform:rotate(0deg); /* IE 9 */
+  -moz-transform:rotate(0deg); /* Firefox */
+  -webkit-transform:rotate(0deg); /* Safari and Chrome */
+  -o-transform:rotate(0deg); /* Opera */
+}
 
 .rotate-right:active{
   -ms-transform:rotate(-150deg); /* IE 9 */
@@ -382,6 +390,13 @@ body {
   -ms-transition:ease-in-out 0.2s;
   -moz-transition:ease-in-out 0.2s;
   -o-transition:ease-in-out 0.2s;
+}
+
+.rotate-right:active{
+  -ms-transform:rotate(0deg); /* IE 9 */
+  -moz-transform:rotate(-0deg); /* Firefox */
+  -webkit-transform:rotate(0deg); /* Safari and Chrome */
+  -o-transform:rotate(0deg); /* Opera */
 }
 
 .param-value{
@@ -620,7 +635,7 @@ body {
   display: block;
   width:100%;
   margin:0;
-  padding:30px;
+  padding:25px;
   height:300px;
   color:#00396d;
   font-family: inherit;
@@ -721,7 +736,7 @@ body {
   display: block;
   width:100%;
   margin:0;
-  padding:30px;
+  padding:25px;
   height:300px;
   background:inherit;
   color:#4a4a4a;
