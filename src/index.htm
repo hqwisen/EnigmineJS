@@ -14,7 +14,7 @@
 <body>
   <section id="toolbar-section">
     <div id="toolbar">
-      <ul class="tabs">
+      <ul id="tabs" class="tabs">
         <li class="tab" id="utilitytab"><a id="utilitylink" href="#utility">UTILITY</a></li>
         <li class="tab" id="graphictab"><a id="graphiclink" href="#graphic">GRAPHIC</a></li>
         <li class="tab" id="abouttab"><a id="aboutlink" href="#about">ABOUT </a></li>
@@ -40,12 +40,19 @@
     </section>
   </div>
   <div id="graphic">
-    <!--section id="section-graphic">
+    <section id="section-graphic">
       <span class="title">Enigma I Machine Simulator</span>
       <div id="machine-container">
-        HERE THE MACHINE.
+        <div id="machine">
+          <div id="machine-rotor">
+          </div>
+          <div id="machine-output">
+          </div>
+          <div id="machine-input">
+          </div>
+        </div>
       </div>
-    </section-->
+    </section>
   </div>
   <div id="about">
     Hakim.Boulahya@ulb.ac.be
@@ -57,7 +64,7 @@
   <script>
     $(function () {
       "use strict";
-      var INITIAL_TAB = 0;
+      var INITIAL_TAB = 1;
       var tabList = ["#utilitytab", "#graphictab", "#abouttab"];
       var linkList = ["#utilitylink", "#graphiclink", "#aboutlink"];
 
