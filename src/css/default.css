@@ -61,9 +61,10 @@ body {
 .tabs{
   display: flex;
   width:100%;
-  height: 93%;
+  height: 100%;
   margin:0;
   padding:0;
+  margin-left:40px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -74,29 +75,42 @@ body {
   display: flex;
   height: 100%;
   width: auto;
+  padding:0;
+  margin-left: 5px;
+  margin-right: 5px;
   align-items: center;
   justify-content: center;
   cursor: default;
 }
 
 .tab a{
-  display: inline;
+  display: flex;
   width: auto;
   height: auto;
-  padding:0;
+  margin:0;
+  padding:5px;
   color:white;
-  font-size: 27px;
-  font-variant: small-caps;
+  font-size: 22px;
+  font-variant: normal;
   text-decoration: none;
   outline: none;
+  align-items: center;
+  justify-content: center;
   cursor:pointer;
+}
+
+.tab a.active{
+  background:white;
+  color:#005dbf;
+  border-radius: 10px;
 }
 
 #tabbar{
   width:100%;
-  height:7%;
+  height:0%;
   margin:0;
   padding:0;
+  background:green;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -267,6 +281,11 @@ body {
   color:white;
 }
 
+.reflector-choice button.active{
+  background:#004d95;
+  color:white;
+}
+
 /* utility rotor */
 
 .rotor {
@@ -312,6 +331,11 @@ body {
 }
 
 .rotor-choice button:hover{
+  background:#004d95;
+  color:white;
+}
+
+.rotor-choice button.active{
   background:#004d95;
   color:white;
 }

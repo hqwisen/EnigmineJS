@@ -15,12 +15,13 @@
   <section id="toolbar-section">
     <div id="toolbar">
       <ul class="tabs">
-        <li class="tab" id="utilitytab"><a id="utilitylink" href="#utility">utility</a></li>
-        <li class="tab" id="graphictab"><a id="graphiclink" href="#graphic">graphic</a></li>
-        <li class="tab" id="abouttab"><a id="aboutlink" href="#about">about</a></li>
+        <li class="tab" id="utilitytab"><a id="utilitylink" href="#utility">UTILITY</a></li>
+        <li class="tab" id="graphictab"><a id="graphiclink" href="#graphic">GRAPHIC</a></li>
+        <li class="tab" id="abouttab"><a id="aboutlink" href="#about">ABOUT </a></li>
       </ul>
-      <div id="tabbar">
-        <div id="bar" /></div>
+      <!--div id="tabbar">
+        <div id="bar" />
+      </div-->
     </div>
   </section>
 
@@ -59,67 +60,25 @@
       var INITIAL_TAB = 0;
       var tabList = ["#utilitytab", "#graphictab", "#abouttab"];
       var linkList = ["#utilitylink", "#graphiclink", "#aboutlink"];
-      var widthList = [];
-      for (var i = 0; i < tabList.length; i++) {
-        widthList.push($(linkList[i]).outerWidth());
-      }
 
-      function beforeTabWidth(index) {
-        var width = 0;
-        for (var i = 0; i < index; i++) {
-          width += widthList[i];
-        }
-        return width;
-      }
-
-      function tabWidth(index) {
-        return widthList[index];
-      }
-
-      function activeLink(id) {
-        id = "#" + id;
-        var index = -1;
-        for (var i = 0; i < linkList.length; i++) {
-          if (id == linkList[i]) {
-            index = i;
-            break;
-          };
-        }
-        var width = tabWidth(index);
-        var bwidth = beforeTabWidth(index);
-        $("#bar").animate({
-          width: width,
-          marginLeft: bwidth
-
-        }, 300);
-      }
       $('ul.tabs').each(function () {
         var $active, $content, $links = $(this).find('a');
         $active = $($links[INITIAL_TAB]);
+        $active.addClass("active");
         $content = $($active[0].hash);
         $links.not($active).each(function () {
           $(this.hash).hide();
         });
         $(this).on('click', 'a', function (e) {
+          $active.removeClass("active");
           $content.hide();
           $active = $(this);
+          $active.addClass("active");
           $content = $(this.hash);
           $content.show();
           e.preventDefault();
-          activeLink($(this).attr('id'));
         });
       });
-
-      function initialTab(index) {
-        var width = tabWidth(index);
-        var bwidth = beforeTabWidth(index);
-        $("#bar").css({
-          width: width,
-          left: bwidth
-        });
-      }
-      initialTab(INITIAL_TAB);
-
     });
   </script>
   <script src="js/util.js" type="text/javascript"></script>

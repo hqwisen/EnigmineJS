@@ -130,18 +130,14 @@ CharUtil.isAlpha = function(char){
 function HtmlUtil(){}
 
 HtmlUtil.changeSelector = function(object, currentId){
-  if(currentId != object.lastId){
-    $(currentId).css({background:"#004d95", color:"white"});
-    $(currentId).hover(function(){$(currentId).css({background:"#004d95", color:"white"});},
-                      function(){$(currentId).css({background:"#004d95", color:"white"});});
 
-    if(object.lastId != undefined){
-      $(object.lastId).css({background:"inherit", color:"#3f668b"});
-      $(object.lastId).hover(function(){$(this).css({background:"#004D95", color:"white"});},
-                           function(){$(this).css({background:"inherit", color:"#3f668b"});});
-    }
-    object.lastId = currentId;
+  if(object.lastId != undefined){
+    $(object.lastId).removeClass("active");
   }
+  if(currentId != object.lastId){
+    $(currentId).addClass("active");
+  }
+  object.lastId = currentId;
 }
 
 
