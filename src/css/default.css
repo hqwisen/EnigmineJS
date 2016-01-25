@@ -40,6 +40,11 @@ body {
 
 /* Toolbar */
 
+#toolbar-section{
+  width: 100%;
+  height: auto;
+}
+
 #toolbar{
   position: fixed;
   width:100%;
@@ -59,8 +64,6 @@ body {
   height: 93%;
   margin:0;
   padding:0;
-  padding-left:20px;
-  padding-right:20px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -73,8 +76,6 @@ body {
   width: auto;
   align-items: center;
   justify-content: center;
-  padding-left:10px;
-  padding-right:10px;
   cursor: default;
 }
 
@@ -82,6 +83,7 @@ body {
   display: inline;
   width: auto;
   height: auto;
+  padding:0;
   color:white;
   font-size: 27px;
   font-variant: small-caps;
@@ -95,8 +97,6 @@ body {
   height:7%;
   margin:0;
   padding:0;
-  padding-left:20px;
-  padding-right:20px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -106,6 +106,9 @@ body {
 #bar{
   position: relative;
   width:0;
+  margin:0;
+  padding:0;
+  left:0;
   height:100%;
   background:white;
 }
@@ -175,11 +178,6 @@ body {
 
 
 /* utility sections */
-
-#toolbar-section{
-  width: 100%;
-  height: auto;
-}
 
 #section-config{
   width:100%;
@@ -754,3 +752,25 @@ body {
   box-sizing: border-box;
 
 }
+
+/* graphic section */
+/*
+#section-graphic{
+  width: 100%;
+  height: auto;
+  padding:25px;
+}
+
+#section-graphic .title{
+  padding:5px;
+  color:#00396d;
+  font-size:40px;
+  font-variant: small-caps;
+}
+
+#machine-container{
+  width: 100%;
+  height: auto;
+  margin-top:30px;
+  background:green;
+}*/

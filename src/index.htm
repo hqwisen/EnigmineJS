@@ -5,9 +5,10 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta name="description" content="Simulation of the Enigma I Machine">
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
   <link rel="stylesheet" type="text/css" href="css/default.css">
-  <title>v2 (enigmine)</title>
+  <title>Enigmine Simulation</title>
 </head>
 
 <body>
@@ -38,7 +39,12 @@
     </section>
   </div>
   <div id="graphic">
-    Grapic interfaace not implement.
+    <!--section id="section-graphic">
+      <span class="title">Enigma I Machine Simulator</span>
+      <div id="machine-container">
+        HERE THE MACHINE.
+      </div>
+    </section-->
   </div>
   <div id="about">
     Hakim.Boulahya@ulb.ac.be
@@ -54,9 +60,10 @@
       var tabList = ["#utilitytab", "#graphictab", "#abouttab"];
       var linkList = ["#utilitylink", "#graphiclink", "#aboutlink"];
       var widthList = [];
-      for(var i=0;i<tabList.length;i++){
-        widthList.push($(tabList[i]).outerWidth());
+      for (var i = 0; i < tabList.length; i++) {
+        widthList.push($(linkList[i]).outerWidth());
       }
+
       function beforeTabWidth(index) {
         var width = 0;
         for (var i = 0; i < index; i++) {
@@ -64,18 +71,26 @@
         }
         return width;
       }
+
       function tabWidth(index) {
         return widthList[index];
       }
+
       function activeLink(id) {
         id = "#" + id;
         var index = -1;
-        for(var i=0;i<linkList.length;i++){
-          if(id == linkList[i]){index = i;break;};
+        for (var i = 0; i < linkList.length; i++) {
+          if (id == linkList[i]) {
+            index = i;
+            break;
+          };
         }
+        var width = tabWidth(index);
+        var bwidth = beforeTabWidth(index);
         $("#bar").animate({
-          width: tabWidth(index),
-          left: beforeTabWidth(index)
+          width: width,
+          marginLeft: bwidth
+
         }, 300);
       }
       $('ul.tabs').each(function () {
@@ -94,10 +109,13 @@
           activeLink($(this).attr('id'));
         });
       });
+
       function initialTab(index) {
+        var width = tabWidth(index);
+        var bwidth = beforeTabWidth(index);
         $("#bar").css({
-          width: tabWidth(index),
-          left: beforeTabWidth(index)
+          width: width,
+          left: bwidth
         });
       }
       initialTab(INITIAL_TAB);
