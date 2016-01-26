@@ -613,6 +613,74 @@ $(function () {
     return this.getContent().length;
   }
 
+  /* UtilityHandler */
+
+  function UtilityHandler(controller){
+    this.controller = controller;
+    this.rotorViewList = {};
+    this.reflectorView = new ReflectorView(this.controller, this.controller.getActiveReflectorName());
+    this.createRotorView(Machine.LEFT_ROTOR);
+    this.createRotorView(Machine.MIDDLE_ROTOR);
+    this.createRotorView(Machine.RIGHT_ROTOR);
+    this.plugboardView = new PlugboardView(this.controller);
+    this.inputView = new InputView(this.controller);
+    this.outputView = new OutputView(this.controller);
+
+  }
+
+  UtilityHandler.log = function (message) {
+    if (LOG_ENIGMA) {
+      console.log("[UtilityHandler] " + message + ".");
+    }
+  }
+
+
+  UtilityHandler.prototype.createRotorView = function (side) {
+    var rotorView = new RotorView(this.controller, side, this.controller.getRotorName(side));
+    rotorView.refreshStart(this.controller.getRotorStart(side));
+    rotorView.refreshRing(this.controller.getRotorRing(side));
+    this.rotorViewList[side] = (rotorView);
+  }
+
+  UtilityHandler.prototype.changeReflectorSelector = function(name){
+    UtilityHandler.log("changing reflector selector");
+    this.reflectorView.changeSelector(name);
+  }
+
+  UtilityHandler.prototype.changeRotor = function(side, name){
+    this.rotorViewList[side].changeSelector(name);
+    this.rotorViewList[side].refreshStart(this.controller.getRotorStart(side));
+    this.rotorViewList[side].refreshRing(this.controller.getRotorRing(side));
+  }
+
+  UtilityHandler.prototype.refreshStart = function(side, start){
+    this.rotorViewList[side].refreshStart(start);
+  }
+
+  UtilityHandler.prototype.refreshRing = function(side, ring){
+    this.rotorViewList[side].refreshRing(ring);
+  }
+
+  UtilityHandler.prototype.getLastInputBlock = function(index){
+    return this.inputView.getLastBlock(index);
+  }
+
+  UtilityHandler.prototype.addOutputContent = function(content){
+    this.outputView.addContent(content);
+  }
+
+  UtilityHandler.prototype.removeFromOutput = function(index){
+    this.outputView.removeFrom(index);
+  }
+
+  UtilityHandler.prototype.refreshParameters = function(starts, rings){
+    var sideList = this.controller.getSideList();
+    for (var i=0;i<sideList.length;i++){
+      this.rotorViewList[sideList[i]].refreshStart(starts[i]);
+      this.rotorViewList[sideList[i]].refreshRing(rings[i]);
+    }
+  }
+
   /* MachineController */
 
   function MachineController() {
@@ -622,14 +690,7 @@ $(function () {
     this.plugItemCounter = 0;
     this.startIndex = -1;
     this.beforeBlock = "";
-    this.rotorViewList = {};
-    this.reflectorView = new ReflectorView(this, this.machine.getActiveReflector().getName());
-    this.createRotorView(Machine.LEFT_ROTOR);
-    this.createRotorView(Machine.MIDDLE_ROTOR);
-    this.createRotorView(Machine.RIGHT_ROTOR);
-    this.plugboardView = new PlugboardView(this);
-    this.inputView = new InputView(this);
-    this.outputView = new OutputView(this);
+    this.utilityHandler = new UtilityHandler(this);
 
   }
 
@@ -641,32 +702,21 @@ $(function () {
     }
   }
 
-  MachineController.prototype.createRotorView = function (side) {
-    var rotorView = new RotorView(this, side, this.machine.getRotorOnSide(side).getName());
-    rotorView.refreshStart(this.machine.getStartRotor(side));
-    rotorView.refreshRing(this.machine.getRingRotor(side));
-    this.rotorViewList[side] = (rotorView);
-  }
-
   MachineController.prototype.changeReflector = function (name) {
     MachineController.log("changeReflector(" + name + ")");
     this.machine.setActiveReflector(name);
-    this.reflectorView.changeSelector(name);
+    this.utilityHandler.changeReflectorSelector(name);
   }
 
   MachineController.prototype.changeRotor = function (side, name) {
     MachineController.log("changeRotor(" + side + ", " + name + ")");
-    var old = this.machine.getRotorOnSide(side).getName();
+    var old = this.getRotorName(side);
     this.machine.setRotorOnSide(side, name);
-    this.rotorViewList[side].changeSelector(name);
-    this.rotorViewList[side].refreshStart(this.machine.getStartRotor(side));
-    this.rotorViewList[side].refreshRing(this.machine.getRingRotor(side));
+    this.utilityHandler.changeRotor(side, name);
     for (var otherSide in [Machine.LEFT_ROTOR, Machine.MIDDLE_ROTOR, Machine.RIGHT_ROTOR]) {
       if (side != otherSide && this.machine.getRotorOnSide(otherSide).getName() == name) {
         this.machine.setRotorOnSide(otherSide, old);
-        this.rotorViewList[otherSide].changeSelector(old);
-        this.rotorViewList[otherSide].refreshStart(this.machine.getStartRotor(otherSide));
-        this.rotorViewList[otherSide].refreshRing(this.machine.getRingRotor(otherSide));
+        this.utilityHandler.changeRotor(otherSide, old);
       }
     }
   }
@@ -674,7 +724,7 @@ $(function () {
   // FIXME to avoid conflict, |value| = 1
   MachineController.prototype.changeStart = function (side, value) {
     MachineController.log("changeStart(" + side + ", " + value + ")");
-    var char = this.machine.getStartRotor(side);
+    var char = this.getRotorStart(side);
     var charCode = char.charCodeAt(0);
     if (value == 1 && charCode >= Rotor.CHARCODEMAXSET) {
       charCode = Rotor.CHARCODEMINSET;
@@ -684,14 +734,14 @@ $(function () {
       charCode += (value);
     }
     var newStart = String.fromCharCode(charCode);
-    this.machine.setStartRotor(side, newStart);
-    this.rotorViewList[side].refreshStart(newStart);
+    this.setRotorStart(side, newStart);
+    this.utilityHandler.refreshStart(side, newStart);
   }
 
   // FIXME to avoid conflict, |value| = 1
   MachineController.prototype.changeRing = function (side, value) {
     MachineController.log("changeRing(" + side + ", " + value + ")");
-    var char = this.machine.getRingRotor(side);
+    var char = this.getRotorRing(side);
     var charCode = char.charCodeAt(0);
     if (value == 1 && charCode >= Rotor.CHARCODEMAXSET) {
       charCode = Rotor.CHARCODEMINSET;
@@ -701,10 +751,11 @@ $(function () {
       charCode += (value);
     }
     var newRing = String.fromCharCode(charCode);
-    this.machine.setRingRotor(side, newRing);
-    this.rotorViewList[side].refreshRing(newRing);
+    this.setRotorRing(side, newRing);
+    this.utilityHandler.refreshRing(side, newRing);
   }
 
+  // FIXME Plugboard refreshing by the controller (not by itself)
   MachineController.prototype.addPlugboardConnection = function (entry1, entry2) {
     MachineController.log("addPlugboardConnection(" + entry1 + ", " + entry2 + ")");
     this.plugItemCounter++;
@@ -725,10 +776,10 @@ $(function () {
   MachineController.prototype.handleInput = function () {
     MachineController.log("handleInput().");
     this.reverse(this.getBeforeBlock());
-    var block = this.inputView.getLastBlock(this.startIndex);
+    var block = this.utilityHandler.getLastInputBlock(this.startIndex);
     var cryptedBlock = this.crypt(block);
-    this.outputView.removeFrom(this.startIndex);
-    this.outputView.addContent(cryptedBlock);
+    this.utilityHandler.removeFromOutput(this.startIndex);
+    this.utilityHandler.addOutputContent(cryptedBlock);
   }
 
   MachineController.prototype.reverse = function (block) {
@@ -787,11 +838,42 @@ $(function () {
     return this.machine.getRotors();
   }
 
+  MachineController.prototype.getActiveReflectorName = function(){
+    return this.machine.getActiveReflector().getName();
+  }
+
+  MachineController.prototype.getRotorName = function(side){
+    return this.machine.getRotorOnSide(side).getName();
+  }
+
+  MachineController.prototype.getRotorStart = function(side){
+    return this.machine.getRotorStart(side);
+  }
+
+  MachineController.prototype.getRotorRing = function(side){
+    return this.machine.getRotorRing(side);
+  }
+
+  MachineController.prototype.setRotorStart = function(side, start){
+    return this.machine.setRotorStart(side, start);
+  }
+
+  MachineController.prototype.setRotorRing = function(side, ring){
+    return this.machine.setRotorRing(side, ring);
+  }
+
+  MachineController.prototype.getSideList = function(){
+    return [Machine.LEFT_ROTOR, Machine.MIDDLE_ROTOR, Machine.RIGHT_ROTOR];
+  }
+
   MachineController.prototype.refreshParameters = function () {
-    for (var side in this.rotorViewList) {
-      this.rotorViewList[side].refreshStart(this.machine.getStartRotor(side));
-      this.rotorViewList[side].refreshRing(this.machine.getRingRotor(side));
+    var starts = [];
+    var rings = [];
+    for (var side in this.getSideList()) {
+      starts.push(this.getRotorStart(side));
+      rings.push(this.getRotorRing(side));
     }
+    this.utilityHandler.refreshParameters(starts, rings);
   }
 
   /* Main */

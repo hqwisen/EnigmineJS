@@ -89,17 +89,17 @@ Machine.prototype.getActiveReflector = function () {
 }
 
 Machine.prototype.applyConfig = function (config) {
-  this.setStartRotor(Machine.RIGHT_ROTOR,
+  this.setRotorStart(Machine.RIGHT_ROTOR,
     this.config["starts"][Machine.RIGHT_ROTOR]);
-  this.setStartRotor(Machine.MIDDLE_ROTOR,
+  this.setRotorStart(Machine.MIDDLE_ROTOR,
     this.config["starts"][Machine.MIDDLE_ROTOR]);
-  this.setStartRotor(Machine.LEFT_ROTOR,
+  this.setRotorStart(Machine.LEFT_ROTOR,
     this.config["starts"][Machine.LEFT_ROTOR]);
-  this.setRingRotor(Machine.RIGHT_ROTOR,
+  this.setRotorRing(Machine.RIGHT_ROTOR,
     this.config["rings"][Machine.RIGHT_ROTOR]);
-  this.setRingRotor(Machine.MIDDLE_ROTOR,
+  this.setRotorRing(Machine.MIDDLE_ROTOR,
     this.config["rings"][Machine.MIDDLE_ROTOR]);
-  this.setRingRotor(Machine.LEFT_ROTOR,
+  this.setRotorRing(Machine.LEFT_ROTOR,
     this.config["rings"][Machine.LEFT_ROTOR]);
 }
 
@@ -167,20 +167,20 @@ Machine.prototype.reverseRotateRotor = function (side) {
   this.getRotorOnSide(side).reverseRotate();
 }
 
-Machine.prototype.getRingRotor = function (side) {
+Machine.prototype.getRotorRing = function (side) {
   return this.getRotorOnSide(side).getCharRing();
 }
 
-Machine.prototype.getStartRotor = function (side) {
+Machine.prototype.getRotorStart = function (side) {
   return this.getRotorOnSide(side).getCharStart();
 }
 
-Machine.prototype.setRingRotor = function (side, ring) {
+Machine.prototype.setRotorRing = function (side, ring) {
   this.config["rings"][side] = ring;
   this.getRotorOnSide(side).setRing(ring);
 }
 
-Machine.prototype.setStartRotor = function (side, start) {
+Machine.prototype.setRotorStart = function (side, start) {
   this.config["starts"][side] = start;
   this.getRotorOnSide(side).setStart(start);
 }
