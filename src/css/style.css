@@ -99,6 +99,11 @@ body {
   cursor:pointer;
 }
 
+.tab a:hover{
+  border-radius: 7px;
+  box-shadow: #004d95 0px 0px 5px 1px;
+}
+
 .tab a.active{
   background:white;
   color:#005dbf;
