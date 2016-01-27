@@ -669,6 +669,10 @@ $(function () {
     this.outputView.addContent(content);
   }
 
+  UtilityHandler.prototype.addInputContent = function (content) {
+    this.inputView.addContent(content);
+  }
+
   UtilityHandler.prototype.removeFromOutput = function (index) {
     this.outputView.removeFrom(index);
   }
@@ -729,14 +733,12 @@ $(function () {
 
 
   // FIXME timer output active
-  function inputKeyboardMouseDownEvent(event){
-    console.log("mousedown: " + event.data.char);
+  function inputKeyboardMouseDownEvent(event) {
     event.data.handler.keyDown(event.data.char);
   }
 
-  function inputKeyboardMouseUpEvent(event){
-    console.log("mouseup: " + event.data.char);
-    event.data.handler.keyUp(event.data.char);
+  function inputKeyboardMouseUpEvent(event) {
+    event.data.handler.keyUp();
   }
 
   function InputKeyboard(handler) {
@@ -754,14 +756,13 @@ $(function () {
         char = Keyboard.LINES[lineNumber][i];
         $(this.hid("key" + char)).mousedown({
           char: char,
-          handler:this.handler
+          handler: this.handler
         }, inputKeyboardMouseDownEvent);
-        $(this.hid("key" + char)).mouseup({
-          char: char,
-          handler:this.handler
-        }, inputKeyboardMouseUpEvent);
       }
     }
+    $("#graphic").mouseup({
+      handler: this.handler
+    }, inputKeyboardMouseUpEvent);
     /*$("#graphic").keydown(inputKeyboardKeyDown);
     $("#graphic").keyup(inputKeyboardKeyUp);*/
   }
@@ -783,12 +784,12 @@ $(function () {
     return "output";
   }
 
-  OutputKeyboard.prototype.enable = function(char){
-    $(this.hid("key"+char)).addClass("output-key-active");
+  OutputKeyboard.prototype.enable = function (char) {
+    $(this.hid("key" + char)).addClass("output-key-active");
   }
 
-  OutputKeyboard.prototype.disable = function(char){
-    $(this.hid("key"+char)).removeClass("output-key-active");
+  OutputKeyboard.prototype.disable = function (char) {
+    $(this.hid("key" + char)).removeClass("output-key-active");
   }
 
   /* GraphicHandler */
@@ -797,23 +798,21 @@ $(function () {
     this.controller = controller;
     this.outputKeyboard = new OutputKeyboard(this);
     this.inputKeyboard = new InputKeyboard(this);
-    this.pressedKey = {};
+    this.lastCryptedChar = undefined;
 
   }
 
   GraphicHandler.prototype.keyDown = function (char) {
-    console.log("gh down " + char);
-    if(!this.pressedKey[char]){
-      this.pressedKey[char] = true;
-      this.outputKeyboard.enable(char);
+    if (this.lastCryptedChar == undefined) {
+      this.lastCryptedChar = this.controller.refreshCrypt(char);
+      this.outputKeyboard.enable(this.lastCryptedChar);
     }
   }
 
-  GraphicHandler.prototype.keyUp = function (char) {
-    console.log("gh up " + char);
-    if(this.pressedKey[char]){
-      this.outputKeyboard.disable(char);
-      this.pressedKey[char] = false;
+  GraphicHandler.prototype.keyUp = function () {
+    if (this.lastCryptedChar != undefined) {
+      this.outputKeyboard.disable(this.lastCryptedChar);
+      this.lastCryptedChar = undefined;
     }
   }
 
@@ -930,6 +929,13 @@ $(function () {
       }
     }
     MachineController.log("(?? DONE) NOT IMPLEMENTED > reversing: " + block + "; counter = " + counter);
+  }
+
+  MachineController.prototype.refreshCrypt = function(block){
+    var cryptedBlock = this.crypt(block);
+    this.utilityHandler.addInputContent(block);
+    this.utilityHandler.addOutputContent(cryptedBlock);
+    return cryptedBlock;
   }
 
   MachineController.prototype.crypt = function (block) {
