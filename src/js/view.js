@@ -615,7 +615,7 @@ $(function () {
 
   /* UtilityHandler */
 
-  function UtilityHandler(controller){
+  function UtilityHandler(controller) {
     this.controller = controller;
     this.rotorViewList = {};
     this.reflectorView = new ReflectorView(this.controller, this.controller.getActiveReflectorName());
@@ -642,43 +642,120 @@ $(function () {
     this.rotorViewList[side] = (rotorView);
   }
 
-  UtilityHandler.prototype.changeReflectorSelector = function(name){
+  UtilityHandler.prototype.changeReflectorSelector = function (name) {
     UtilityHandler.log("changing reflector selector");
     this.reflectorView.changeSelector(name);
   }
 
-  UtilityHandler.prototype.changeRotor = function(side, name){
+  UtilityHandler.prototype.changeRotor = function (side, name) {
     this.rotorViewList[side].changeSelector(name);
     this.rotorViewList[side].refreshStart(this.controller.getRotorStart(side));
     this.rotorViewList[side].refreshRing(this.controller.getRotorRing(side));
   }
 
-  UtilityHandler.prototype.refreshStart = function(side, start){
+  UtilityHandler.prototype.refreshStart = function (side, start) {
     this.rotorViewList[side].refreshStart(start);
   }
 
-  UtilityHandler.prototype.refreshRing = function(side, ring){
+  UtilityHandler.prototype.refreshRing = function (side, ring) {
     this.rotorViewList[side].refreshRing(ring);
   }
 
-  UtilityHandler.prototype.getLastInputBlock = function(index){
+  UtilityHandler.prototype.getLastInputBlock = function (index) {
     return this.inputView.getLastBlock(index);
   }
 
-  UtilityHandler.prototype.addOutputContent = function(content){
+  UtilityHandler.prototype.addOutputContent = function (content) {
     this.outputView.addContent(content);
   }
 
-  UtilityHandler.prototype.removeFromOutput = function(index){
+  UtilityHandler.prototype.removeFromOutput = function (index) {
     this.outputView.removeFrom(index);
   }
 
-  UtilityHandler.prototype.refreshParameters = function(starts, rings){
+  UtilityHandler.prototype.refreshParameters = function (starts, rings) {
     var sideList = this.controller.getSideList();
-    for (var i=0;i<sideList.length;i++){
+    for (var i = 0; i < sideList.length; i++) {
       this.rotorViewList[sideList[i]].refreshStart(starts[i]);
       this.rotorViewList[sideList[i]].refreshRing(rings[i]);
     }
+  }
+
+  /* Keyboard */
+
+  function Keyboard() {
+
+  }
+
+  Keyboard.NUMBEROFLINE = 3;
+  Keyboard.LINES = [["Q", "W", "E", "R", "T", "Z", "U", "I", "O"],
+                   ["A", "S", "D", "F", "G", "H", "J", "K"],
+                   ["P", "Y", "X", "C", "V", "B", "N", "M", "L"]];
+
+
+  Keyboard.prototype.buildKeyboard = function () {
+    for (var i = 0; i < Keyboard.NUMBEROFLINE; i++) {
+      this.buildLine(i);
+    }
+  }
+
+  Keyboard.prototype.buildLine = function (lineNumber) {
+    $("<div/>", {
+      class: "keyboard-line" + " " + "line" + lineNumber,
+      id: this.id("line" + lineNumber)
+    }).appendTo(this.getKeyboardContainerId());
+    for (var i in Keyboard.LINES[lineNumber]) {
+      $("<span/>", {
+        class:this.getType() + "-key",
+        html: Keyboard.LINES[lineNumber][i]
+      }).appendTo(this.hid("line" + lineNumber));
+    }
+  }
+
+  Keyboard.prototype.getKeyboardContainerId = function () {
+    return "#machine-" + this.getType();
+  }
+
+  Keyboard.prototype.id = function (name) {
+    return this.getType() + name;
+  }
+
+  Keyboard.prototype.hid = function (name) {
+    return "#" + this.getType() + name;
+  }
+
+  /* InputKeyboard */
+
+  function InputKeyboard(controller) {
+    this.controller = controller;
+    this.buildKeyboard();
+  }
+
+  InputKeyboard.prototype = new Keyboard();
+
+  InputKeyboard.prototype.getType = function () {
+    return "input";
+  }
+
+  /* OutputKeyboard */
+
+  function OutputKeyboard(controller) {
+    this.controller = controller;
+    this.buildKeyboard();
+  }
+
+  OutputKeyboard.prototype = new Keyboard();
+
+  OutputKeyboard.prototype.getType = function () {
+    return "output";
+  }
+
+  /* GraphicHandler */
+
+  function GraphicHandler(controller) {
+    this.controller = controller;
+    this.outputKeyboard = new OutputKeyboard(this.controller);
+    this.inputKeyboard = new InputKeyboard(this.controller);
   }
 
   /* MachineController */
@@ -686,11 +763,12 @@ $(function () {
   function MachineController() {
 
     this.machine = new Machine("Enigma 1",
-                               MachineController.MAXIMUM_PLUGITEM);
+      MachineController.MAXIMUM_PLUGITEM);
     this.plugItemCounter = 0;
     this.startIndex = -1;
     this.beforeBlock = "";
     this.utilityHandler = new UtilityHandler(this);
+    this.graphicHandler = new GraphicHandler(this);
 
   }
 
@@ -838,31 +916,31 @@ $(function () {
     return this.machine.getRotors();
   }
 
-  MachineController.prototype.getActiveReflectorName = function(){
+  MachineController.prototype.getActiveReflectorName = function () {
     return this.machine.getActiveReflector().getName();
   }
 
-  MachineController.prototype.getRotorName = function(side){
+  MachineController.prototype.getRotorName = function (side) {
     return this.machine.getRotorOnSide(side).getName();
   }
 
-  MachineController.prototype.getRotorStart = function(side){
+  MachineController.prototype.getRotorStart = function (side) {
     return this.machine.getRotorStart(side);
   }
 
-  MachineController.prototype.getRotorRing = function(side){
+  MachineController.prototype.getRotorRing = function (side) {
     return this.machine.getRotorRing(side);
   }
 
-  MachineController.prototype.setRotorStart = function(side, start){
+  MachineController.prototype.setRotorStart = function (side, start) {
     return this.machine.setRotorStart(side, start);
   }
 
-  MachineController.prototype.setRotorRing = function(side, ring){
+  MachineController.prototype.setRotorRing = function (side, ring) {
     return this.machine.setRotorRing(side, ring);
   }
 
-  MachineController.prototype.getSideList = function(){
+  MachineController.prototype.getSideList = function () {
     return [Machine.LEFT_ROTOR, Machine.MIDDLE_ROTOR, Machine.RIGHT_ROTOR];
   }
 
