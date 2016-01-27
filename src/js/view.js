@@ -701,13 +701,14 @@ $(function () {
 
   Keyboard.prototype.buildLine = function (lineNumber) {
     $("<div/>", {
-      class: "keyboard-line" + " " + "line" + lineNumber,
+      class: "keyboard-line" + " " + "line" + lineNumber + (lineNumber == Keyboard.NUMBEROFLINE - 1 ? "" : " keyboard-line-" + this.getType()),
       id: this.id("line" + lineNumber)
     }).appendTo(this.getKeyboardContainerId());
     for (var i in Keyboard.LINES[lineNumber]) {
       $("<span/>", {
-        class:this.getType() + "-key",
-        html: Keyboard.LINES[lineNumber][i]
+        class: this.getType() + "-key",
+        id: this.id("key" + Keyboard.LINES[lineNumber][i]),
+        html: Keyboard.LINES[lineNumber][i],
       }).appendTo(this.hid("line" + lineNumber));
     }
   }
@@ -726,12 +727,44 @@ $(function () {
 
   /* InputKeyboard */
 
-  function InputKeyboard(controller) {
-    this.controller = controller;
+
+  // FIXME timer output active
+  function inputKeyboardMouseDownEvent(event){
+    console.log("mousedown: " + event.data.char);
+    event.data.handler.keyDown(event.data.char);
+  }
+
+  function inputKeyboardMouseUpEvent(event){
+    console.log("mouseup: " + event.data.char);
+    event.data.handler.keyUp(event.data.char);
+  }
+
+  function InputKeyboard(handler) {
+    this.handler = handler;
     this.buildKeyboard();
+    this.buildKeysEvent();
   }
 
   InputKeyboard.prototype = new Keyboard();
+
+  InputKeyboard.prototype.buildKeysEvent = function () {
+    var char;
+    for (var lineNumber = 0; lineNumber < Keyboard.NUMBEROFLINE; lineNumber++) {
+      for (var i in Keyboard.LINES[lineNumber]) {
+        char = Keyboard.LINES[lineNumber][i];
+        $(this.hid("key" + char)).mousedown({
+          char: char,
+          handler:this.handler
+        }, inputKeyboardMouseDownEvent);
+        $(this.hid("key" + char)).mouseup({
+          char: char,
+          handler:this.handler
+        }, inputKeyboardMouseUpEvent);
+      }
+    }
+    /*$("#graphic").keydown(inputKeyboardKeyDown);
+    $("#graphic").keyup(inputKeyboardKeyUp);*/
+  }
 
   InputKeyboard.prototype.getType = function () {
     return "input";
@@ -739,8 +772,8 @@ $(function () {
 
   /* OutputKeyboard */
 
-  function OutputKeyboard(controller) {
-    this.controller = controller;
+  function OutputKeyboard(handler) {
+    this.handler = handler;
     this.buildKeyboard();
   }
 
@@ -750,13 +783,40 @@ $(function () {
     return "output";
   }
 
+  OutputKeyboard.prototype.enable = function(char){
+    $(this.hid("key"+char)).addClass("output-key-active");
+  }
+
+  OutputKeyboard.prototype.disable = function(char){
+    $(this.hid("key"+char)).removeClass("output-key-active");
+  }
+
   /* GraphicHandler */
 
   function GraphicHandler(controller) {
     this.controller = controller;
-    this.outputKeyboard = new OutputKeyboard(this.controller);
-    this.inputKeyboard = new InputKeyboard(this.controller);
+    this.outputKeyboard = new OutputKeyboard(this);
+    this.inputKeyboard = new InputKeyboard(this);
+    this.pressedKey = {};
+
   }
+
+  GraphicHandler.prototype.keyDown = function (char) {
+    console.log("gh down " + char);
+    if(!this.pressedKey[char]){
+      this.pressedKey[char] = true;
+      this.outputKeyboard.enable(char);
+    }
+  }
+
+  GraphicHandler.prototype.keyUp = function (char) {
+    console.log("gh up " + char);
+    if(this.pressedKey[char]){
+      this.outputKeyboard.disable(char);
+      this.pressedKey[char] = false;
+    }
+  }
+
 
   /* MachineController */
 

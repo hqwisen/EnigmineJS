@@ -97,15 +97,14 @@ body {
 }
 
 .tab a:hover {
+  background: #0068d6;
   border-radius: 7px;
-  box-shadow: #004d95 0px 0px 5px 1px;
 }
 
 .tab a.active {
   background: white;
   color: #005dbf;
   border-radius: 7px;
-  box-shadow: #004d95 0px 0px 5px 1px;
 }
 
 #tabbar {
@@ -277,7 +276,6 @@ body {
   border-width: 0;
   border-top: 2px solid #004d95;
   border-bottom: 2px solid #004d95;
-  /*border: 1px solid black;*/
 }
 
 .reflector-choice button:hover {
@@ -332,7 +330,6 @@ body {
   border-width: 0;
   border-top: 2px solid #004d95;
   border-bottom: 2px solid #004d95;
-  /*border: 1px solid black;*/
 }
 
 .rotor-choice button:hover {
@@ -803,9 +800,14 @@ body {
 #machine {
   display: block;
   width: 620px;
-  height: 700px;
-  background: #3c3c3c;
-  border: 10px solid #765b31;
+  height: 750px;
+  background: #2a2d2f;
+  /*background-image: url("../../image/rubber.jpg");*/
+  border: 10px solid white;
+  -webkit-border-image: url(../../image/wood.jpg) 30 round;
+  -o-border-image: url(../../image/wood.jpg) 30 round;
+  border-image: url(../../image/wood.jpg) 30 round;
+  box-shadow: inset 0px 0px 10px 1px rgb(26, 26, 26), 0px 0px 3px 3px rgb(62, 43, 0);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -815,6 +817,7 @@ body {
   display: block;
   width: 100%;
   height: 40%;
+  background: black;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -824,6 +827,7 @@ body {
   display: block;
   width: 100%;
   height: 30%;
+  box-shadow: 0px 21px 9px -5px rgba(0, 0, 0, 1), inset 0px -12px 9px -5px rgba(0, 0, 0, 1);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -841,7 +845,7 @@ body {
 .keyboard-line {
   display: flex;
   width: 100%;
-  height: 33.33%;
+  height: 32%;
   align-items: center;
   justify-content: flex-start;
   -webkit-box-sizing: border-box;
@@ -849,16 +853,20 @@ body {
   box-sizing: border-box;
 }
 
+.keyboard-line-input {
+  box-shadow: 0px 14px 9px -5px rgba(0, 0, 0, 1), inset 0px -10px 9px -5px rgba(0, 0, 0, 1);
+}
+
 .line0 {
-  margin-left: 70px;
+  padding-left: 70px;
 }
 
 .line1 {
-  margin-left: 90px;
+  padding-left: 90px;
 }
 
 .line2 {
-  margin-left: 55px;
+  padding-left: 55px;
 }
 
 .output-key {
@@ -867,7 +875,7 @@ body {
   height: 35px;
   margin-right: 20px;
   background: #0f0f0f;
-  color: #d9d9d9;
+  color: #d1cfba;
   border-radius: 50%;
   font-size: 28px;
   font-weight: bold;
@@ -875,12 +883,25 @@ body {
   justify-content: center;
   border-top: 1px inset #292929;
   border-bottom: 1px inset #292929;
-  -webkit-box-shadow: inset -1px 0px 21px -6px rgba(255, 255, 255, 1);
-  -moz-box-shadow: inset -1px 0px 21px -6px rgba(255, 255, 255, 1);
-  box-shadow: inset -1px 0px 15px -6px rgb(204, 204, 204);
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  box-shadow: inset -1px 0px 15px -6px rgb(54, 54, 54);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.output-key:hover {
+  cursor: default;
+}
+
+
+
+.output-key-active{
+  color:#e6e600;
 }
 
 .input-key {
@@ -888,9 +909,40 @@ body {
   width: 35px;
   height: 35px;
   margin-right: 20px;
-  background: yellow;
+  background: #1d1d1d;
+  color: #d1cfba;
   border-radius: 50%;
   font-size: 25px;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid #cbc8c2;
+  box-shadow: 5px 5px 15px 2px rgb(0, 0, 0);
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-transition: ease-in-out .1s;
+  -ms-transition: ease-in-out .1s;
+  -moz-transition: ease-in-out .1s;
+  -o-transition: ease-in .1s;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.input-key:hover {
+  cursor: pointer;
+}
+
+.input-key:active {
+  display: flex;
+  border-width: 2px;
+  width: 31px;
+  height: 31px;
+  font-size: 20px;
+  margin-left: 4px;
+  box-shadow: 0 0 0 0 #000000;
   align-items: center;
   justify-content: center;
 }
