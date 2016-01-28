@@ -792,10 +792,35 @@ $(function () {
     $(this.hid("key" + char)).removeClass("output-key-active");
   }
 
+  /* RotorComponent */
+
+  RotorComponent.NUMBEROFROTOR = 3;
+
+  function RotorComponent(handler) {
+    this.handler = handler;
+    var component, frame, wheel;
+    for (var i = 0; i < RotorComponent.NUMBEROFROTOR; i++) {
+      frame = $("<div/>", {
+        class: "rotor-frame",
+        text: "A"
+      });
+      wheel = $("<div/>", {
+        class: "rotor-wheel"
+      });
+      component = $("<div/>", {
+        class: "rotor-component",
+      });
+      frame.appendTo(component);
+      wheel.appendTo(component);
+      component.appendTo("#machine-components");
+    }
+  }
+
   /* GraphicHandler */
 
   function GraphicHandler(controller) {
     this.controller = controller;
+    this.rotorComponent = new RotorComponent(this);
     this.outputKeyboard = new OutputKeyboard(this);
     this.inputKeyboard = new InputKeyboard(this);
     this.lastCryptedChar = undefined;
@@ -931,7 +956,7 @@ $(function () {
     MachineController.log("(?? DONE) NOT IMPLEMENTED > reversing: " + block + "; counter = " + counter);
   }
 
-  MachineController.prototype.refreshCrypt = function(block){
+  MachineController.prototype.refreshCrypt = function (block) {
     var cryptedBlock = this.crypt(block);
     this.utilityHandler.addInputContent(block);
     this.utilityHandler.addOutputContent(cryptedBlock);
