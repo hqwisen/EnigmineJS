@@ -775,7 +775,7 @@ body {
 #section-graphic {
   width: 100%;
   height: auto;
-  padding:0;
+  padding: 0;
   padding-top: 10px;
 }
 
@@ -826,11 +826,11 @@ body {
   box-sizing: border-box;
 }
 
-.rotor-component{
+.rotor-component {
   display: flex;
-  width:70px;
-  height:200px;
-  margin-right:5px;
+  width: 65px;
+  height: 160px;
+  margin-right: 5px;
   align-items: center;
   justify-content: center;
   -webkit-box-sizing: border-box;
@@ -838,11 +838,11 @@ body {
   box-sizing: border-box;
 }
 
-.rotor-frame{
+.rotor-frame {
   display: flex;
-  height:45px;
-  width:35px;
-  background:#f7f5de;
+  height: 45px;
+  width: 35px;
+  background: #f2f2f2;
   font-size: 25px;
   align-items: center;
   justify-content: center;
@@ -856,12 +856,30 @@ body {
   box-sizing: border-box;
 }
 
-.rotor-wheel{
-  width:7%;
-  height:100%;
+.rotor-wheel {
+  width: 10%;
+  height: 100%;
   margin-left: 20%;
-  background:white;
-box-shadow: 8px 2px 13px 2px rgba(0,0,0,1);
+  background: white;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.rotor-tooth{
+  width: 100%;
+  border: 0px solid #2e2e2e;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tooth-state-0{
+  box-shadow: 0px 8px 5px 0px rgba(36, 36, 36, 0.75), inset 0px -8px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.tooth-state-1{
+  box-shadow: 0px 8px 5px 0px rgba(36, 36, 36, 0.75), inset 0px 8px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
 #machine-output {
@@ -939,10 +957,8 @@ box-shadow: 8px 2px 13px 2px rgba(0,0,0,1);
   cursor: default;
 }
 
-
-
-.output-key-active{
-  color:#ffff00;
+.output-key-active {
+  color: #ffff00;
 }
 
 .input-key {
@@ -951,7 +967,7 @@ box-shadow: 8px 2px 13px 2px rgba(0,0,0,1);
   height: 35px;
   margin-right: 20px;
   background: #1d1d1d;
-  color: #d1cfba;
+  color: #fffef4;
   border-radius: 50%;
   font-size: 25px;
   align-items: center;

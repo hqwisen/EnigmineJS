@@ -794,33 +794,119 @@ $(function () {
 
   /* RotorComponent */
 
-  RotorComponent.NUMBEROFROTOR = 3;
+  function wheelUpEvent(event){
+    console.log("up");
+  }
 
-  function RotorComponent(handler) {
+  function wheelDownEvent(event){
+    console.log("down");
+  }
+
+  function RotorComponent(handler, side) {
     this.handler = handler;
+    this.side = side;
+
     var component, frame, wheel;
-    for (var i = 0; i < RotorComponent.NUMBEROFROTOR; i++) {
-      frame = $("<div/>", {
-        class: "rotor-frame",
-        text: "A"
-      });
-      wheel = $("<div/>", {
-        class: "rotor-wheel"
-      });
-      component = $("<div/>", {
-        class: "rotor-component",
-      });
-      frame.appendTo(component);
-      wheel.appendTo(component);
-      component.appendTo("#machine-components");
+    frame = $("<div/>", {
+      class: "rotor-frame",
+      text: "A"
+    });
+    wheel = $("<div/>", {
+      class: "rotor-wheel",
+      id: this.id("wheel")
+    });
+    component = $("<div/>", {
+      class: "rotor-component",
+    });
+    frame.appendTo(component);
+    wheel.appendTo(component);
+    component.appendTo("#machine-components");
+    this.buildWheelState(1);
+  }
+
+  RotorComponent.NUMBEROFROTOR = 3;
+  RotorComponent.NUMBEROFTOOTH = 5;
+
+  RotorComponent.prototype.buildWheelState = function (state) {
+    var wheelHeight = $(this.hid("wheel")).outerHeight();
+    if(state == 0){
+      this.buildWheelState0(wheelHeight, state);
+    }else if(state == 1){
+      this.buildWheelState1(wheelHeight, state);
     }
+  }
+
+  RotorComponent.prototype.buildWheelState0 = function (wheelHeight, state) {
+    var toothHeight = Math.floor(wheelHeight / RotorComponent.NUMBEROFTOOTH);
+    var $tooth;
+    // FIXME the up/down is correct only if number of tooth is impair
+    for (var i = 0; i < RotorComponent.NUMBEROFTOOTH; i++) {
+      var direction = undefined;
+      if(RotorComponent.NUMBEROFTOOTH % 2 != 0 && i == Math.floor(RotorComponent.NUMBEROFTOOTH / 2)){
+        console.log("i = " + i + " impair");
+        console.log(direction);
+      }else{
+        direction = i < Math.floor(RotorComponent.NUMBEROFTOOTH / 2)  ? "up" : "down";
+      }
+      $tooth = this.createTooth(toothHeight, state, direction);
+      $tooth.appendTo(this.hid("wheel"));
+    }
+  }
+
+  RotorComponent.prototype.buildWheelState1 = function (wheelHeight, state) {
+    var toothHeight = Math.floor(wheelHeight / RotorComponent.NUMBEROFTOOTH);
+    var halfToothHeight = Math.floor(toothHeight / 2);
+    var $tooth;
+    $tooth = this.createTooth(halfToothHeight, state, "up");
+    $tooth.appendTo(this.hid("wheel"));
+    for (var i = 0; i < RotorComponent.NUMBEROFTOOTH-1; i++) {
+      var direction = undefined;
+      if(RotorComponent.NUMBEROFTOOTH % 2 != 0 && i == Math.floor(RotorComponent.NUMBEROFTOOTH / 2)){
+        console.log("i = " + i + " impair");
+        console.log(direction);
+      }else{
+        direction = i < Math.floor(RotorComponent.NUMBEROFTOOTH / 2)  ? "up" : "down";
+      }
+      $tooth = this.createTooth(toothHeight, state, direction);
+      $tooth.appendTo(this.hid("wheel"));
+    }
+    $tooth = this.createTooth(halfToothHeight, state, "down");
+    $tooth.appendTo(this.hid("wheel"));
+  }
+
+  RotorComponent.prototype.deduceDirection = function(index){
+
+  }
+
+  RotorComponent.prototype.createTooth = function (height, state, direction) {
+    var $tooth;
+    $tooth = $("<div/>", {
+      class: "rotor-tooth tooth-state-"+state
+    });
+    if(direction != undefined){
+      $tooth.css({cursor:"pointer"});
+      $tooth.click(direction == "up" ? wheelUpEvent : wheelDownEvent);
+    }
+    $tooth.outerHeight(height);
+    return $tooth;
+  }
+
+
+  RotorComponent.prototype.id = function (name) {
+    return name + this.side;
+  }
+
+  RotorComponent.prototype.hid = function (name) {
+    return "#" + this.id(name);
   }
 
   /* GraphicHandler */
 
   function GraphicHandler(controller) {
     this.controller = controller;
-    this.rotorComponent = new RotorComponent(this);
+    this.rotorComponent = new RotorComponent(this, Machine.LEFT_ROTOR);
+    this.rotorComponent = new RotorComponent(this, Machine.MIDDLE_ROTOR);
+    this.rotorComponent = new RotorComponent(this, Machine.RIGHT_ROTOR);
     this.outputKeyboard = new OutputKeyboard(this);
     this.inputKeyboard = new InputKeyboard(this);
     this.lastCryptedChar = undefined;
