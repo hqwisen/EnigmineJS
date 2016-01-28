@@ -806,7 +806,7 @@ body {
   display: block;
   width: 620px;
   height: 750px;
-  background: #2a2d2f;
+  background: rgb(42, 45, 47);
   /*background-image: url("../../image/rubber.jpg");*/
   border: 10px solid white;
   -webkit-border-image: url(../../image/wood.jpg) 30 round;
@@ -823,7 +823,8 @@ body {
   width: 100%;
   height: 40%;
   padding-left: 27%;
-  align-items: center;
+  padding-bottom:5%;
+  align-items: flex-end;
   justify-content: flex-start;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -879,11 +880,11 @@ body {
 }
 
 .tooth-state-0{
-  box-shadow: 0px 8px 5px 0px rgba(36, 36, 36, 0.75), inset 0px 8px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 8px 5px 0px rgba(42, 45, 47, 0.75), inset 0px 8px 5px 0px rgba(42, 45, 47, 0.75);
 }
 
 .tooth-state-1{
-  box-shadow: 0px 8px 5px 0px rgba(36, 36, 36, 0.75), inset 0px 8px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 8px 5px 0px rgba(42, 45, 47, 0.75), inset 0px 8px 5px 0px rgba(42, 45, 47, 0.75);
 }
 
 #machine-output {
