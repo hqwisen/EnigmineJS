@@ -22,7 +22,7 @@ function Machine(name, maxCable, config) {
 Machine.DEFAULT_CONFIG = {
   "rotors": ["I", "II", "III"],
   "reflector": "B",
-  "starts": ["A", "A", "A"],
+  "starts": ["A", "B", "C"],
   "rings": ["A", "A", "A"]
 }
 

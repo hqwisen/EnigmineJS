@@ -875,7 +875,7 @@ body {
 }
 
 .tooth-state-0{
-  box-shadow: 0px 8px 5px 0px rgba(36, 36, 36, 0.75), inset 0px -8px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 8px 5px 0px rgba(36, 36, 36, 0.75), inset 0px 8px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
 .tooth-state-1{
