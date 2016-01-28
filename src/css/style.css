@@ -4,6 +4,10 @@ button::-moz-focus-inner {
   border: 0;
 }
 
+div::-moz-focus-inner {
+  border: 0;
+}
+
 button {
   cursor: pointer;
   font-family: inherit;

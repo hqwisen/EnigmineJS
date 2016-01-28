@@ -810,11 +810,12 @@ $(function () {
     this.controller = controller;
     this.side = side;
     this.state = RotorComponent.DEFAULTSTATE;
+    this.previousFrame = undefined;
 
     var component, frame, wheel;
     frame = $("<div/>", {
       class: "rotor-frame",
-      id:this.id("frame")
+      id: this.id("frame")
     });
     wheel = $("<div/>", {
       class: "rotor-wheel",
@@ -835,7 +836,7 @@ $(function () {
 
   RotorComponent.prototype.buildWheelState = function (state) {
     var wheelHeight = $(this.hid("wheel")).outerHeight();
-    if (state  == 0) {
+    if (state == 0) {
       this.buildWheelState0(wheelHeight, state);
     } else if (state == 1) {
       this.buildWheelState1(wheelHeight, state);
@@ -892,18 +893,31 @@ $(function () {
     return $tooth;
   }
 
-  RotorComponent.prototype.cleanWheel = function(){
+  RotorComponent.prototype.cleanWheel = function () {
     $(this.hid("wheel")).empty();
   }
 
-  RotorComponent.prototype.rotateWheel = function(){
-    this.state = (this.state+1) % 2;
+  RotorComponent.prototype.rotateWheel = function () {
+    this.state = (this.state + 1) % 2;
     this.cleanWheel();
     this.buildWheelState(this.state);
   }
 
-  RotorComponent.prototype.refreshFrame = function(char){
+  RotorComponent.prototype.refreshWheel = function () {
+    if (this.previousFrame != this.frameVal()) {
+      this.rotateWheel();
+    }
+  }
+
+  // NOTE (FIXME): refreshFrame is called every crypt,
+  // even if the rotor does not change (see controller.refreshParameters())
+  RotorComponent.prototype.refreshFrame = function (char) {
+    this.previousFrame = this.frameVal();
     $(this.hid("frame")).text(char);
+  }
+
+  RotorComponent.prototype.frameVal = function (char) {
+    return $(this.hid("frame")).text();
   }
 
   RotorComponent.prototype.id = function (name) {
@@ -939,6 +953,13 @@ $(function () {
     if (this.lastCryptedChar == undefined) {
       this.lastCryptedChar = this.controller.refreshCrypt(char);
       this.outputKeyboard.enable(this.lastCryptedChar);
+      this.rotateWheels();
+    }
+  }
+
+  GraphicHandler.prototype.rotateWheels = function () {
+    for (var side in this.rotorComponentList) {
+      this.rotorComponentList[side].refreshWheel();
     }
   }
 
@@ -949,7 +970,8 @@ $(function () {
     }
   }
 
-  GraphicHandler.prototype.refreshFrame = function(side, char){
+  GraphicHandler.prototype.refreshFrame = function (side, char) {
+    console.log("refresh frame " + side);
     this.rotorComponentList[side].refreshFrame(char);
   }
 
@@ -1154,6 +1176,7 @@ $(function () {
     for (var side in this.getSideList()) {
       starts.push(this.getRotorStart(side));
       rings.push(this.getRotorRing(side));
+      this.graphicHandler.refreshFrame(side, this.getRotorStart(side));
     }
     this.utilityHandler.refreshParameters(starts, rings);
   }
@@ -1163,7 +1186,6 @@ $(function () {
   function main(args) {
     var controller = new MachineController();
   }
-
   main();
 
 });
