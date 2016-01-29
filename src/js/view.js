@@ -689,7 +689,7 @@ $(function () {
   /* Keyboard */
 
   function Keyboard() {
-
+    this.$keys = {};
   }
 
   Keyboard.NUMBEROFLINE = 3;
@@ -710,11 +710,14 @@ $(function () {
       id: this.id("line" + lineNumber)
     }).appendTo(this.getKeyboardContainerId());
     for (var i in Keyboard.LINES[lineNumber]) {
-      $("<span/>", {
+      var char = Keyboard.LINES[lineNumber][i];
+      var element = $("<span/>", {
         class: this.getType() + "-key",
-        id: this.id("key" + Keyboard.LINES[lineNumber][i]),
+        id: this.id("key" + char),
         html: Keyboard.LINES[lineNumber][i],
-      }).appendTo(this.hid("line" + lineNumber));
+      });
+      this.$keys[char] = element;
+      element.appendTo(this.hid("line" + lineNumber));
     }
   }
 
@@ -785,23 +788,45 @@ $(function () {
   }
 
   OutputKeyboard.prototype.enable = function (char) {
-    $(this.hid("key" + char)).addClass("output-key-active");
+    $(this.hid("key" + char)).addClass("output-"+this.getKeyType()+"-active");
   }
 
   OutputKeyboard.prototype.disable = function (char) {
-    $(this.hid("key" + char)).removeClass("output-key-active");
+    $(this.hid("key" + char)).removeClass("output-"+this.getKeyType()+"-active");
   }
 
-  OutputKeyboard.prototype.open = function(){
+  OutputKeyboard.prototype.getKeyType = function(){
+    return this.handler.isOpen() ? "light" : "key";
+  }
+
+  OutputKeyboard.prototype.open = function () {
     console.log("opening output keyboard");
     $("#machine-output").removeClass("machine-output-close");
     $("#machine-output").addClass("machine-output-open");
+    this.showLights();
   }
 
-  OutputKeyboard.prototype.close = function(){
+  OutputKeyboard.prototype.close = function () {
     console.log("closing output keyboard");
     $("#machine-output").removeClass("machine-output-open");
     $("#machine-output").addClass("machine-output-close");
+    this.showKeys();
+  }
+
+  OutputKeyboard.prototype.showLights = function(){
+    for(var char in this.$keys){
+      this.$keys[char].removeClass("output-key");
+      this.$keys[char].addClass("output-light");
+      this.$keys[char].html("");
+    }
+  }
+
+  OutputKeyboard.prototype.showKeys = function(){
+    for(var char in this.$keys){
+      this.$keys[char].removeClass("output-light");
+      this.$keys[char].addClass("output-key");
+      this.$keys[char].html(char);
+    }
   }
 
   /* RotorComponent */
@@ -944,11 +969,11 @@ $(function () {
 
   /* GraphicHandler */
 
-  function openMachineEvent(event){
+  function openMachineEvent(event) {
     event.data.handler.openMachine();
   }
 
-  function closeMachineEvent(event){
+  function closeMachineEvent(event) {
     event.data.handler.closeMachine();
   }
 
@@ -962,6 +987,7 @@ $(function () {
     this.inputKeyboard = new InputKeyboard(this);
     this.lastCryptedChar = undefined;
     this.currentMachineAction = GraphicHandler.OPENACTION;
+    this.open = false;
     this.buildOpenButton();
   }
 
@@ -1001,38 +1027,49 @@ $(function () {
     this.rotorComponentList[side].refreshFrame(char);
   }
 
-  GraphicHandler.prototype.openMachine = function(){
+  GraphicHandler.prototype.openMachine = function () {
     console.log("opening machine");
+    this.setOpen(true);
     this.outputKeyboard.open();
     this.reverseOpenAction();
   }
 
-  GraphicHandler.prototype.closeMachine = function(){
+  GraphicHandler.prototype.closeMachine = function () {
     console.log("closing machine");
+    this.setOpen(false);
     this.outputKeyboard.close();
     this.reverseOpenAction();
   }
 
   GraphicHandler.prototype.buildOpenButton = function () {
-    var $button =$("<button/>", {
-      id:"open-button",
+    var $button = $("<button/>", {
+      id: "open-button",
       class: "open-button",
-      html:"&#9187;"
+      html: "^"
     });
     $button.appendTo("#machine-output");
     this.changeOpenAction(this.currentMachineAction);
   }
 
-  GraphicHandler.prototype.reverseOpenAction = function(){
-    this.currentMachineAction = (this.currentMachineAction+1) % 2;
+  GraphicHandler.prototype.reverseOpenAction = function () {
+    this.currentMachineAction = (this.currentMachineAction + 1) % 2;
     this.changeOpenAction(this.currentMachineAction);
   }
 
-  GraphicHandler.prototype.changeOpenAction = function(action){
+  GraphicHandler.prototype.changeOpenAction = function (action) {
     $("#open-button").off('click');
-    $("#open-button").click({handler:this}, GraphicHandler.OPENACTIONFUNC[action]);
+    $("#open-button").click({
+      handler: this
+    }, GraphicHandler.OPENACTIONFUNC[action]);
   }
 
+  GraphicHandler.prototype.isOpen = function(){
+    return this.open;
+  }
+
+  GraphicHandler.prototype.setOpen = function(open){
+    this.open = open;
+  }
 
 
   /* MachineController */

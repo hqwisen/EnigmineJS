@@ -889,8 +889,8 @@ body {
 
 .machine-output-open{
   box-shadow: inset 0px -12px 9px -5px rgba(0, 0, 0, 1);
-  background:#868686;
-  border-bottom:2px solid #141617;
+  background: #1e2124;
+  border-bottom:5px solid #141617;
 }
 
 .open-button{
@@ -978,12 +978,40 @@ body {
   box-sizing: border-box;
 }
 
+.output-light {
+  display: flex;
+  width: 35px;
+  height: 35px;
+  margin-right: 20px;
+  background: #d1cfba;
+  border-radius: 50%;
+  font-size: 28px;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px outset #292929;
+  border-right: 1px outset #292929;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  box-shadow: inset -1px 0px 15px -6px rgb(54, 54, 54);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .output-key:hover {
   cursor: default;
 }
 
 .output-key-active {
   color: #ffff00;
+}
+
+.output-light-active{
+  background: #ffff00;
 }
 
 .input-key {
