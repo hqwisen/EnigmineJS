@@ -53,6 +53,7 @@ $(function () {
       },
       changeReflectorClick);
     /* Rotor parameters */
+    /*
     $("<div/>", {
       class: "param-container",
       id: this.id("param-container")
@@ -67,7 +68,7 @@ $(function () {
     $("<button/>", {
       class: "rotate-left",
       id: this.id("startup"),
-      html: "&#8635;"
+      html: "#"
     }).appendTo(this.hid("start-param"));
     $("<span/>", {
       class: "param-value",
@@ -77,7 +78,7 @@ $(function () {
     $("<button/>", {
       class: "rotate-right",
       id: this.id("startdown"),
-      html: "&#8634;"
+      html: "#"
     }).appendTo(this.hid("start-param"));
     $(this.hid("startup")).attr("disabled", true);
     $(this.hid("startdown")).attr("disabled", true);
@@ -91,7 +92,7 @@ $(function () {
     $("<button/>", {
       class: "rotate-left",
       id: this.id("ringup"),
-      html: "&#8635;"
+      html: "#"
     }).appendTo(this.hid("ring-param"));
     $("<span/>", {
       class: "param-value",
@@ -101,10 +102,10 @@ $(function () {
     $("<button/>", {
       class: "rotate-right",
       id: this.id("ringdown"),
-      html: "&#8634;"
+      html: "#"
     }).appendTo(this.hid("ring-param"));
     $(this.hid("ringup")).attr("disabled", true);
-    $(this.hid("ringdown")).attr("disabled", true);
+    $(this.hid("ringdown")).attr("disabled", true);*/
 
 
     this.changeSelector(initial);
@@ -774,6 +775,7 @@ $(function () {
   function OutputKeyboard(handler) {
     this.handler = handler;
     this.buildKeyboard();
+    this.close();
   }
 
   OutputKeyboard.prototype = new Keyboard();
@@ -788,6 +790,18 @@ $(function () {
 
   OutputKeyboard.prototype.disable = function (char) {
     $(this.hid("key" + char)).removeClass("output-key-active");
+  }
+
+  OutputKeyboard.prototype.open = function(){
+    console.log("opening output keyboard");
+    $("#machine-output").removeClass("machine-output-close");
+    $("#machine-output").addClass("machine-output-open");
+  }
+
+  OutputKeyboard.prototype.close = function(){
+    console.log("closing output keyboard");
+    $("#machine-output").removeClass("machine-output-open");
+    $("#machine-output").addClass("machine-output-close");
   }
 
   /* RotorComponent */
@@ -930,6 +944,14 @@ $(function () {
 
   /* GraphicHandler */
 
+  function openMachineEvent(event){
+    event.data.handler.openMachine();
+  }
+
+  function closeMachineEvent(event){
+    event.data.handler.closeMachine();
+  }
+
   function GraphicHandler(controller) {
     this.controller = controller;
     this.rotorComponentList = {}
@@ -939,8 +961,13 @@ $(function () {
     this.outputKeyboard = new OutputKeyboard(this);
     this.inputKeyboard = new InputKeyboard(this);
     this.lastCryptedChar = undefined;
-
+    this.currentMachineAction = GraphicHandler.OPENACTION;
+    this.buildOpenButton();
   }
+
+  GraphicHandler.OPENACTION = 0;
+  GraphicHandler.CLOSEACTION = 1;
+  GraphicHandler.OPENACTIONFUNC = [openMachineEvent, closeMachineEvent];
 
   GraphicHandler.prototype.createRotorComponent = function (side) {
     var rotorComponent = new RotorComponent(this.controller, side);
@@ -971,9 +998,41 @@ $(function () {
   }
 
   GraphicHandler.prototype.refreshFrame = function (side, char) {
-    console.log("refresh frame " + side);
     this.rotorComponentList[side].refreshFrame(char);
   }
+
+  GraphicHandler.prototype.openMachine = function(){
+    console.log("opening machine");
+    this.outputKeyboard.open();
+    this.reverseOpenAction();
+  }
+
+  GraphicHandler.prototype.closeMachine = function(){
+    console.log("closing machine");
+    this.outputKeyboard.close();
+    this.reverseOpenAction();
+  }
+
+  GraphicHandler.prototype.buildOpenButton = function () {
+    var $button =$("<button/>", {
+      id:"open-button",
+      class: "open-button",
+      html:"&#9187;"
+    });
+    $button.appendTo("#machine-output");
+    this.changeOpenAction(this.currentMachineAction);
+  }
+
+  GraphicHandler.prototype.reverseOpenAction = function(){
+    this.currentMachineAction = (this.currentMachineAction+1) % 2;
+    this.changeOpenAction(this.currentMachineAction);
+  }
+
+  GraphicHandler.prototype.changeOpenAction = function(action){
+    $("#open-button").off('click');
+    $("#open-button").click({handler:this}, GraphicHandler.OPENACTIONFUNC[action]);
+  }
+
 
 
   /* MachineController */
