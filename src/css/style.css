@@ -824,7 +824,7 @@ body {
 .rotor-component {
   display: flex;
   width: auto;
-  height: 160px;
+  height: 180px;
   align-items: center;
   justify-content: center;
   -webkit-box-sizing: border-box;
@@ -840,17 +840,44 @@ body {
   background: inherit;
 }
 
-.rotor-frame {
-  display: flex;
-  height: 20%;
-  width: 30px;
-  background: #f2f2f2;
-  font-size: 25px;
+.rotor-letters{
+  height:90%;
+  width:30px;
+  color: #2a2d2f;
   align-items: center;
   justify-content: center;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.rotor-letters-open{
+  border:2px solid #cccccc;
+}
+
+.rotor-letter {
+  display: flex;
+  background: #f2f2f2;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.rotor-letter-open{
+  box-shadow: inset -1px -2px 5px 1px rgba(0,0,0,0.75);
+}
+
+.rotor-letter-close{
+  background:inherit;
+  color:inherit;
 }
 
 .rotor-frame-close {
@@ -859,15 +886,18 @@ body {
   border-bottom: 2px outset #2e2d27;
   border-right: 2px outset #2e2d27;
   box-shadow: inset 0px 0px 1px 1px rgb(0, 0, 0);
+  /*box-shadow: inset -1px -2px 15px 1px rgba(0,0,0,0.75);*/
 }
 
 .rotor-frame-open {
-  border: 1px solid black;
+  border-width: 0;
+  box-shadow: inset -1px -2px 5px 1px rgba(0,0,0,0.75);
 }
+
 
 .rotor-separator {
   height: 70%;
-  width: 5px;
+  width: 0;
   margin-top: 15%;
   margin-bottom: 15%;
 }
@@ -877,9 +907,9 @@ body {
 }
 
 .rotor-separator0-open {
-  height: 90%;
+  /*height: 90%;
   background: black;
-  box-shadow: inset -9px -46px 83px -36px rgba(100, 100, 100, 0.75), inset 20px -46px 83px -36px rgba(100, 100, 100, 0.75);
+  box-shadow: inset -9px -46px 83px -36px rgba(100, 100, 100, 0.75), inset 20px -46px 83px -36px rgba(100, 100, 100, 0.75);*/
 }
 
 .rotor-separator1-close {
@@ -887,8 +917,8 @@ body {
 }
 
 .rotor-separator1-open {
-  background: #c9c9c9;
-  box-shadow: inset -9px -46px 83px -36px rgba(100, 100, 100, 0.75), inset 20px -46px 83px -36px rgba(100, 100, 100, 0.75);
+  /*background: #c9c9c9;
+  box-shadow: inset -9px -46px 83px -36px rgba(100, 100, 100, 0.75), inset 20px -46px 83px -36px rgba(100, 100, 100, 0.75);*/
 }
 
 .rotor-wheel {

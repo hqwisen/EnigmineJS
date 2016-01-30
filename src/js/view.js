@@ -787,14 +787,14 @@ $(function () {
   }
 
   OutputKeyboard.prototype.enable = function (char) {
-    $(this.hid("key" + char)).addClass("output-"+this.getKeyType()+"-active");
+    $(this.hid("key" + char)).addClass("output-" + this.getKeyType() + "-active");
   }
 
   OutputKeyboard.prototype.disable = function (char) {
-    $(this.hid("key" + char)).removeClass("output-"+this.getKeyType()+"-active");
+    $(this.hid("key" + char)).removeClass("output-" + this.getKeyType() + "-active");
   }
 
-  OutputKeyboard.prototype.getKeyType = function(){
+  OutputKeyboard.prototype.getKeyType = function () {
     return this.handler.isOpen() ? "light" : "key";
   }
 
@@ -812,16 +812,16 @@ $(function () {
     this.showKeys();
   }
 
-  OutputKeyboard.prototype.showLights = function(){
-    for(var char in this.$keys){
+  OutputKeyboard.prototype.showLights = function () {
+    for (var char in this.$keys) {
       this.$keys[char].removeClass("output-key");
       this.$keys[char].addClass("output-light");
       this.$keys[char].html("");
     }
   }
 
-  OutputKeyboard.prototype.showKeys = function(){
-    for(var char in this.$keys){
+  OutputKeyboard.prototype.showKeys = function () {
+    for (var char in this.$keys) {
       this.$keys[char].removeClass("output-light");
       this.$keys[char].addClass("output-key");
       this.$keys[char].html(char);
@@ -849,12 +849,10 @@ $(function () {
     this.side = side;
     this.state = RotorComponent.DEFAULTSTATE;
     this.previousFrame = undefined;
+    this.letterList = [];
 
-    var component, frame, separator0, separator1, wheel;
-    frame = $("<div/>", {
-      class: "rotor-frame",
-      id: this.id("frame")
-    });
+    var component, letters, separator0, separator1, wheel;
+    letters = this.buildLetters();
     wheel = $("<div/>", {
       class: "rotor-wheel",
       id: this.id("wheel")
@@ -869,10 +867,10 @@ $(function () {
     });
     component = $("<div/>", {
       class: "rotor-component",
-      id:this.id("component")
+      id: this.id("component")
     });
     separator0.appendTo(component);
-    frame.appendTo(component);
+    letters.appendTo(component);
     separator1.appendTo(component);
     wheel.appendTo(component);
     component.appendTo("#machine-components");
@@ -881,7 +879,58 @@ $(function () {
 
   RotorComponent.NUMBEROFROTOR = 3;
   RotorComponent.NUMBEROFTOOTH = 5;
+  // NumberOfLetter must be odd
+  RotorComponent.NUMBEROFLETTER = 5;
+  RotorComponent.FRAMEFONTSIZE = 25;
   RotorComponent.DEFAULTSTATE = 0;
+
+  RotorComponent.frameIndex = function () {
+    return Math.floor(RotorComponent.NUMBEROFLETTER / 2);
+  }
+
+  RotorComponent.prototype.buildLetters = function () {
+    // Note : build manually 5 (numberOfLetter) letters
+    var letters = $("<div/>", {
+      class: "rotor-letters",
+      id: this.id("letters")
+    });
+    for (var i = 0; i < RotorComponent.NUMBEROFLETTER; i++) {
+      this.letterList.push(this.buildLetter(i));
+    }
+    this.letterList[0].css({
+      fontSize: "15px",
+      height: "15%"
+    });
+    this.letterList[1].css({
+      fontSize: "20px",
+      height: "22.5%"
+    });
+    this.letterList[2].css({
+      fontSize: "25px",
+      height: "25%"
+    });
+    this.letterList[3].css({
+      fontSize: "20px",
+      height: "22.5%"
+    });
+    this.letterList[4].css({
+      fontSize: "15px",
+      height: "15%"
+    });
+    for (var i = 0; i < RotorComponent.NUMBEROFLETTER; i++) {
+      this.letterList[i].appendTo(letters);
+    }
+    return letters;
+  }
+
+  RotorComponent.prototype.buildLetter = function (index) {
+    var letter = $("<div/>", {
+      class: "rotor-letter",
+      id: this.id("letter" + index),
+      text: "#"
+    });
+    return letter;
+  }
 
   RotorComponent.prototype.buildWheelState = function (state) {
     var wheelHeight = $(this.hid("wheel")).outerHeight();
@@ -962,17 +1011,25 @@ $(function () {
   // even if the rotor does not change (see controller.refreshParameters())
   RotorComponent.prototype.refreshFrame = function (char) {
     this.previousFrame = this.frameVal();
-    $(this.hid("frame")).text(char);
+    this.getFrameElement().text(char);
+    $(this.hid("letter0")).text(CharUtil.getShiftedChar(char, -2));
+    $(this.hid("letter1")).text(CharUtil.getShiftedChar(char, -1));
+    $(this.hid("letter3")).text(CharUtil.getShiftedChar(char, +1));
+    $(this.hid("letter4")).text(CharUtil.getShiftedChar(char, +2))
   }
 
   RotorComponent.prototype.frameVal = function (char) {
-    return $(this.hid("frame")).text();
+    return this.getFrameElement().text();
+  }
+
+  RotorComponent.prototype.getFrameElement = function () {
+    return this.letterList[RotorComponent.frameIndex()];
   }
 
   RotorComponent.prototype.open = function () {
     console.log("opening rotor component " + this.side);
     this.openPart("component");
-    this.openPart("frame");
+    this.showLetters();
     this.openPart("separator0");
     this.openPart("separator1");
   }
@@ -980,19 +1037,43 @@ $(function () {
   RotorComponent.prototype.close = function () {
     console.log("closing rotor component " + this.side);
     this.closePart("component");
-    this.closePart("frame");
+    this.hideLetters();
     this.closePart("separator0");
     this.closePart("separator1");
   }
 
-  RotorComponent.prototype.openPart = function(part){
-    $(this.hid(part)).removeClass("rotor-"+part+"-close");
-    $(this.hid(part)).addClass("rotor-"+part+"-open");
+  RotorComponent.prototype.showLetters = function () {
+    $(this.hid("letters")).addClass("rotor-letters-open");
+    this.getFrameElement().removeClass("rotor-frame-close");
+    this.getFrameElement().addClass("rotor-frame-open");
+    for (var i = 0; i < RotorComponent.NUMBEROFLETTER; i++) {
+      if (this.letterList[i] != this.getFrameElement()) {
+        this.letterList[i].removeClass("rotor-letter-close");
+        this.letterList[i].addClass("rotor-letter-open");
+      }
+    }
   }
 
-  RotorComponent.prototype.closePart = function(part){
-    $(this.hid(part)).removeClass("rotor-"+part+"-open");
-    $(this.hid(part)).addClass("rotor-"+part+"-close");
+  RotorComponent.prototype.hideLetters = function () {
+    $(this.hid("letters")).removeClass("rotor-letters-open");
+    this.getFrameElement().removeClass("rotor-frame-open");
+    this.getFrameElement().addClass("rotor-frame-close");
+    for (var i = 0; i < RotorComponent.NUMBEROFLETTER; i++) {
+      if (this.letterList[i] != this.getFrameElement()) {
+        this.letterList[i].removeClass("rotor-letter-open");
+        this.letterList[i].addClass("rotor-letter-close");
+      }
+    }
+  }
+
+  RotorComponent.prototype.openPart = function (part) {
+    $(this.hid(part)).removeClass("rotor-" + part + "-close");
+    $(this.hid(part)).addClass("rotor-" + part + "-open");
+  }
+
+  RotorComponent.prototype.closePart = function (part) {
+    $(this.hid(part)).removeClass("rotor-" + part + "-open");
+    $(this.hid(part)).addClass("rotor-" + part + "-close");
   }
 
   RotorComponent.prototype.id = function (name) {
@@ -1079,18 +1160,18 @@ $(function () {
     this.reverseOpenAction(GraphicHandler.OPENACTION);
   }
 
-  GraphicHandler.prototype.openMachineComponents = function(){
+  GraphicHandler.prototype.openMachineComponents = function () {
     $("#machine-components").removeClass("machine-components-close");
     $("#machine-components").addClass("machine-components-open");
-    for(var side in this.rotorComponentList){
+    for (var side in this.rotorComponentList) {
       this.rotorComponentList[side].open();
     }
   }
 
-  GraphicHandler.prototype.closeMachineComponents = function(){
+  GraphicHandler.prototype.closeMachineComponents = function () {
     $("#machine-components").removeClass("machine-components-open");
     $("#machine-components").addClass("machine-components-close");
-    for(var side in this.rotorComponentList){
+    for (var side in this.rotorComponentList) {
       this.rotorComponentList[side].close();
     }
   }
@@ -1117,11 +1198,11 @@ $(function () {
     this.currentMachineAction = action;
   }
 
-  GraphicHandler.prototype.isOpen = function(){
+  GraphicHandler.prototype.isOpen = function () {
     return this.open;
   }
 
-  GraphicHandler.prototype.setOpen = function(open){
+  GraphicHandler.prototype.setOpen = function (open) {
     this.open = open;
   }
 

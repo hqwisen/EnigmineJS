@@ -136,6 +136,10 @@ KeyCode.toChar = function(keyCode){
   return String.fromCharCode(keyCode);
 }
 
+KeyCode.toCharCode = function(char){
+  return char.charCodeAt(0);
+}
+
 /* String utility */
 
 function StringUtil(){}
@@ -193,6 +197,18 @@ CharUtil.isLowerCase = function(char){
 
 CharUtil.isAlpha = function(char){
   return CharUtil.inRegexp(char, /[A-Za-z]/);
+}
+
+CharUtil.getShiftedChar = function(char, shift){
+  var code = KeyCode.toCharCode(char);
+  var shiftedCode = code + shift;
+  if(shiftedCode > KeyCode.Z){
+    return KeyCode.toChar((KeyCode.A + (shiftedCode - KeyCode.Z)) - 1);
+  }else if(shiftedCode < KeyCode.A){
+    return KeyCode.toChar((KeyCode.Z - (KeyCode.A - shiftedCode)) + 1);
+  }else{
+    return KeyCode.toChar(shiftedCode);
+  }
 }
 
 /* Html utility */
