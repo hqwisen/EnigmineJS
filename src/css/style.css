@@ -805,9 +805,9 @@ body {
   display: flex;
   width: 100%;
   height: 40%;
-  padding-bottom: 30px;
-  align-items: flex-end;
-  justify-content: center;
+  padding-left:100px;
+  align-items: center;
+  justify-content: flex-start;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -819,6 +819,37 @@ body {
 
 .machine-components-open {
   background: #1e2124;
+}
+
+#reflector-component{
+  display:flex;
+  width:170px;
+  height:160px;
+  padding-left:20px;
+  border-radius:50px 5px 5px 50px;
+  align-items:center;
+  justify-content:flex-start;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.reflector-component-close{
+  background:inherit;
+  color: #2a2d2f;
+}
+
+.reflector-component-open{
+  color:#333333;
+  background:#cccccc;
+  border:2px solid #cccccc;
+  box-shadow: inset 13px -15px 33px -14px rgba(0,0,0,0.75), inset 13px 15px 33px -14px rgba(0,0,0,0.75);
+  cursor:pointer;
 }
 
 .rotor-component {

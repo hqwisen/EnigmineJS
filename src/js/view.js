@@ -828,6 +828,29 @@ $(function () {
     }
   }
 
+  /* ReflectorComponent */ 
+
+  function ReflectorComponent(controller){
+    this.controller = controller;
+    var reflector = $("<div/>", {id:"reflector-component"});
+    $("<span/>", {text:"B"}).appendTo(reflector);
+    reflector.appendTo("#machine-components");
+  }
+
+  ReflectorComponent.prototype.open = function () {
+    console.log("opening reflector component");
+    $("#reflector-component").removeClass("reflector-component-close");
+    $("#reflector-component").addClass("reflector-component-open");
+  }
+
+  ReflectorComponent.prototype.close = function () {
+    console.log("closing reflector component");
+    $("#reflector-component").removeClass("reflector-component-open");
+    $("#reflector-component").addClass("reflector-component-close");
+  }
+
+
+
   /* RotorComponent */
 
   function wheelUpEvent(event) {
@@ -1096,6 +1119,7 @@ $(function () {
 
   function GraphicHandler(controller) {
     this.controller = controller;
+    this.reflectorComponent = new ReflectorComponent(this.controller);
     this.rotorComponentList = {}
     this.createRotorComponent(Machine.LEFT_ROTOR);
     this.createRotorComponent(Machine.MIDDLE_ROTOR);
@@ -1166,6 +1190,7 @@ $(function () {
     for (var side in this.rotorComponentList) {
       this.rotorComponentList[side].open();
     }
+    this.reflectorComponent.open();
   }
 
   GraphicHandler.prototype.closeMachineComponents = function () {
@@ -1174,6 +1199,7 @@ $(function () {
     for (var side in this.rotorComponentList) {
       this.rotorComponentList[side].close();
     }
+    this.reflectorComponent.close();
   }
 
   GraphicHandler.prototype.buildOpenButton = function () {
