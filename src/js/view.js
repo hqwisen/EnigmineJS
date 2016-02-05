@@ -8,6 +8,7 @@
 // TODO quand ecrit texte au milieu
 // TODO static method outside class
 // TODO Fix behaviour plugboard (int and out !!!)
+// FIXME bug in changerotor in graphics view
 
 $(function () {
   "use strict";
