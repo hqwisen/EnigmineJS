@@ -12,11 +12,95 @@
 $(function () {
   "use strict";
 
-  /* ReflectorView */
+  /* Event, Click */
 
-  function changeReflectorClick(event) {
+  function changeReflectorEvent(event) {
+    var controller = event.data.controller;
+    controller.changeReflector(event.data.choice);
+  }
+
+  function changeRotorClick(event) {
     event.data.view.changeTo(event.data.choice);
   }
+
+  function changeStartClick(event) {
+    var controller = event.data.controller;
+    controller.changeStart(event.data.side, event.data.value);
+  }
+
+  function changeRingClick(event) {
+    var controller = event.data.controller;
+    controller.changeRing(event.data.side, event.data.value);
+  }
+
+  function addPlugClick(event) {
+    var values = event.data.view.getEntriesValue();
+    if (!values["error"]) {
+      event.data.view.addPlug(values["entry1"], values["entry2"]);
+      if (event.data.view.controller.hasMaximumPlugboardConnection()) {
+        event.data.view.disableAddButton();
+      }
+    }
+  }
+
+  function outputCopyEvent(event) {
+    var controller = event.data.controller;
+    MachineController.log("NOT IMPLEMENTED > outputCopyEvent");
+  }
+
+  function outputSelectEvent(event) {
+    var controller = event.data.controller;
+    MachineController.log("NOT IMPLEMENTED > outputSelectEvent");
+  }
+
+  function inputChangeEvent(event) {
+    var controller = event.data.controller;
+    var view = event.data.view;
+    controller.handleInput();
+  }
+
+
+  function inputDownEvent(event) {
+    var controller = event.data.controller;
+    var view = event.data.view;
+    var start = view.getSelectionStart();
+    var end = view.getSelectionEnd();
+    if (KeyCode.isBackspace(event.which) && start == end) {
+      start--;
+    }
+    controller.setStart(start);
+    controller.setBeforeBlock(view.getLastBlock(start));
+
+  }
+
+  function inputPasteEvent(event) {
+    var view = event.data.view;
+    MachineController.log("NOT IMPLEMENTED > <PASTING NOT IMPLEMENTED>");
+  }
+
+  function wheelUpEvent(event) {
+    var component = event.data.component;
+    component.controller.changeStart(component.side, +1);
+    component.rotateWheel();
+    // FIXME (info) wheel rotation is here because need focus to calculte tooth size (controller refresh even when not focus on graphic tab)
+  }
+
+  function wheelDownEvent(event) {
+    var component = event.data.component;
+    component.controller.changeStart(component.side, -1);
+    component.rotateWheel();
+    // FIXME (info) wheel rotation is here because need focus to calculte tooth size (controller refresh even when not focus on graphic tab)
+  }
+
+  function openMachineEvent(event) {
+    event.data.handler.openMachine();
+  }
+
+  function closeMachineEvent(event) {
+    event.data.handler.closeMachine();
+  }
+
+  /* ReflectorView */
 
   function ReflectorView(controller, initial) {
     this.controller = controller;
@@ -39,19 +123,19 @@ $(function () {
       text: "B"
     }).appendTo(this.hid("reflector-choice"));
     $(this.hid("choiceB")).click({
-        view: this,
+        controller: this.controller,
         choice: "B"
       },
-      changeReflectorClick);
+      changeReflectorEvent);
     $("<button/>", {
       id: this.id("choiceC"),
       text: "C"
     }).appendTo(this.hid("reflector-choice"));
     $(this.hid("choiceC")).click({
-        view: this,
+        controller: this.controller,
         choice: "C"
       },
-      changeReflectorClick);
+      changeReflectorEvent);
     /* Rotor parameters */
     /*
     $("<div/>", {
@@ -111,10 +195,6 @@ $(function () {
     this.changeSelector(initial);
   }
 
-  ReflectorView.prototype.changeTo = function (choice) {
-    this.controller.changeReflector(choice);
-  }
-
   ReflectorView.prototype.changeSelector = function (choice) {
     var reflId = choice == "B" ? "#choiceB" : "#choiceC";
     HtmlUtil.changeSelector(this, reflId);
@@ -134,20 +214,6 @@ $(function () {
 
 
   /* RotorView */
-
-  function changeRotorClick(event) {
-    event.data.view.changeTo(event.data.choice);
-  }
-
-  function changeStartClick(event) {
-    var controller = event.data.controller;
-    controller.changeStart(event.data.side, event.data.value);
-  }
-
-  function changeRingClick(event) {
-    var controller = event.data.controller;
-    controller.changeRing(event.data.side, event.data.value);
-  }
 
   function RotorView(controller, side, initial) {
     this.controller = controller;
@@ -293,16 +359,6 @@ $(function () {
 
   /* Plugboard View */
 
-  function addPlugClick(event) {
-    var values = event.data.view.getEntriesValue();
-    if (!values["error"]) {
-      event.data.view.addPlug(values["entry1"], values["entry2"]);
-      if (event.data.view.controller.hasMaximumPlugboardConnection()) {
-        event.data.view.disableAddButton();
-      }
-    }
-  }
-
   function PlugboardView(controller) {
     this.itemGenerator = 0;
     this.controller = controller;
@@ -430,31 +486,6 @@ $(function () {
 
   /* Input View */
 
-  function inputChangeEvent(event) {
-    var controller = event.data.controller;
-    var view = event.data.view;
-    controller.handleInput();
-  }
-
-
-  function inputDownEvent(event) {
-    var controller = event.data.controller;
-    var view = event.data.view;
-    var start = view.getSelectionStart();
-    var end = view.getSelectionEnd();
-    if (KeyCode.isBackspace(event.which) && start == end) {
-      start--;
-    }
-    controller.setStart(start);
-    controller.setBeforeBlock(view.getLastBlock(start));
-
-  }
-
-  function inputPasteEvent(event) {
-    var view = event.data.view;
-    MachineController.log("NOT IMPLEMENTED > <PASTING NOT IMPLEMENTED>");
-  }
-
   function InputView(controller) {
     this.controller = controller;
 
@@ -539,16 +570,6 @@ $(function () {
 
 
   /* Output View */
-
-  function outputCopyEvent(event) {
-    var controller = event.data.controller;
-    MachineController.log("NOT IMPLEMENTED > outputCopyEvent");
-  }
-
-  function outputSelectEvent(event) {
-    var controller = event.data.controller;
-    MachineController.log("NOT IMPLEMENTED > outputSelectEvent");
-  }
 
   function OutputView(controller) {
     this.controller = controller;
@@ -685,7 +706,7 @@ $(function () {
       this.rotorViewList[sideList[i]].refreshRing(rings[i]);
     }
   }
-
+  
   /* Keyboard */
 
   function Keyboard() {
@@ -832,8 +853,9 @@ $(function () {
 
   function ReflectorComponent(controller){
     this.controller = controller;
+    this.currentChoice = this.controller.getActiveReflectorName();
     var reflector = $("<div/>", {id:"reflector-component"});
-    $("<span/>", {text:"B"}).appendTo(reflector);
+    $("<span/>", {id:"reflector-component-name", text:this.currentChoice}).appendTo(reflector);
     reflector.appendTo("#machine-components");
   }
 
@@ -841,31 +863,32 @@ $(function () {
     console.log("opening reflector component");
     $("#reflector-component").removeClass("reflector-component-close");
     $("#reflector-component").addClass("reflector-component-open");
+    $("#reflector-component").click({controller:this.controller, choice:this.getNextChoice()}, changeReflectorEvent);
   }
 
   ReflectorComponent.prototype.close = function () {
     console.log("closing reflector component");
     $("#reflector-component").removeClass("reflector-component-open");
     $("#reflector-component").addClass("reflector-component-close");
+    $("#reflector-component").off('click'); 
   }
 
+  ReflectorComponent.prototype.getNextChoice = function(){
+    if(this.currentChoice == "B"){
+      return "C";
+    }
+    if(this.currentChoice == "C"){
+      return "B";
+    }
+  }
 
+  ReflectorComponent.prototype.changeReflector = function(name){
+    this.currentChoice = name;
+    $("#reflector-component-name").text(name);
+    $("#reflector-component").click({controller:this.controller, choice:this.getNextChoice()}, changeReflectorEvent);
+  }
 
   /* RotorComponent */
-
-  function wheelUpEvent(event) {
-    var component = event.data.component;
-    component.controller.changeStart(component.side, +1);
-    component.rotateWheel();
-    // FIXME (info) wheel rotation is here because need focus to calculte tooth size (controller refresh even when not focus on graphic tab)
-  }
-
-  function wheelDownEvent(event) {
-    var component = event.data.component;
-    component.controller.changeStart(component.side, -1);
-    component.rotateWheel();
-    // FIXME (info) wheel rotation is here because need focus to calculte tooth size (controller refresh even when not focus on graphic tab)
-  }
 
   function RotorComponent(controller, side) {
     this.controller = controller;
@@ -1109,13 +1132,6 @@ $(function () {
 
   /* GraphicHandler */
 
-  function openMachineEvent(event) {
-    event.data.handler.openMachine();
-  }
-
-  function closeMachineEvent(event) {
-    event.data.handler.closeMachine();
-  }
 
   function GraphicHandler(controller) {
     this.controller = controller;
@@ -1224,6 +1240,10 @@ $(function () {
     this.currentMachineAction = action;
   }
 
+  GraphicHandler.prototype.changeReflector = function(name){
+    this.reflectorComponent.changeReflector(name);
+  }
+
   GraphicHandler.prototype.isOpen = function () {
     return this.open;
   }
@@ -1259,6 +1279,7 @@ $(function () {
     MachineController.log("changeReflector(" + name + ")");
     this.machine.setActiveReflector(name);
     this.utilityHandler.changeReflectorSelector(name);
+    this.graphicHandler.changeReflector(name);
   }
 
   MachineController.prototype.changeRotor = function (side, name) {

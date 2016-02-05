@@ -848,7 +848,7 @@ body {
   color:#333333;
   background:#cccccc;
   border:2px solid #cccccc;
-  box-shadow: inset 13px -15px 33px -14px rgba(0,0,0,0.75), inset 13px 15px 33px -14px rgba(0,0,0,0.75);
+  box-shadow: inset 13px -15px 33px -14px rgba(50,50,50,0.75), inset 13px 15px 33px -14px rgba(50,50,50,0.75);
   cursor:pointer;
 }
 
