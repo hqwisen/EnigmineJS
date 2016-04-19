@@ -45,6 +45,8 @@ body {
 #toolbar-section {
   width: 100%;
   height: auto;
+  margin:0;
+  padding:0;
 }
 
 #toolbar {
@@ -53,6 +55,7 @@ body {
   height: 70px;
   margin: 0;
   padding: 0;
+  padding-left: 40px;
   background: #005dbf;
   /*box-shadow: 0 0 1px 1px #000;*/
   -webkit-box-sizing: border-box;
@@ -66,7 +69,6 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  margin-left: 40px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
