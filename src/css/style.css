@@ -659,7 +659,8 @@ body {
   padding: 25px;
   height: 300px;
   color: #00396d;
-  font-family: inherit;
+  font-family: Courier;
+  font-weight: bold;
   font-size: 20px;
   resize: none;
   outline: none;
@@ -759,8 +760,9 @@ body {
   height: 300px;
   background: inherit;
   color: #4a4a4a;
-  font-family: inherit;
+  font-family: Courier;
   font-size: 20px;
+  font-weight: bold;
   resize: none;
   outline: none;
   text-align: left;
@@ -804,8 +806,8 @@ body {
 
 #machine {
   display: block;
-  width: 620px;
-  height: 750px;
+  width: 517px;
+  height: 625px;
   background: #2a2d2f;
   /*background-image: url("../image/rubber.jpg");*/
   border: 10px solid white;
@@ -1063,26 +1065,26 @@ body {
 }
 
 .line0 {
-  padding-left: 70px;
+  padding-left: 40px;
 }
 
 .line1 {
-  padding-left: 90px;
+  padding-left: 60px;
 }
 
 .line2 {
-  padding-left: 55px;
+  padding-left: 25px;
 }
 
 .output-key {
   display: flex;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   margin-right: 20px;
   background: #0f0f0f;
   color: #d1cfba;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 22px;
   font-weight: bold;
   align-items: center;
   justify-content: center;
@@ -1101,12 +1103,12 @@ body {
 
 .output-light {
   display: flex;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   margin-right: 20px;
   background: #d1cfba;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 22px;
   font-weight: bold;
   align-items: center;
   justify-content: center;
@@ -1137,13 +1139,13 @@ body {
 
 .input-key {
   display: flex;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   margin-right: 20px;
   background: #1d1d1d;
   color: #fffef4;
   border-radius: 50%;
-  font-size: 25px;
+  font-size: 22px;
   align-items: center;
   justify-content: center;
   border: 2.5px solid #cbc8c2;
@@ -1169,10 +1171,10 @@ body {
 .input-key:active {
   display: flex;
   border-width: 2px;
-  width: 31px;
-  height: 31px;
-  font-size: 20px;
-  margin-left: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  margin-left: 2px;
   box-shadow: 0 0 0 0 #000000;
   align-items: center;
   justify-content: center;
