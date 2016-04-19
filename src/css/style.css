@@ -805,7 +805,7 @@ body {
   width: 620px;
   height: 750px;
   background: #2a2d2f;
-  /*background-image: url("../../image/rubber.jpg");*/
+  /*background-image: url("../image/rubber.jpg");*/
   border: 10px solid white;
   -webkit-border-image: url(../image/wood.jpg) 30 round;
   -o-border-image: url(../image/wood.jpg) 30 round;
