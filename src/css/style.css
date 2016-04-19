@@ -84,6 +84,11 @@ body {
   cursor: default;
 }
 
+
+.error{
+  color:red;
+}
+
 .tab a {
   display: flex;
   width: auto;
@@ -216,6 +221,16 @@ body {
 
 
 /* utility containers */
+
+#reflectors-container {
+  display: inline-block;
+  width: 80%;
+  height: auto;
+  margin: 0 auto;
+  padding-top: 20px;
+  text-align: center;
+  vertical-align: top;
+}
 
 #rotors-container {
   display: inline-block;
@@ -792,9 +807,9 @@ body {
   background: #2a2d2f;
   /*background-image: url("../../image/rubber.jpg");*/
   border: 10px solid white;
-  -webkit-border-image: url(../../image/wood.jpg) 30 round;
-  -o-border-image: url(../../image/wood.jpg) 30 round;
-  border-image: url(../../image/wood.jpg) 30 round;
+  -webkit-border-image: url(../image/wood.jpg) 30 round;
+  -o-border-image: url(../image/wood.jpg) 30 round;
+  border-image: url(../image/wood.jpg) 30 round;
   box-shadow: inset 0px 0px 10px 1px rgb(26, 26, 26), 0px 0px 3px 3px rgb(62, 43, 0);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

@@ -110,7 +110,7 @@ $(function () {
     $("<div/>", {
       class: "rotor",
       id: this.id("reflector")
-    }).appendTo("#rotors-container");
+    }).appendTo("#reflectors-container");
     $("<span/>", {
       text: this.getName()
     }).appendTo(this.hid("reflector"));
