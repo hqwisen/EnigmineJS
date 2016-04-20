@@ -845,7 +845,7 @@ body {
   width:170px;
   height:160px;
   padding-left:20px;
-  border-radius:50px 5px 5px 50px;
+  border-radius:50px 0px 0px 50px;
   align-items:center;
   justify-content:flex-start;
   -moz-user-select: none;
@@ -866,7 +866,7 @@ body {
 .reflector-component-open{
   color:#333333;
   background:#cccccc;
-  border:2px solid #cccccc;
+  border:0px solid #cccccc;
   box-shadow: inset 13px -15px 33px -14px rgba(50,50,50,0.75), inset 13px 15px 33px -14px rgba(50,50,50,0.75);
   cursor:pointer;
 }
@@ -902,7 +902,7 @@ body {
 }
 
 .rotor-letters-open{
-  border:2px solid #cccccc;
+  border:0px solid #cccccc;
 }
 
 .rotor-letter {

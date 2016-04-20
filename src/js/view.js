@@ -1131,6 +1131,12 @@ $(function () {
     return "#" + this.id(name);
   }
 
+  /* Plugboard Component */
+
+  function PlugboardComponent(handler){
+    this.handler = handler;
+  }
+
   /* GraphicHandler */
 
 
@@ -1143,6 +1149,7 @@ $(function () {
     this.createRotorComponent(Machine.RIGHT_ROTOR);
     this.outputKeyboard = new OutputKeyboard(this);
     this.inputKeyboard = new InputKeyboard(this);
+    this.plugboadComponent = new PlugboardComponent(this);
     this.lastCryptedChar = undefined;
     this.currentMachineAction = GraphicHandler.OPENACTION;
     this.buildOpenButton();
