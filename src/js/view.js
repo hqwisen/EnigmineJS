@@ -46,7 +46,7 @@ $(function () {
     }
   }
 
-  function removePlugClick(event){
+  function removePlugClick(event) {
     var entry1 = event.data.entry1;
     var entry2 = event.data.entry2;
     var controller = event.data.controller;
@@ -57,7 +57,7 @@ $(function () {
       view.refreshAddButton();
     }
   }
-  
+
   function outputCopyEvent(event) {
     var controller = event.data.controller;
     MachineController.log("NOT IMPLEMENTED > outputCopyEvent");
@@ -412,7 +412,7 @@ $(function () {
       id: "item" + this.itemGenerator
     });
     item.appendTo("#plugboard-list");
-    this.items[entry1+entry2] = item;
+    this.items[entry1 + entry2] = item;
     $("<div/>", {
       class: "cross-panel",
       html: "<div class='cross'>&#x274c;</div>"
@@ -422,21 +422,21 @@ $(function () {
     }).appendTo("#item" + this.itemGenerator);
     $("#item" + this.itemGenerator).click({
       view: this,
-      controller:this.controller,
-      entry1:entry1,
-      entry2:entry2
+      controller: this.controller,
+      entry1: entry1,
+      entry2: entry2
     }, removePlugClick);
-    
+
     this.refreshAddButton();
     this.itemGenerator++;
   }
 
-  PlugboardView.prototype.removePlug = function(entry1, entry2){
-    console.log("plugboard view remove "  + entry1 + entry2);
-    this.items[entry1+entry2].remove();
-    delete this.items[entry1+entry2];
+  PlugboardView.prototype.removePlug = function (entry1, entry2) {
+    console.log("plugboard view remove " + entry1 + entry2);
+    this.items[entry1 + entry2].remove();
+    delete this.items[entry1 + entry2];
   }
-  
+
   PlugboardView.prototype.getEntriesValue = function () {
     this.unshowError("#entry-one");
     this.unshowError("#entry-two");
@@ -728,14 +728,14 @@ $(function () {
     }
   }
 
-  UtilityHandler.prototype.addPlug = function(char1, char2){
+  UtilityHandler.prototype.addPlug = function (char1, char2) {
     this.plugboardView.addPlug(char1, char2);
   }
 
-  UtilityHandler.prototype.removePlug = function(char1, char2){
+  UtilityHandler.prototype.removePlug = function (char1, char2) {
     this.plugboardView.removePlug(char1, char2);
   }
-  
+
   /* Keyboard */
 
   function Keyboard() {
@@ -1183,20 +1183,77 @@ $(function () {
   }
 
   function portMouseDown(event) {
-    console.log("port mousedown on " + char);
     var handler = event.data.handler;
     var char = event.data.char;
+    handler.portDown(char);
   }
 
   function portMouseUp(event) {
-    console.log("port mouseup on " + char);
     var handler = event.data.handler;
     var char = event.data.char;
+    handler.portUp(char);
   }
 
+  function Port(handler, char) {
+    this.handler = handler;
+    this.plugged = false;
+    this.active = false;
+    this.element = $("<span/>", {
+      class: "port",
+      id: "port" + char,
+      html: "O<br/>O"
+    });
+    this.element.mouseup({
+      handler: this.handler,
+      char: char
+    }, portMouseUp);
+    this.element.mousedown({
+      handler: this.handler,
+      char: char
+    }, portMouseDown);
+
+  }
+
+  Port.prototype.plug = function(){
+    this.plugged = true;
+    this.element.addClass("port-plugged");  
+  }
+  
+  Port.prototype.unplug = function(){
+    this.deactivate();
+    this.plugged = false;
+    this.element.removeClass("port-plugged");
+  }
+  
+  Port.prototype.isPlugged = function(){
+    return this.plugged;
+  }
+  
+  Port.prototype.activate = function(){
+    if(this.plugged){
+      this.active = true;
+      this.element.addClass("port-plugged-active");      
+    }
+  }
+  
+  Port.prototype.deactivate = function(){
+    if(this.plugged){
+      this.active = false;
+      this.element.removeClass("port-plugged-active");      
+    }
+  }
+  
+  Port.prototype.isActivate = function(){
+    return this.active;
+  }
+  
+  Port.prototype.getElement = function () {
+    return this.element;
+  }
+  
   function PlugboardComponent(handler) {
     this.handler = handler;
-    this.$ports = {};
+    this.ports = {};
     $("#cables-close").click({
       handler: this.handler
     }, closePlugboardEvent);
@@ -1240,46 +1297,43 @@ $(function () {
         class: "portchar",
         text: char
       });
-      var portElement = $("<span/>", {
-        class: "port",
-        id: this.id("port" + char),
-        html: "O<br/>O"
-      });
-      this.$ports[char] = portElement;
+
+      var port = new Port(this.handler, char);
+      this.ports[char] = port;
       charElement.appendTo(portContainer);
-      portElement.appendTo(portContainer);
+      port.getElement().appendTo(portContainer);
       portContainer.appendTo(this.hid("line" + lineNumber));
-      portElement.mouseup({
-        handler: this.handler,
-        char: char
-      }, portMouseUp);
-      portElement.mousedown({
-        handler: this.handler,
-        char: char
-      }, portMouseDown);
     }
   }
 
-  PlugboardComponent.prototype.addPlug = function(char1, char2){
+  PlugboardComponent.prototype.clickOn = function(char){
+    if(this.ports[char].isActivate()){
+      this.ports[char].deactivate();
+    }else{
+      this.ports[char].activate();
+    }
+  }
+
+  PlugboardComponent.prototype.addPlug = function (char1, char2) {
     this.addPlugOn(char1);
     this.addPlugOn(char2);
   }
 
-  PlugboardComponent.prototype.removePlug = function(char1, char2){
+  PlugboardComponent.prototype.removePlug = function (char1, char2) {
     this.removePlugOn(char1);
     this.removePlugOn(char2);
   }
-  
-  PlugboardComponent.prototype.addPlugOn = function(char){
-    var element = this.$ports[char];
-    element.addClass("port-plugged");
+
+  PlugboardComponent.prototype.addPlugOn = function (char) {
+    var element = this.ports[char];
+    this.ports[char].plug();
   }
 
-  PlugboardComponent.prototype.removePlugOn = function(char){
-    var element = this.$ports[char];
-    element.removeClass("port-plugged");
+  PlugboardComponent.prototype.removePlugOn = function (char) {
+    var element = this.ports[char];
+    this.ports[char].unplug();
   }
-  
+
   PlugboardComponent.prototype.id = function (name) {
     return "plugboard" + name;
   }
@@ -1295,6 +1349,7 @@ $(function () {
     this.controller = controller;
     this.reflectorComponent = new ReflectorComponent(this.controller);
     this.rotorComponentList = {}
+    this.currentActivePlug = undefined;
     this.createRotorComponent(Machine.LEFT_ROTOR);
     this.createRotorComponent(Machine.MIDDLE_ROTOR);
     this.createRotorComponent(Machine.RIGHT_ROTOR);
@@ -1311,6 +1366,28 @@ $(function () {
   GraphicHandler.CLOSEACTION = 1;
   GraphicHandler.OPENACTIONFUNC = [openMachineEvent, closeMachineEvent];
 
+  GraphicHandler.prototype.portDown = function(char){
+    if(this.currentActivePlug != undefined){
+      this.clickOnPlug(this.currentActivePlug);  
+    }
+    if(char != this.currentActivePlug && this.controller.isPlugboardUsed(char)){
+      this.clickOnPlug(char);
+      this.currentActivePlug = char;
+    }else{
+      this.currentActivePlug = undefined;
+    }
+  }
+  
+  GraphicHandler.prototype.clickOnPlug = function(char){
+      var otherChar = this.controller.getPlugboardPeer(char); 
+      this.plugboadComponent.clickOn(char);
+      this.plugboadComponent.clickOn(otherChar);    
+  }
+  
+  GraphicHandler.prototype.portUp = function(){
+    
+  }
+  
   GraphicHandler.prototype.openPlugboard = function () {
     this.plugboadComponent.open();
   }
@@ -1419,6 +1496,13 @@ $(function () {
     this.open = open;
   }
 
+  GraphicHandler.prototype.addPlug = function (entry1, entry2) {
+    this.plugboadComponent.addPlug(entry1, entry2);
+  }
+
+  GraphicHandler.prototype.removePlug = function (entry1, entry2) {
+    this.plugboadComponent.removePlug(entry1, entry2);
+  }
 
   /* MachineController */
 
@@ -1505,6 +1589,7 @@ $(function () {
     this.plugItemCounter++;
     this.machine.addPlugboardConnection(entry1, entry2);
     this.utilityHandler.addPlug(entry1, entry2);
+    this.graphicHandler.addPlug(entry1, entry2);
   }
 
   MachineController.prototype.removePlugboardConnection = function (entry1, entry2) {
@@ -1514,6 +1599,7 @@ $(function () {
     this.plugItemCounter--;
     this.machine.removePlugboardConnection(entry1, entry2);
     this.utilityHandler.removePlug(entry1, entry2);
+    this.graphicHandler.removePlug(entry1, entry2);
   }
 
   MachineController.prototype.isPlugboardUsed = function (char) {
@@ -1521,6 +1607,10 @@ $(function () {
     return this.machine.isPlugboardUsed(char);
   }
 
+  MachineController.prototype.getPlugboardPeer = function(char){
+    return this.machine.plug(char);
+  }
+  
   MachineController.prototype.handleInput = function () {
     MachineController.log("handleInput().");
     this.reverse(this.getBeforeBlock());

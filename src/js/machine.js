@@ -204,3 +204,7 @@ Machine.prototype.removePlugboardConnection = function (charIn, charOut) {
 Machine.prototype.isPlugboardUsed = function (char) {
   return this.plugboard.used(char);
 }
+
+Machine.prototype.plug = function(char){
+  return this.plugboard.plug(char);
+}

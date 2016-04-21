@@ -1279,5 +1279,15 @@ body {
 }
 
 .port-plugged{
-  background:red;
+  padding:5px;
+  background:black;
+  color:black;
+  border-radius:20px;
 }
+
+.port-plugged-active{
+  background:red;
+  color:red;
+}
+
+
