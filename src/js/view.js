@@ -35,15 +35,29 @@ $(function () {
   }
 
   function addPlugClick(event) {
-    var values = event.data.view.getEntriesValue();
+    var controller = event.data.controller;
+    var view = event.data.view;
+    var values = view.getEntriesValue();
     if (!values["error"]) {
-      event.data.view.addPlug(values["entry1"], values["entry2"]);
-      if (event.data.view.controller.hasMaximumPlugboardConnection()) {
-        event.data.view.disableAddButton();
+      controller.addPlugboardConnection(values["entry1"], values["entry2"]);
+      if (controller.hasMaximumPlugboardConnection()) {
+        view.disableAddButton();
       }
     }
   }
 
+  function removePlugClick(event){
+    var entry1 = event.data.entry1;
+    var entry2 = event.data.entry2;
+    var controller = event.data.controller;
+    var view = event.data.view;
+    controller.removePlugboardConnection(entry1, entry2);
+    if (!controller.hasMaximumPlugboardConnection()) {
+      view.enableAddButton();
+      view.refreshAddButton();
+    }
+  }
+  
   function outputCopyEvent(event) {
     var controller = event.data.controller;
     MachineController.log("NOT IMPLEMENTED > outputCopyEvent");
@@ -363,6 +377,7 @@ $(function () {
   function PlugboardView(controller) {
     this.itemGenerator = 0;
     this.controller = controller;
+    this.items = {};
     $("<ul/>", {
       id: "plugboard-list"
     }).appendTo("#plugboard-container");
@@ -386,16 +401,18 @@ $(function () {
       text: this.getAddButtonName()
     }).appendTo("#plugboard-adder");
     $("#add-button").click({
-      view: this
+      view: this,
+      controller: this.controller
     }, addPlugClick);
   }
 
   PlugboardView.prototype.addPlug = function (entry1, entry2) {
-    this.controller.addPlugboardConnection(entry1, entry2);
-    $("<div/>", {
+    var item = $("<div/>", {
       class: "add-item",
       id: "item" + this.itemGenerator
-    }).appendTo("#plugboard-list");
+    });
+    item.appendTo("#plugboard-list");
+    this.items[entry1+entry2] = item;
     $("<div/>", {
       class: "cross-panel",
       html: "<div class='cross'>&#x274c;</div>"
@@ -404,19 +421,22 @@ $(function () {
       html: entry1.toUpperCase() + " &#8961; " + entry2.toUpperCase()
     }).appendTo("#item" + this.itemGenerator);
     $("#item" + this.itemGenerator).click({
-      view: this
-    }, function (event) {
-      $(this).remove();
-      event.data.view.controller.removePlugboardConnection(entry1, entry2);
-      if (!event.data.view.controller.hasMaximumPlugboardConnection()) {
-        event.data.view.enableAddButton();
-        event.data.view.refreshAddButton();
-      }
-    });
+      view: this,
+      controller:this.controller,
+      entry1:entry1,
+      entry2:entry2
+    }, removePlugClick);
+    
     this.refreshAddButton();
     this.itemGenerator++;
   }
 
+  PlugboardView.prototype.removePlug = function(entry1, entry2){
+    console.log("plugboard view remove "  + entry1 + entry2);
+    this.items[entry1+entry2].remove();
+    delete this.items[entry1+entry2];
+  }
+  
   PlugboardView.prototype.getEntriesValue = function () {
     this.unshowError("#entry-one");
     this.unshowError("#entry-two");
@@ -707,6 +727,14 @@ $(function () {
       this.rotorViewList[sideList[i]].refreshRing(rings[i]);
     }
   }
+
+  UtilityHandler.prototype.addPlug = function(char1, char2){
+    this.plugboardView.addPlug(char1, char2);
+  }
+
+  UtilityHandler.prototype.removePlug = function(char1, char2){
+    this.plugboardView.removePlug(char1, char2);
+  }
   
   /* Keyboard */
 
@@ -850,13 +878,18 @@ $(function () {
     }
   }
 
-  /* ReflectorComponent */ 
+  /* ReflectorComponent */
 
-  function ReflectorComponent(controller){
+  function ReflectorComponent(controller) {
     this.controller = controller;
     this.currentChoice = this.controller.getActiveReflectorName();
-    var reflector = $("<div/>", {id:"reflector-component"});
-    $("<span/>", {id:"reflector-component-name", text:this.currentChoice}).appendTo(reflector);
+    var reflector = $("<div/>", {
+      id: "reflector-component"
+    });
+    $("<span/>", {
+      id: "reflector-component-name",
+      text: this.currentChoice
+    }).appendTo(reflector);
     reflector.appendTo("#machine-components");
   }
 
@@ -864,29 +897,35 @@ $(function () {
     console.log("opening reflector component");
     $("#reflector-component").removeClass("reflector-component-close");
     $("#reflector-component").addClass("reflector-component-open");
-    $("#reflector-component").click({controller:this.controller, choice:this.getNextChoice()}, changeReflectorEvent);
+    $("#reflector-component").click({
+      controller: this.controller,
+      choice: this.getNextChoice()
+    }, changeReflectorEvent);
   }
 
   ReflectorComponent.prototype.close = function () {
     console.log("closing reflector component");
     $("#reflector-component").removeClass("reflector-component-open");
     $("#reflector-component").addClass("reflector-component-close");
-    $("#reflector-component").off('click'); 
+    $("#reflector-component").off('click');
   }
 
-  ReflectorComponent.prototype.getNextChoice = function(){
-    if(this.currentChoice == "B"){
+  ReflectorComponent.prototype.getNextChoice = function () {
+    if (this.currentChoice == "B") {
       return "C";
     }
-    if(this.currentChoice == "C"){
+    if (this.currentChoice == "C") {
       return "B";
     }
   }
 
-  ReflectorComponent.prototype.changeReflector = function(name){
+  ReflectorComponent.prototype.changeReflector = function (name) {
     this.currentChoice = name;
     $("#reflector-component-name").text(name);
-    $("#reflector-component").click({controller:this.controller, choice:this.getNextChoice()}, changeReflectorEvent);
+    $("#reflector-component").click({
+      controller: this.controller,
+      choice: this.getNextChoice()
+    }, changeReflectorEvent);
   }
 
   /* RotorComponent */
@@ -1133,32 +1172,34 @@ $(function () {
 
   /* Plugboard Component */
 
-  function openPlugboardEvent(event){
+  function openPlugboardEvent(event) {
     var handler = event.data.handler;
     handler.openPlugboard();
   }
 
-  function closePlugboardEvent(event){
+  function closePlugboardEvent(event) {
     var handler = event.data.handler;
     handler.closePlugboard();
   }
 
-  function portMouseDown(event){
-    var handler = event.data.handler;
-    var char = event.data.char;
+  function portMouseDown(event) {
     console.log("port mousedown on " + char);
-  }
-
-  function portMouseUp(event){
     var handler = event.data.handler;
     var char = event.data.char;
-    console.log("port mouseup on " + char);
   }
 
-  function PlugboardComponent(handler){
+  function portMouseUp(event) {
+    console.log("port mouseup on " + char);
+    var handler = event.data.handler;
+    var char = event.data.char;
+  }
+
+  function PlugboardComponent(handler) {
     this.handler = handler;
     this.$ports = {};
-    $("#cables-close").click({handler:this.handler}, closePlugboardEvent);
+    $("#cables-close").click({
+      handler: this.handler
+    }, closePlugboardEvent);
     this.build();
     this.close();
   }
@@ -1174,7 +1215,9 @@ $(function () {
     console.log("closing plugboard component");
     $("#machine-cables").removeClass("plugboard-open");
     $("#machine-cables").addClass("plugboard-close");
-    $("#machine-plugboard").click({handler:this.handler}, openPlugboardEvent);
+    $("#machine-plugboard").click({
+      handler: this.handler
+    }, openPlugboardEvent);
   }
 
   PlugboardComponent.prototype.build = function () {
@@ -1194,8 +1237,8 @@ $(function () {
         class: "portcontainer"
       });
       var charElement = $("<span/>", {
-        class:"portchar",
-        text:char
+        class: "portchar",
+        text: char
       });
       var portElement = $("<span/>", {
         class: "port",
@@ -1206,11 +1249,37 @@ $(function () {
       charElement.appendTo(portContainer);
       portElement.appendTo(portContainer);
       portContainer.appendTo(this.hid("line" + lineNumber));
-      portElement.mouseup({handler:this.handler, char:char}, portMouseUp);
-      portElement.mousedown({handler:this.handler, char:char}, portMouseDown);
+      portElement.mouseup({
+        handler: this.handler,
+        char: char
+      }, portMouseUp);
+      portElement.mousedown({
+        handler: this.handler,
+        char: char
+      }, portMouseDown);
     }
   }
 
+  PlugboardComponent.prototype.addPlug = function(char1, char2){
+    this.addPlugOn(char1);
+    this.addPlugOn(char2);
+  }
+
+  PlugboardComponent.prototype.removePlug = function(char1, char2){
+    this.removePlugOn(char1);
+    this.removePlugOn(char2);
+  }
+  
+  PlugboardComponent.prototype.addPlugOn = function(char){
+    var element = this.$ports[char];
+    element.addClass("port-plugged");
+  }
+
+  PlugboardComponent.prototype.removePlugOn = function(char){
+    var element = this.$ports[char];
+    element.removeClass("port-plugged");
+  }
+  
   PlugboardComponent.prototype.id = function (name) {
     return "plugboard" + name;
   }
@@ -1242,11 +1311,11 @@ $(function () {
   GraphicHandler.CLOSEACTION = 1;
   GraphicHandler.OPENACTIONFUNC = [openMachineEvent, closeMachineEvent];
 
-  GraphicHandler.prototype.openPlugboard = function(){
+  GraphicHandler.prototype.openPlugboard = function () {
     this.plugboadComponent.open();
   }
 
-  GraphicHandler.prototype.closePlugboard = function(){
+  GraphicHandler.prototype.closePlugboard = function () {
     this.plugboadComponent.close();
   }
 
@@ -1338,7 +1407,7 @@ $(function () {
     this.currentMachineAction = action;
   }
 
-  GraphicHandler.prototype.changeReflector = function(name){
+  GraphicHandler.prototype.changeReflector = function (name) {
     this.reflectorComponent.changeReflector(name);
   }
 
@@ -1430,15 +1499,21 @@ $(function () {
 
   // FIXME Plugboard refreshing by the controller (not by itself)
   MachineController.prototype.addPlugboardConnection = function (entry1, entry2) {
+    entry1 = entry1.toUpperCase();
+    entry2 = entry2.toUpperCase();
     MachineController.log("addPlugboardConnection(" + entry1 + ", " + entry2 + ")");
     this.plugItemCounter++;
     this.machine.addPlugboardConnection(entry1, entry2);
+    this.utilityHandler.addPlug(entry1, entry2);
   }
 
   MachineController.prototype.removePlugboardConnection = function (entry1, entry2) {
+    entry1 = entry1.toUpperCase();
+    entry2 = entry2.toUpperCase();
     MachineController.log("removePlugboardConnection(" + entry1 + ", " + entry2 + ")");
     this.plugItemCounter--;
     this.machine.removePlugboardConnection(entry1, entry2);
+    this.utilityHandler.removePlug(entry1, entry2);
   }
 
   MachineController.prototype.isPlugboardUsed = function (char) {
