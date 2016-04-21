@@ -807,7 +807,7 @@ body {
 #machine {
   display: block;
   width: 550px;
-  height: 705px;
+  height: 570px;
   background: #2a2d2f;
   /*background-image: url("../image/rubber.jpg");*/
   border: 10px solid white;
@@ -843,7 +843,7 @@ body {
 #reflector-component{
   display:flex;
   width:170px;
-  height:160px;
+  height:125px;
   padding-left:20px;
   border-radius:50px 0px 0px 50px;
   align-items:center;
@@ -874,7 +874,7 @@ body {
 .rotor-component {
   display: flex;
   width: auto;
-  height: 180px;
+  height: 140px;
   align-items: center;
   justify-content: center;
   -webkit-box-sizing: border-box;
@@ -1000,7 +1000,7 @@ body {
   position: relative;
   display: block;
   width: 100%;
-  height: 27%;
+  height: 29%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1043,7 +1043,7 @@ body {
 #machine-input {
   display: block;
   width: 100%;
-  height: 27%;
+  height: 29%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1183,6 +1183,97 @@ body {
 /* Machine plugboard */
 
 #machine-plugboard{
-  background: red;
-  height:11%;
+  background: #272522;
+  box-shadow: inset 0px -3px 15px 0px rgb(0, 0, 0);
+  height:7%;
+  cursor:pointer;
+  border-top:3px solid #0f0f15;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none
+}
+
+#machine-cables{
+  position: absolute;
+  width: 550px;
+  height: 260px;
+  top: 420px;
+  left: 50%;
+  background: #202527;
+  margin-left: -275px;
+  margin-bottom:125px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.cable{
+  display: inline-block;
+  width:35px;
+  height:85%;
+  margin-right:12px;
+  background:#000000;
+  border-top: 1px solid #4e4e4e;
+  border-radius: 0px 0px 7px 7px;
+}
+
+#cables-close{
+  display:flex;
+  position:absolute;
+  margin:0;
+  padding:0;
+  top:0;
+  right:0;
+  height:25px;
+  width:25px;
+  background:inherit;
+  color: #3a454a;
+  font-size: 15px;
+  align-items: center;
+  justify-content: center;
+  cursor:pointer;
+}
+
+.plugboard-open{
+  display:block;
+
+}
+
+.plugboard-close{
+  display:none;
+}
+
+
+.portcontainer{
+  display: flex;
+  margin:0;
+  padding:0;
+  align-items: center;
+  justify-content: center;
+  height:50px;
+  width:50px;
+
+}
+
+.portchar{
+  display: block;
+  color:white;
+  font-size: 15px;
+  margin-right: 5px;
+  font-size:22px;
+  font-family: inherit;
+}
+
+.port{
+  display: block;
+  margin:0;
+  padding:0;
+  font-weight: bold;
+  color:#918d8d;
+  font-size:20px;
+  cursor:pointer;
 }

@@ -1133,8 +1133,90 @@ $(function () {
 
   /* Plugboard Component */
 
+  function openPlugboardEvent(event){
+    var handler = event.data.handler;
+    handler.openPlugboard();
+  }
+
+  function closePlugboardEvent(event){
+    var handler = event.data.handler;
+    handler.closePlugboard();
+  }
+
+  function portMouseDown(event){
+    var handler = event.data.handler;
+    var char = event.data.char;
+    console.log("port mousedown on " + char);
+  }
+
+  function portMouseUp(event){
+    var handler = event.data.handler;
+    var char = event.data.char;
+    console.log("port mouseup on " + char);
+  }
+
   function PlugboardComponent(handler){
     this.handler = handler;
+    this.$ports = {};
+    $("#cables-close").click({handler:this.handler}, closePlugboardEvent);
+    this.build();
+    this.close();
+  }
+
+  PlugboardComponent.prototype.open = function () {
+    console.log("opening plugboard component");
+    $("#machine-cables").removeClass("plugboard-close");
+    $("#machine-cables").addClass("plugboard-open");
+
+  }
+
+  PlugboardComponent.prototype.close = function () {
+    console.log("closing plugboard component");
+    $("#machine-cables").removeClass("plugboard-open");
+    $("#machine-cables").addClass("plugboard-close");
+    $("#machine-plugboard").click({handler:this.handler}, openPlugboardEvent);
+  }
+
+  PlugboardComponent.prototype.build = function () {
+    for (var i = 0; i < Keyboard.NUMBEROFLINE; i++) {
+      this.buildLine(i);
+    }
+  }
+
+  PlugboardComponent.prototype.buildLine = function (lineNumber) {
+    $("<div/>", {
+      class: "keyboard-line" + " " + "line" + lineNumber,
+      id: this.id("line" + lineNumber)
+    }).appendTo("#machine-cables");
+    for (var i in Keyboard.LINES[lineNumber]) {
+      var char = Keyboard.LINES[lineNumber][i];
+      var portContainer = $("<div/>", {
+        class: "portcontainer"
+      });
+      var charElement = $("<span/>", {
+        class:"portchar",
+        text:char
+      });
+      var portElement = $("<span/>", {
+        class: "port",
+        id: this.id("port" + char),
+        html: "O<br/>O"
+      });
+      this.$ports[char] = portElement;
+      charElement.appendTo(portContainer);
+      portElement.appendTo(portContainer);
+      portContainer.appendTo(this.hid("line" + lineNumber));
+      portElement.mouseup({handler:this.handler, char:char}, portMouseUp);
+      portElement.mousedown({handler:this.handler, char:char}, portMouseDown);
+    }
+  }
+
+  PlugboardComponent.prototype.id = function (name) {
+    return "plugboard" + name;
+  }
+
+  PlugboardComponent.prototype.hid = function (name) {
+    return "#plugboard" + name;
   }
 
   /* GraphicHandler */
@@ -1159,6 +1241,14 @@ $(function () {
   GraphicHandler.OPENACTION = 0;
   GraphicHandler.CLOSEACTION = 1;
   GraphicHandler.OPENACTIONFUNC = [openMachineEvent, closeMachineEvent];
+
+  GraphicHandler.prototype.openPlugboard = function(){
+    this.plugboadComponent.open();
+  }
+
+  GraphicHandler.prototype.closePlugboard = function(){
+    this.plugboadComponent.close();
+  }
 
   GraphicHandler.prototype.createRotorComponent = function (side) {
     var rotorComponent = new RotorComponent(this.controller, side);
