@@ -84,10 +84,14 @@
 
   <!--div class="notification"><div class="notif-message">Notification test</div></div-->
   <script src="js/lib/jquery.js" type="text/javascript"></script>
+  <script src="js/util.js" type="text/javascript"></script>
+  <script src="js/component.js" type="text/javascript"></script>
+  <script src="js/machine.js" type="text/javascript"></script>
+  <script src="js/view.js" type="text/javascript"></script>
   <script>
     $(function () {
       "use strict";
-      var INITIAL_TAB = 1;
+      var INITIAL_TAB = 0;
       var tabList = ["#utilitytab", "#graphictab", "#tutorialtab", "#abouttab"];
       var linkList = ["#utilitylink", "#graphiclink","#tutoriallink" , "#aboutlink"];
 
@@ -109,13 +113,8 @@
           e.preventDefault();
         });
       });
-      //$("#utilitylink").trigger("click");
     });
   </script>
-  <script src="js/util.js" type="text/javascript"></script>
-  <script src="js/component.js" type="text/javascript"></script>
-  <script src="js/machine.js" type="text/javascript"></script>
-  <script src="js/view.js" type="text/javascript"></script>
 
 </body>
 

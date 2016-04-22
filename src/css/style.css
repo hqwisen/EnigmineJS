@@ -246,7 +246,7 @@ body {
 
 #rotors-container {
   display: inline-block;
-  width: 80%;
+  width: 90%;
   height: auto;
   margin: 0 auto;
   padding-top: 20px;
@@ -321,7 +321,7 @@ body {
 
 .rotor {
   display: inline-block;
-  width: 270px;
+  width: 250px;
   margin: 30px;
   margin-bottom: 0;
   padding: 0;
