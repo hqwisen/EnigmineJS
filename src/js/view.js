@@ -729,7 +729,7 @@ $(function () {
   UtilityHandler.prototype.addPlug = function (char1, char2) {
     this.plugboardView.addPlug(char1, char2);
     this.plugboardView.refreshAddButton();
-    if(this.controller.hasMaximumPlugboardConnection()) {
+    if (this.controller.hasMaximumPlugboardConnection()) {
       this.plugboardView.disableAddButton();
     }
 
@@ -738,7 +738,7 @@ $(function () {
   UtilityHandler.prototype.removePlug = function (char1, char2) {
     this.plugboardView.removePlug(char1, char2);
     this.plugboardView.refreshAddButton();
-    if(!this.controller.hasMaximumPlugboardConnection()) {
+    if (!this.controller.hasMaximumPlugboardConnection()) {
       this.plugboardView.enableAddButton();
     }
   }
@@ -1368,6 +1368,7 @@ $(function () {
     this.reflectorComponent = new ReflectorComponent(this.controller);
     this.rotorComponentList = {}
     this.currentActivePlug = undefined;
+    this.currentSelectedPlug = undefined;
     this.createRotorComponent(Machine.LEFT_ROTOR);
     this.createRotorComponent(Machine.MIDDLE_ROTOR);
     this.createRotorComponent(Machine.RIGHT_ROTOR);
@@ -1392,10 +1393,18 @@ $(function () {
   }
 
   GraphicHandler.prototype.portDown = function (char) {
+    if (this.controller.isPlugboardUsed(char)) {
+      this.plugActivation(char);
+    }else{
+      this.currentSelectedPlug = char;
+    }
+  }
+
+  GraphicHandler.prototype.plugActivation = function (char) {
     if (this.currentActivePlug != undefined) {
       this.clickOnPlug(this.currentActivePlug);
     }
-    if (char != this.currentActivePlug && this.controller.isPlugboardUsed(char)) {
+    if (char != this.currentActivePlug) {
       this.clickOnPlug(char);
       this.currentActivePlug = char;
     } else {
@@ -1406,11 +1415,17 @@ $(function () {
   GraphicHandler.prototype.clickOnPlug = function (char) {
     var otherChar = this.controller.getPlugboardPeer(char);
     this.plugboadComponent.clickOn(char);
-    this.plugboadComponent.clickOn(otherChar);
+    if(char != otherChar){
+      this.plugboadComponent.clickOn(otherChar);    
+    }
   }
 
-  GraphicHandler.prototype.portUp = function () {
-
+  GraphicHandler.prototype.portUp = function (char) {
+    if(this.currentSelectedPlug != undefined
+      && !this.controller.hasMaximumPlugboardConnection()){
+      this.controller.addPlugboardConnection(this.currentSelectedPlug, char);
+      this.currentSelectedPlug = undefined;    
+    }
   }
 
   GraphicHandler.prototype.openPlugboard = function () {
