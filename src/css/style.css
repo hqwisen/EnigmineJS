@@ -175,6 +175,16 @@ body {
   box-sizing: border-box;
 }
 
+#tutorial {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding-bottom: 70px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 
 /* Notifications */
 
@@ -1286,8 +1296,12 @@ body {
 }
 
 .port-plugged-active{
-  background:red;
-  color:red;
+  background:#520707;
+  color:#520707;
+}
+
+.port-not-allowed{
+  cursor:not-allowed;
 }
 
 
