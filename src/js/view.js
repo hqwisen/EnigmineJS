@@ -1200,14 +1200,17 @@ $(function () {
       handler.portRemove(char);
       break;
     }
-    return false;
   }
 
 
   function portMouseUp(event) {
     var handler = event.data.handler;
     var char = event.data.char;
-    handler.portUp(char);
+    switch (event.which) {
+    case 1: // left click
+      handler.portUp(char);
+      break;
+    }
   }
 
   function Port(handler, char) {
@@ -1265,14 +1268,14 @@ $(function () {
     return this.active;
   }
 
-  Port.prototype.disable = function() {
+  Port.prototype.disable = function () {
     this.element.addClass("port-not-allowed");
   }
-  
-  Port.prototype.enable = function(){
+
+  Port.prototype.enable = function () {
     this.element.removeClass("port-not-allowed");
   }
-  
+
   Port.prototype.getElement = function () {
     return this.element;
   }
@@ -1360,22 +1363,22 @@ $(function () {
     this.ports[char].unplug();
   }
 
-  PlugboardComponent.prototype.disable = function(){
-    for(var char in this.ports){
-      if(!this.ports[char].isPlugged()){
+  PlugboardComponent.prototype.disable = function () {
+    for (var char in this.ports) {
+      if (!this.ports[char].isPlugged()) {
         this.ports[char].disable();
       }
     }
   }
 
-  PlugboardComponent.prototype.enable = function(){
-    for(var char in this.ports){
+  PlugboardComponent.prototype.enable = function () {
+    for (var char in this.ports) {
       this.ports[char].enable();
     }
   }
-  
-  
-  
+
+
+
   PlugboardComponent.prototype.id = function (name) {
     return "plugboard" + name;
   }
@@ -1419,7 +1422,7 @@ $(function () {
   GraphicHandler.prototype.portDown = function (char) {
     if (this.controller.isPlugboardUsed(char)) {
       this.plugActivation(char);
-    }else{
+    } else {
       this.currentSelectedPlug = char;
     }
   }
@@ -1439,17 +1442,15 @@ $(function () {
   GraphicHandler.prototype.clickOnPlug = function (char) {
     var otherChar = this.controller.getPlugboardPeer(char);
     this.plugboadComponent.clickOn(char);
-    if(char != otherChar){
-      this.plugboadComponent.clickOn(otherChar);    
+    if (char != otherChar) {
+      this.plugboadComponent.clickOn(otherChar);
     }
   }
 
   GraphicHandler.prototype.portUp = function (char) {
-    if(this.currentSelectedPlug != undefined
-       && !this.controller.isPlugboardUsed(char)
-      && !this.controller.hasMaximumPlugboardConnection()){
+    if (this.currentSelectedPlug != undefined && !this.controller.isPlugboardUsed(char) && !this.controller.hasMaximumPlugboardConnection()) {
       this.controller.addPlugboardConnection(this.currentSelectedPlug, char);
-      this.currentSelectedPlug = undefined;    
+      this.currentSelectedPlug = undefined;
     }
   }
 
@@ -1563,14 +1564,14 @@ $(function () {
 
   GraphicHandler.prototype.addPlug = function (entry1, entry2) {
     this.plugboadComponent.addPlug(entry1, entry2);
-    if(this.controller.hasMaximumPlugboardConnection()){
+    if (this.controller.hasMaximumPlugboardConnection()) {
       this.plugboadComponent.disable();
     }
   }
 
   GraphicHandler.prototype.removePlug = function (entry1, entry2) {
     this.plugboadComponent.removePlug(entry1, entry2);
-    if(!this.controller.hasMaximumPlugboardConnection()){
+    if (!this.controller.hasMaximumPlugboardConnection()) {
       this.plugboadComponent.enable();
     }
   }
