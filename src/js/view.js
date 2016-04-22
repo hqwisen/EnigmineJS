@@ -40,9 +40,6 @@ $(function () {
     var values = view.getEntriesValue();
     if (!values["error"]) {
       controller.addPlugboardConnection(values["entry1"], values["entry2"]);
-      if (controller.hasMaximumPlugboardConnection()) {
-        view.disableAddButton();
-      }
     }
   }
 
@@ -52,10 +49,6 @@ $(function () {
     var controller = event.data.controller;
     var view = event.data.view;
     controller.removePlugboardConnection(entry1, entry2);
-    if (!controller.hasMaximumPlugboardConnection()) {
-      view.enableAddButton();
-      view.refreshAddButton();
-    }
   }
 
   function outputCopyEvent(event) {
@@ -427,14 +420,19 @@ $(function () {
       entry2: entry2
     }, removePlugClick);
 
-    this.refreshAddButton();
     this.itemGenerator++;
   }
 
   PlugboardView.prototype.removePlug = function (entry1, entry2) {
     console.log("plugboard view remove " + entry1 + entry2);
-    this.items[entry1 + entry2].remove();
-    delete this.items[entry1 + entry2];
+    // FIXME bad conception of this.items
+    if (this.items[entry1 + entry2] != undefined) {
+      this.items[entry1 + entry2].remove();
+      delete this.items[entry1 + entry2];
+    } else {
+      this.items[entry2 + entry1].remove();
+      delete this.items[entry2 + entry1];
+    }
   }
 
   PlugboardView.prototype.getEntriesValue = function () {
@@ -730,10 +728,19 @@ $(function () {
 
   UtilityHandler.prototype.addPlug = function (char1, char2) {
     this.plugboardView.addPlug(char1, char2);
+    this.plugboardView.refreshAddButton();
+    if(this.controller.hasMaximumPlugboardConnection()) {
+      this.plugboardView.disableAddButton();
+    }
+
   }
 
   UtilityHandler.prototype.removePlug = function (char1, char2) {
     this.plugboardView.removePlug(char1, char2);
+    this.plugboardView.refreshAddButton();
+    if(!this.controller.hasMaximumPlugboardConnection()) {
+      this.plugboardView.enableAddButton();
+    }
   }
 
   /* Keyboard */
@@ -1185,8 +1192,17 @@ $(function () {
   function portMouseDown(event) {
     var handler = event.data.handler;
     var char = event.data.char;
-    handler.portDown(char);
+    switch (event.which) {
+    case 1: // left click
+      handler.portDown(char);
+      break;
+    case 3: // right click
+      handler.portRemove(char);
+      break;
+    }
+    return false;
   }
+
 
   function portMouseUp(event) {
     var handler = event.data.handler;
@@ -1211,46 +1227,48 @@ $(function () {
       handler: this.handler,
       char: char
     }, portMouseDown);
-
+    this.element.on("contextmenu", function () {
+      return false;
+    });
   }
 
-  Port.prototype.plug = function(){
+  Port.prototype.plug = function () {
     this.plugged = true;
-    this.element.addClass("port-plugged");  
+    this.element.addClass("port-plugged");
   }
-  
-  Port.prototype.unplug = function(){
+
+  Port.prototype.unplug = function () {
     this.deactivate();
     this.plugged = false;
     this.element.removeClass("port-plugged");
   }
-  
-  Port.prototype.isPlugged = function(){
+
+  Port.prototype.isPlugged = function () {
     return this.plugged;
   }
-  
-  Port.prototype.activate = function(){
-    if(this.plugged){
+
+  Port.prototype.activate = function () {
+    if (this.plugged) {
       this.active = true;
-      this.element.addClass("port-plugged-active");      
+      this.element.addClass("port-plugged-active");
     }
   }
-  
-  Port.prototype.deactivate = function(){
-    if(this.plugged){
+
+  Port.prototype.deactivate = function () {
+    if (this.plugged) {
       this.active = false;
-      this.element.removeClass("port-plugged-active");      
+      this.element.removeClass("port-plugged-active");
     }
   }
-  
-  Port.prototype.isActivate = function(){
+
+  Port.prototype.isActivate = function () {
     return this.active;
   }
-  
+
   Port.prototype.getElement = function () {
     return this.element;
   }
-  
+
   function PlugboardComponent(handler) {
     this.handler = handler;
     this.ports = {};
@@ -1306,10 +1324,10 @@ $(function () {
     }
   }
 
-  PlugboardComponent.prototype.clickOn = function(char){
-    if(this.ports[char].isActivate()){
+  PlugboardComponent.prototype.clickOn = function (char) {
+    if (this.ports[char].isActivate()) {
       this.ports[char].deactivate();
-    }else{
+    } else {
       this.ports[char].activate();
     }
   }
@@ -1366,28 +1384,35 @@ $(function () {
   GraphicHandler.CLOSEACTION = 1;
   GraphicHandler.OPENACTIONFUNC = [openMachineEvent, closeMachineEvent];
 
-  GraphicHandler.prototype.portDown = function(char){
-    if(this.currentActivePlug != undefined){
-      this.clickOnPlug(this.currentActivePlug);  
+  GraphicHandler.prototype.portRemove = function (char) {
+    if (this.controller.isPlugboardUsed(char)) {
+      var otherChar = this.controller.getPlugboardPeer(char);
+      this.controller.removePlugboardConnection(char, otherChar);
     }
-    if(char != this.currentActivePlug && this.controller.isPlugboardUsed(char)){
+  }
+
+  GraphicHandler.prototype.portDown = function (char) {
+    if (this.currentActivePlug != undefined) {
+      this.clickOnPlug(this.currentActivePlug);
+    }
+    if (char != this.currentActivePlug && this.controller.isPlugboardUsed(char)) {
       this.clickOnPlug(char);
       this.currentActivePlug = char;
-    }else{
+    } else {
       this.currentActivePlug = undefined;
     }
   }
-  
-  GraphicHandler.prototype.clickOnPlug = function(char){
-      var otherChar = this.controller.getPlugboardPeer(char); 
-      this.plugboadComponent.clickOn(char);
-      this.plugboadComponent.clickOn(otherChar);    
+
+  GraphicHandler.prototype.clickOnPlug = function (char) {
+    var otherChar = this.controller.getPlugboardPeer(char);
+    this.plugboadComponent.clickOn(char);
+    this.plugboadComponent.clickOn(otherChar);
   }
-  
-  GraphicHandler.prototype.portUp = function(){
-    
+
+  GraphicHandler.prototype.portUp = function () {
+
   }
-  
+
   GraphicHandler.prototype.openPlugboard = function () {
     this.plugboadComponent.open();
   }
@@ -1581,7 +1606,6 @@ $(function () {
     this.utilityHandler.refreshRing(side, newRing);
   }
 
-  // FIXME Plugboard refreshing by the controller (not by itself)
   MachineController.prototype.addPlugboardConnection = function (entry1, entry2) {
     entry1 = entry1.toUpperCase();
     entry2 = entry2.toUpperCase();
@@ -1607,10 +1631,10 @@ $(function () {
     return this.machine.isPlugboardUsed(char);
   }
 
-  MachineController.prototype.getPlugboardPeer = function(char){
+  MachineController.prototype.getPlugboardPeer = function (char) {
     return this.machine.plug(char);
   }
-  
+
   MachineController.prototype.handleInput = function () {
     MachineController.log("handleInput().");
     this.reverse(this.getBeforeBlock());
