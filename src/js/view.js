@@ -964,11 +964,6 @@ $(function () {
       id: this.id("component-name"),
       text: this.controller.getRotorName(side)
     });
-    name.click({
-      controller: this.controller,
-      side: this.side,
-      choice: EnigmaUtil.getNextName(this.controller.getRotorName(side))
-    }, changeRotorClick);
     component = $("<div/>", {
       class: "rotor-component",
       id: this.id("component")
@@ -1114,11 +1109,6 @@ $(function () {
 
   RotorComponent.prototype.refreshName = function (name) {
     $(this.hid("component-name")).text(name);
-    $(this.hid("component-name")).click({
-      controller: this.controller,
-      side: this.side,
-      choice: EnigmaUtil.getNextName(name)
-    }, changeRotorClick);
   }
 
   // NOTE (FIXME): refreshFrame is called every crypt,
