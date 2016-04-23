@@ -1,7 +1,7 @@
 
 /* CONST */
 
-var LOG_ENIGMA = true;
+var LOG_ENIGMA = false;
 
 /* Factory */
 
@@ -226,4 +226,24 @@ HtmlUtil.changeSelector = function(object, currentId){
   object.lastId = currentId;
 }
 
+/* Enigma utility */
 
+function EnigmaUtil(){}
+
+EnigmaUtil.names = ["I", "II", "III", "IV", "V"];
+
+EnigmaUtil.getIndexName = function(name){
+  for(var i=0; i<EnigmaUtil.names.length; i++){
+    if(EnigmaUtil.names[i] == name){
+      return i;
+    }
+  }
+}
+
+EnigmaUtil.getNextName = function(name){
+  var index = EnigmaUtil.getIndexName(name);
+  if(index == (EnigmaUtil.names.length - 1)){
+    index = -1;
+  }
+  return EnigmaUtil.names[index+1];
+}

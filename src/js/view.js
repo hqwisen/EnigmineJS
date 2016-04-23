@@ -21,7 +21,11 @@ $(function () {
   }
 
   function changeRotorClick(event) {
-    event.data.view.changeTo(event.data.choice);
+    var side, choice, controller;
+    side = event.data.side;
+    choice = event.data.choice;
+    controller = event.data.controller;
+    controller.changeRotor(side, choice);
   }
 
   function changeStartClick(event) {
@@ -246,7 +250,8 @@ $(function () {
         text: name
       }).appendTo(this.hid("rotor-choice"));
       $(this.hid("choice" + name)).click({
-          view: this,
+          controller: this.controller,
+          side: this.side,
           choice: name
         },
         changeRotorClick);
@@ -329,10 +334,6 @@ $(function () {
       changeRingClick);
 
     this.changeSelector(initial);
-  }
-
-  RotorView.prototype.changeTo = function (choice) {
-    this.controller.changeRotor(this.side, choice);
   }
 
   RotorView.prototype.changeSelector = function (choice) {
@@ -944,7 +945,7 @@ $(function () {
     this.previousFrame = undefined;
     this.letterList = [];
 
-    var component, letters, separator0, separator1, wheel;
+    var component, letters, separator0, separator1, wheel, name;
     letters = this.buildLetters();
     wheel = $("<div/>", {
       class: "rotor-wheel",
@@ -958,11 +959,22 @@ $(function () {
       class: "rotor-separator",
       id: this.id("separator1")
     });
+    name = $("<div/>", {
+      class: "rotor-component-name",
+      id: this.id("component-name"),
+      text: this.controller.getRotorName(side)
+    });
+    name.click({
+      controller: this.controller,
+      side: this.side,
+      choice: EnigmaUtil.getNextName(this.controller.getRotorName(side))
+    }, changeRotorClick);
     component = $("<div/>", {
       class: "rotor-component",
       id: this.id("component")
     });
     separator0.appendTo(component);
+    name.appendTo(letters);
     letters.appendTo(component);
     separator1.appendTo(component);
     wheel.appendTo(component);
@@ -1100,6 +1112,15 @@ $(function () {
     }
   }
 
+  RotorComponent.prototype.refreshName = function (name) {
+    $(this.hid("component-name")).text(name);
+    $(this.hid("component-name")).click({
+      controller: this.controller,
+      side: this.side,
+      choice: EnigmaUtil.getNextName(name)
+    }, changeRotorClick);
+  }
+
   // NOTE (FIXME): refreshFrame is called every crypt,
   // even if the rotor does not change (see controller.refreshParameters())
   RotorComponent.prototype.refreshFrame = function (char) {
@@ -1125,6 +1146,7 @@ $(function () {
     this.showLetters();
     this.openPart("separator0");
     this.openPart("separator1");
+    this.showName();
   }
 
   RotorComponent.prototype.close = function () {
@@ -1133,6 +1155,17 @@ $(function () {
     this.hideLetters();
     this.closePart("separator0");
     this.closePart("separator1");
+    this.unshowName();
+  }
+
+  RotorComponent.prototype.showName = function () {
+    $(this.hid("component-name")).removeClass("close-class");
+    $(this.hid("component-name")).addClass("open-class");
+  }
+
+  RotorComponent.prototype.unshowName = function () {
+    $(this.hid("component-name")).removeClass("open-class");
+    $(this.hid("component-name")).addClass("close-class");
   }
 
   RotorComponent.prototype.showLetters = function () {
@@ -1286,21 +1319,24 @@ $(function () {
     $("#cables-close").click({
       handler: this.handler
     }, closePlugboardEvent);
+    $("#machine-cables").on("contextmenu", function () {
+      return false;
+    });
     this.build();
     this.close();
   }
 
   PlugboardComponent.prototype.open = function () {
     console.log("opening plugboard component");
-    $("#machine-cables").removeClass("plugboard-close");
-    $("#machine-cables").addClass("plugboard-open");
+    $("#machine-cables").removeClass("close-class");
+    $("#machine-cables").addClass("open-class");
 
   }
 
   PlugboardComponent.prototype.close = function () {
     console.log("closing plugboard component");
-    $("#machine-cables").removeClass("plugboard-open");
-    $("#machine-cables").addClass("plugboard-close");
+    $("#machine-cables").removeClass("open-class");
+    $("#machine-cables").addClass("close-class");
     $("#machine-plugboard").click({
       handler: this.handler
     }, openPlugboardEvent);
@@ -1411,6 +1447,11 @@ $(function () {
   GraphicHandler.OPENACTION = 0;
   GraphicHandler.CLOSEACTION = 1;
   GraphicHandler.OPENACTIONFUNC = [openMachineEvent, closeMachineEvent];
+
+  GraphicHandler.prototype.changeRotor = function (side, name) {
+    this.refreshFrame(side, this.controller.getRotorStart(side));
+    this.rotorComponentList[side].refreshName(name);
+  }
 
   GraphicHandler.prototype.portRemove = function (char) {
     if (this.controller.isPlugboardUsed(char)) {
@@ -1610,10 +1651,12 @@ $(function () {
     var old = this.getRotorName(side);
     this.machine.setRotorOnSide(side, name);
     this.utilityHandler.changeRotor(side, name);
+    this.graphicHandler.changeRotor(side, name);
     for (var otherSide in [Machine.LEFT_ROTOR, Machine.MIDDLE_ROTOR, Machine.RIGHT_ROTOR]) {
       if (side != otherSide && this.machine.getRotorOnSide(otherSide).getName() == name) {
         this.machine.setRotorOnSide(otherSide, old);
         this.utilityHandler.changeRotor(otherSide, old);
+        this.graphicHandler.changeRotor(otherSide, old);
       }
     }
   }
