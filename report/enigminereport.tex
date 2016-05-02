@@ -1,5 +1,6 @@
 \documentclass[letterpaper]{article}
 \usepackage{natbib,alifexi}
+\usepackage[utf8]{inputenc}
 
 \title{Simulation graphique de la machine Enigma I}
 \author{Hakim Boulahya \\
@@ -21,29 +22,75 @@ l'armée Nazi durant la deuxième guerre mondiale. Elle a permis aux militaires 
 de maintenir une commnunication secrète durant une majeur partie de la guerre. Très peu
 de machine ont survécu du au fait que les Alliés ont recu l'ordre de detruire toute machine
 enigma trouvé.
-
-\section{La machine}
-
-\subsection{composition}
-
 nombre de possibilté
-
 cracké par Alan Turring donc pas secu
 
+\section{Contexte}
+
+\subsection{Le chiffrement}
+
+\paragraph{}
+Le chiffrement est un moyen de transformé une suite de caractère, en un autre suite, de telle sorte
+que cette dernière soit codé \textit{i.e.} indéchiffrable sans une manipulation particulière \citep{MCEE}.
+Cette action s'effectue généarelement à l'aide
+d'une clé de codage. 
+ \paragraph{}
+Imaginons un cas ou un individu A souhaite envoyer un message codé à un individu
+B. Pour cela il est nécessaire que les deux parties se communiquent une clé privé, \textit{i.e.} que seule
+eux puissent en avoir la connaissance. Après l'échange des clés l'individu A peut chiffrer son message
+via un algorithme de codage et envoyer le message codé sur le canal de communication.
+\paragraph{}
+Soit $f$ une
+fonction représentant l'algorithme de codage, $k$ une clé privée et $x$ un message.
+Le chiffrement du message peut être representé par l'équation:
+
+\[
+  f(x, k) = y
+\]
+
+
+L'objectif de la fonction de chiffrement est de produire une sortie $y$. Cette sortie $y$
+ne doit pas représenter le contenu du message. C'est celle-ci
+qui sera envoyée à l'individu B. Lors de sa réception l'individu B devra effectuer la même action
+pour déchiffrer le message \textit{i.e.} exécuter l'algorithme sur le message reçu
+pour en récupérer le message compréhensible. Ainsi l'équation suivante peut
+représenter le déchiffrement:
+
+\[
+  f(y, k) = x
+\]
+
+\paragraph{}
+Il est primordial que la clé de chiffrement ne soit pas divulger sur le canal de communication
+pour que le chiffrement et le déchiffrement ne soit applicable que par les parties concernées. 
+
+
+\subsection{La machine Enigma I}
+\paragraph{}
+La machine enigma est une appareil electro-mécanique de chiffrement utilisée durant la seconde guerre mondiale
+par l'armée nazi. Il en existe de plusieurs types tous utilisé à différentes périodes. Dans ce document nous
+nous interesseront uniquement à la machine Enigma \texttt{I}, également appelé \textit{Ch.11a} par son constructeur.
+L'objectif de la machine est de produire un chiffrement pseudo-aléatoire d'un \textit{input} - un caractère alphabétique latin - 
+donnée[REFVERSARTICLE]. 
+
+%f(c, x_n) = y_n
+%f(c, y_n) = x_n
+
+%nombre de config = bcp
+
+\section{}
+
 \section{Etat de l'art}
-\subsection{Util}
-\subsection{Graphic}
 
-\section{Mon simulateur}
 
-\subsection{util}
-\subsection{graphic}
+\section{Le simulateur graphique}
 
-\section{conclusion}
+\section{Conclusion}
+
 
 \footnotesize
+\bibliography{enigmine}
 \bibliographystyle{apalike}
-\bibliography{example}
 
 
 \end{document}
