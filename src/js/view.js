@@ -945,7 +945,7 @@ $(function () {
     this.previousFrame = undefined;
     this.letterList = [];
 
-    var component, letters, separator0, separator1, wheel, name, choices;
+    var component, letters, separator0, separator1, wheel, name;
     letters = this.buildLetters();
     wheel = $("<div/>", {
       class: "rotor-wheel",
@@ -985,18 +985,6 @@ $(function () {
   }
 
   RotorComponent.prototype.buildName = function () {
-    /*var choices = $("<div/>", {
-       class: "rotor-component-choices",
-       id: this.id("component-choices")
-     });
-     for (var name in rotors) {
-       var choice = $("<div/>", {
-         class: "rotor-component-choice",
-         text: name
-       });
-       choice.appendTo(choices);
-     }
-     return choices;*/
 
     var element = $("<div/>", {
       class: "droping-menu",
