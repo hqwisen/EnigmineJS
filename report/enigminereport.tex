@@ -1,10 +1,10 @@
 \documentclass[letterpaper]{article}
 \usepackage{natbib,alifexi}
 \usepackage[utf8]{inputenc}
-
+\usepackage[colorinlistoftodos]{todonotes}
+ 
 \title{Simulation graphique de la machine Enigma I}
 \author{Hakim Boulahya \\
-\mbox{}\\
 Université Libre de Bruxelles, Belgique\\
 hboulahy@ulb.ac.be}
 
@@ -15,82 +15,220 @@ hboulahy@ulb.ac.be}
 \begin{abstract}
 \end{abstract}
 
+
 \section{Introduction}
-Dans le cadre d'un projet transdiscplinaire, il m'a été demandé d'implémenter
-un simulateur graphique de la machine Enigma I. Cette machine eletro-mécanique a été utilisé par
-l'armée Nazi durant la deuxième guerre mondiale. Elle a permis aux militaires Allemands
-de maintenir une commnunication secrète durant une majeur partie de la guerre. Très peu
-de machine ont survécu du au fait que les Alliés ont recu l'ordre de detruire toute machine
-enigma trouvé.
-nombre de possibilté
-cracké par Alan Turring donc pas secu
+
+
+\paragraph{}
+
+Dans le cadre de mon projet transdisciplinaire, il m'a été demandé de développer un simulateur graphique de la machine Enigma \texttt{I} en utilisant les technologies web \texttt{JavaScript}, \texttt{HTML5} et \texttt{CSS3}. La machine Enigma est un outil éléctro-mécanique de chiffrement utilisé durant la seconde guerre mondiale, majoritairement par l'armée nazi.
+
+\paragraph{}
+Le principal objectif du développement de cette simulation est de proposer à tout le monde la possibilité d'utiliser une machine Enigma. En effet, très peu de vrai machine sont accessible. Plusieurs simulateurs de cette machine existe sur le web ou sous forme d'application bureau. Notre simulateur n'apporte pas de nouveauté dans le domaine de la cryptographie et a pour but uniquement d'apporter une autre vision de la simulation de la machine et d'offrir un accès au chiffrement que réalise cette machine à toute personne le désirant. Etant accessible sur le web, il est possible d'utiliser le simulateur sur n'importe quelle appareil muni d'un navigateur web et d'une connexion Internet \todo{reference vers le site du simu}.
+
+\paragraph{}
+
+Dans cette article plusieurs sujet seront abordés: une brève introduction sur les algorithmes de chiffrement ainsi qu'une introduction sur le fonctionnement basique d'un type de ces algorithmes, une déscription de la machine Enigma \texttt{I} ainsi que son fonctionnement, un état de l'art des simulateurs de la machine les plus pertinents ainsi qu'une présentation du simulateur développé et du fonctionnement de celui-ci.
+
+
+\todo{Parler des motivations}
 
 \section{Contexte}
+
+\subsection{Terminologie}
+
+\paragraph{}
+Dans le texte qui suit plusieurs termes sont utilisé. Cette liste indique tous les termes
+ansi que leur signification:
+
+\begin{itemize}
+    \item $M$ = Un message à chiffrer
+    \item $K$ = Un clé
+    \item $E$ = Une fonction de chiffrement
+    \item $D$ = Une fonction de déchiffrement
+    \item $C$ = Un message chiffré = E(M, K)
+\end{itemize}
 
 \subsection{Le chiffrement}
 
 \paragraph{}
-Le chiffrement est un moyen de transformé une suite de caractère, en un autre suite, de telle sorte
-que cette dernière soit codé \textit{i.e.} indéchiffrable sans une manipulation particulière \citep{MCEE}.
-Cette action s'effectue généarelement à l'aide
-d'une clé de codage. 
+Le chiffrement est un moyen de transformer une suite de caractère, en un autre suite, de telle sorte
+que cette dernière soit codé \textit{i.e.} indéchiffrable sans une manipulation particulière \cite{MCEE}.
+Cette action s'effectue généarelement à l'aide de clé de chiffrement. 
+\paragraph{}
+Il existe plusieurs type d'algorithme de chiffrement à clé: les algorithmes de clé asymétrique et les algorithmes de clé symétrique. Ici nous nous intéressons uniquement aux algorithmes de clé symétrique.
+\paragraph{}
+Les algorithmes de clé symétrique sont des algorithmes de chiffrement qui utilise une même clé pour chiffrer et déchiffrer un message.
  \paragraph{}
 Imaginons un cas ou un individu A souhaite envoyer un message codé à un individu
 B. Pour cela il est nécessaire que les deux parties se communiquent une clé privé, \textit{i.e.} que seule
 eux puissent en avoir la connaissance. Après l'échange des clés l'individu A peut chiffrer son message
-via un algorithme de codage et envoyer le message codé sur le canal de communication.
+via un algorithme de chiffrement à clé symétrique et envoyer le message chiffré sur le canal de communication.
 \paragraph{}
-Soit $f$ une
-fonction représentant l'algorithme de codage, $k$ une clé privée et $x$ un message.
 Le chiffrement du message peut être representé par l'équation:
 
 \[
-  f(x, k) = y
+  C = E(M, K)
 \]
 
 
-L'objectif de la fonction de chiffrement est de produire une sortie $y$. Cette sortie $y$
+L'objectif de la fonction de chiffrement est de produire une sortie $C$. Cette sortie $C$
 ne doit pas représenter le contenu du message. C'est celle-ci
-qui sera envoyée à l'individu B. Lors de sa réception l'individu B devra effectuer la même action
-pour déchiffrer le message \textit{i.e.} exécuter l'algorithme sur le message reçu
+qui sera envoyée à l'individu B. Lors de sa réception l'individu B devra effectuer l'action
+inverse pour déchiffrer le message \textit{i.e.} exécuter l'algorithme de déchiffrement sur le message reçu
 pour en récupérer le message compréhensible. Ainsi l'équation suivante peut
 représenter le déchiffrement:
 
 \[
-  f(y, k) = x
+  M = D(C, K) = D(E(C, K), K)
 \]
 
 \paragraph{}
 Il est primordial que la clé de chiffrement ne soit pas divulger sur le canal de communication
 pour que le chiffrement et le déchiffrement ne soit applicable que par les parties concernées. 
 
+\paragraph{}
+
+Il existe différentes implémentations d'algorithme de chiffrement à clé symétrique. Les plus connus sont \texttt{AES} et \texttt{3DES}. L'\texttt{AES} utilise des clés de tailles de 128, 192 ou 256 bits. Plus la tailles de la clé est grande plus les étapes de chiffrement sont élevés.
 
 \subsection{La machine Enigma I}
 \paragraph{}
 La machine enigma est une appareil electro-mécanique de chiffrement utilisée durant la seconde guerre mondiale
-par l'armée nazi. Il en existe de plusieurs types tous utilisé à différentes périodes. Dans ce document nous
-nous interesseront uniquement à la machine Enigma \texttt{I}, également appelé \textit{Ch.11a} par son constructeur.
-L'objectif de la machine est de produire un chiffrement pseudo-aléatoire d'un \textit{input} - un caractère alphabétique latin - 
-donnée[REFVERSARTICLE]. 
+par le régime nazi. Elle a permis aux militaires allemands
+de maintenir une commnunication secrète durant une majeur partie de la guerre. Très peu
+de machine ont survécu du au fait que les Alliés ont reçu l'ordre de détruire toutes machines
+Enigma trouvées \todo{reference ce fait}.
+\paragraph{}
+Il en existe de plusieurs types, toutes utilisées à différentes périodes de la guerre. Dans ce document nous
+nous intéressont uniquement à la machine Enigma \texttt{I}, également connue sont le nom \textit{Ch.11a} par son constructeur \todo{reference}.
+\paragraph{}
+Le chiffrement d'un caractère s'effectue lors de la pression d'une entrée sur le clavier de la machine. 
+Celle-ci met en évidence la sortie - un caractère - chiffré sur un voyant lumineux.
 
-%f(c, x_n) = y_n
-%f(c, y_n) = x_n
+\paragraph{}
+La machine Enigma \texttt{I} met a disposition plusieurs composants mécaniques paramètrables. Il en existe de trois type:  les rotors, les reflecteurs et le \textit{plugboard}. La figure \ref{fig:enigmaschema} montre la machine ouverte, mettant en évidence les différentes zones des composants.
 
-%nombre de config = bcp
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.2]{enigmaschema}
+    \caption{Schéma de la machine Enigma \texttt{I} ouverte}
+    \label{fig:enigmaschema}
+\end{figure}
 
-\section{}
+\subsubsection{Rotors}
+\paragraph{}
+Les rotors sont des composants mécaniques rotatifs. La machine est composée de trois roues adjacentes lors de son fonctionnement. Le modèle Enigma \texttt{I} met à disposition cinq rotors numérotés: \texttt{I}, \texttt{II}, \texttt{III}, \texttt{IV} et \texttt{V}. Les trois rotors doivent être placés (a) du schéma. Il existe 60 combinaisons possibles.
+
+\paragraph{}
+
+Pour chaque rotor, il est nécessaire de parametré: la position de départ et la position d'un anneau. L'anneau est une élément qui permet d'effectuer un décalage dans le chiffrement qu'effectue le rotor. Il existe 26 positions de départ et 26 positions d'anneau. Nous avons donc $26^3$ combinaisons possible pour les départs et $26^3$ pour les anneaux.
+
+\paragraph{}
+L'objectif d'un rotor est de remplacer un caractère par un autre. Le tableau \ref{table:rotors} \todo{tableau rotors} indique les caractère de remplacement pour chaque rotor.
+
+\paragraph{}
+Les rotors offrent donc $60*26^3*26^3$ possibilité de configuration.
+
+\subsubsection{Reflecteurs}
+\paragraph{}
+Les reflecteurs sont des composants identiques aux rotors, à la différence que dans ce modèle de la machine, ils n'effectuent aucune rotation. Le fonctionnement de la machine nécéssite la mise en place d'un reflecteur. Deux reflecteurs sont mis à disposition nommés: \texttt{B} et \texttt{C}.
+
+\paragraph{}
+
+Il est également possible de trouvé un troisième reflecteur nommé \texttt{A} dans certain modèle de la machine Enigma \texttt{I} mais il ne sera pas utilisé dans le simulateur présenté dans cette article. Le reflecteur doit être placé dans la zone (b) du schéma. Dans la version que nous utilisont pour le simulateur seul les reflecteurs B et C sont utilisés, soit 2 choix possibles.
+
+\paragraph{}
+L'objectif d'un reflecteur est de remplacer un caractère par un autre. Le tableau \ref{table:reflectors} \todo{tableau refls} indique les caractère de remplacement pour chaque reflecteur.
+
+\subsubsection{Plugboard}
+\paragraph{}
+Le dernier élément paramètrable de la machine est un \textit{plugboard}. La machine est composé d'un seul \textit{plugboard}, dans lequel sont connécté en pair des caractères alphabétiques. Généralement dix cables sont mis à dispotions.
+Le \textit{plugboard} permute les caractères entrées avant de les envoyer dans le circuit. Par exemple si les caractère A et B sont une paire du \textit{plugboard}, si le caractère A est entré, c'est le caractère B qui est envoyé dans le reste du circuit et vice-versa. L'ordre d'une pair n'a donc pas d'importance.
+
+\paragraph{}
+Le \textit{plugboard} offre $26! / (6!*10!*2^{10})$ possibilités de configuration.
+
+
+\subsubsection{Clé de chiffrement d'Enigma}
+
+\paragraph{}
+Au total le nombre de possibilté qu'offre Enigma \texttt{I} est égal à 5.587851741017033e+24 soit environ $2^{82}$. Enigma utilise un chiffrement symétrique avec comme clé les différentes combinaisons des composants. La taille de clé que propose Enigma \texttt{I} est d'environ 82 bits.
 
 \section{Etat de l'art}
 
+\paragraph{}
+Il existe de multiples simulateurs graphiques. Plusieurs d'entre-eux sont disponibles via une application web et d'autre en logiciel bureau. Dans les sections suivantes, plusieurs simulateurs vont sont présenter, en plus des différence notable entre ceux-ci et celui développer.
 
-\section{Le simulateur graphique}
+\subsection{Universal Enigma}
+
+\paragraph{}
+Le simulateur graphique \cite{UEN} est une application web simulant différents modèles d'Enigma. Son interface est de type utilitaire \textit{i.e.} les caractères à chiffrer doivent être entrés dans une zone de texte, et les caratères de sortie sont déployés dans une autre zone de texte. Les choix et configurations des différents composants de la machine s'effectuent via des listes et des boutons. Le chiffrement est automatique et ne nécessite aucune action de l'utilisateur hormis évidemment la saisie du texte à coder.
+
+\paragraph{}
+Les similitudes notables sont la technologie utilisé - le \texttt{JavaScript} - ainsi qu'une interface utilitaire simple. Ce simulateur propose également une simulation d'une dizaine de modèle de la machine Enigma.
+
+
+\subsection{Enigma Simulator de Rijmenants}
+
+\paragraph{}
+
+Le simulateur \cite{EWIN} est un simulateur de plusieurs modèle d'Enigma, dont le modèle Enigma \texttt{I}. Disponible uniquement sous Windows, c'est un des simulateurs graphiques les plus complet, permettant de configurer les composants de la manière des plus réaliste. Le developpeur propose un manuel d'utilisation pour pouvoir utilisé toutes les simulations proposé. Une fonctionnalité du logiciel est de pouvoir écrire un texte à chiffrer, mais n'est pas intuitive.
+
+
+\subsection{Enigmaco}
+
+\paragraph{}
+
+Le simulateur \cite{ECO} est une application web simulant une machine Enigma qui pourrait correspondre au modèle \texttt{M3} ou \texttt{M4}. Le but principal de ce simulateur est de montrer le fonctionnement de la machine en illustrant le parcours de chiffrement depuis l'entrée du caractère à chiffré jusqu'au caractère de sortie chiffré.. A chaque chiffrement les rotoations ansi que le circuit parcouru est montrer. Il est possible uniquement de configurer les rotors et le \textit{plugboard}.
+
+
+\todo{Paragraphe sur les différence et ce qu'apporte mon simulateur}
+
+\section{Le simulateur proposé}
+
+\subsection{Technologie}
+
+\paragraph{}
+Le simulateur graphique que présente ce document a été développé avec les technologies web \texttt{JavaScript} pour la logique du programme et les technologies \texttt{HTML5} et \texttt{CSS3} pour la partie graphique du programme.
+
+\subsection{Utilitaire}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{enigmautil}
+    \caption{Partie utilitaire du simulateur}
+    \label{fig:enigmautil}
+\end{figure}
+
+\paragraph{}
+La machine propose une interface de type utilitaire, qui facilite la configuarion des composants de la machine, ainsi qu'un meilleur moyen de saisie du texte à chiffrer. La particularité de cette interface est qu'il est possible d'entrée tout type de caractère pour que lors du déchiffrement du message, les caractères de ponctuation puissent être conservés.La partie utilitaire du simulateur est visible sur la figure \ref{fig:enigmautil}.
+
+\paragraph{}
+
+La zone (a) représente les rotors utilisé par la machine pour le chiffrement. Pour chaque coté de la machine \textit{i.e.} gauche, milieu et droit il vous est possible de choisir le rotor désirer. Si un rotor est déjà utilisé dans un autre emplacement, celui-ci change automatiquement de rotor. Dans le cadre d'un emplacement il est possible de changer la position de départ du rotor choisi ansi que son anneau.
+
+\paragraph{}
+La zone (b) de la figure représente le choix du reflecteur. Deux bouttons \texttt{B} et \texttt{C} sont cliquable et c'est celui en surbrillance qui est utilisé pour le chiffrement.
+
+\paragraph{}
+
+La zone (c) permet d'ajouter des pairs dans le \textit{plugboard}. Deux entrées textes dans lesquels les caractères alphabétiques des pairs doivent être entrées. Dans le cas ou les caractères ne sont pas alphabétiques ou que les caractères sont déjà utilisés, aucunes pairs n'est ajouté et il vous est nécessaire de remplacer les caractères pour ajouter une nouvelle entrée dans le \textit{plugboard}. Si vous avez ajouter 10 pairs, il ne vous sera plus possible d'en rajouter d'autre. Il est possible de supprimer une paire en cliquant dessus.
+
+\paragraph{}
+
+La zone (d) est une zone de texte où il est possible d'écrire le texte que la machine doit chiffrer. Tous les caractères du clavier sont admissible mais seuls les caractères alphabétiques seront chiffrés. Les majuscules et les minuscules sont conservé dans la zone de chiffrement. Les autres caractères ne seront pas chiffrés mais sont de même retranscrit dans la zone de chiffrement. Il est possible de supprimer du texte. Dans ce cas la machine effectue un retour arrière dans les rotations ce qui permet de garder une cohésion avec le texte chiffré.
+
+\paragraph{}
+
+La zone (e) est la zone de chiffrement. Les caractères que la machine a chiffrés sont retranscrit dans cette zone de texte. Aucune interaction n'est possible dans cet élément du simulateur, hormis la selection du texte.
+
+\subsection{Graphique}
 
 \section{Conclusion}
 
-
 \footnotesize
-\bibliography{enigmine}
 \bibliographystyle{apalike}
+\bibliography{enigma}
 
 
 \end{document}
