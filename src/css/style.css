@@ -897,8 +897,40 @@ body {
   color:#f2f2f2;
   margin-top:10px;
   font-size: 20px;
-  cursor: pointer;
+  padding:0;
+  margin:0;
+  text-decoration: none;
+  width:100%;
 }
+
+.droping-menu{
+  position:relative;
+  z-index: 9;
+}
+
+.droping-menu:hover{
+  background:#002e58;
+  cursor: pointer;
+  box-shadow: inset 0px 0px 10px 1px rgb(26, 26, 26), 0px 3px 3px 3px rgb(0, 0, 0);
+}
+
+.droping-menu:hover > .droping-item{
+  background:#000d19;
+  display:block;
+}
+
+.droping-item{
+  position:relative;
+  display:none;
+  color:#c1c1c1;
+}
+
+.droping-item:hover{
+  color:white;
+  font-size:23px;
+  font-weight: bold;
+}
+
 
 .rotor-component-close {
   background: inherit;
@@ -1213,6 +1245,10 @@ body {
   user-select: none
 }
 
+#machine-plugboard:hover{
+  background:#606060;
+}
+
 #machine-cables{
   position: absolute;
   width: 550px;
@@ -1294,6 +1330,10 @@ body {
   color:#918d8d;
   font-size:20px;
   cursor:pointer;
+}
+
+.port-hover{
+  color:white;
 }
 
 .port-plugged{

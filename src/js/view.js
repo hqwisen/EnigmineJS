@@ -945,7 +945,7 @@ $(function () {
     this.previousFrame = undefined;
     this.letterList = [];
 
-    var component, letters, separator0, separator1, wheel, name;
+    var component, letters, separator0, separator1, wheel, name, choices;
     letters = this.buildLetters();
     wheel = $("<div/>", {
       class: "rotor-wheel",
@@ -959,11 +959,7 @@ $(function () {
       class: "rotor-separator",
       id: this.id("separator1")
     });
-    name = $("<div/>", {
-      class: "rotor-component-name",
-      id: this.id("component-name"),
-      text: this.controller.getRotorName(side)
-    });
+    name = this.buildName();
     component = $("<div/>", {
       class: "rotor-component",
       id: this.id("component")
@@ -987,6 +983,52 @@ $(function () {
   RotorComponent.frameIndex = function () {
     return Math.floor(RotorComponent.NUMBEROFLETTER / 2);
   }
+
+  RotorComponent.prototype.buildName = function () {
+    /*var choices = $("<div/>", {
+       class: "rotor-component-choices",
+       id: this.id("component-choices")
+     });
+     for (var name in rotors) {
+       var choice = $("<div/>", {
+         class: "rotor-component-choice",
+         text: name
+       });
+       choice.appendTo(choices);
+     }
+     return choices;*/
+
+    var element = $("<div/>", {
+      class: "droping-menu",
+      id: this.id("droping-menu")
+    });
+    var nameElement = $("<a/>", {
+      class: "rotor-component-name",
+      id: this.id("component-name"),
+      text: this.controller.getRotorName(this.side)
+    });
+    nameElement.attr("href", "#");
+    var rotors = this.controller.getRotors();
+    nameElement.appendTo(element);
+    for (var name in rotors) {
+      var choice = $("<a/>", {
+        class: "droping-item",
+        text: name
+      });
+      choice.click({
+        side: this.side,
+        controller: this.controller,
+        name:name
+      }, function (e) {
+        var name = e.data.name;
+        var side = e.data.side;
+        e.data.controller.changeRotor(side, name);
+      });
+      element.append(choice);
+    }
+    return element;
+  }
+
 
   RotorComponent.prototype.buildLetters = function () {
     // Note : build manually 5 (numberOfLetter) letters
@@ -1149,13 +1191,13 @@ $(function () {
   }
 
   RotorComponent.prototype.showName = function () {
-    $(this.hid("component-name")).removeClass("close-class");
-    $(this.hid("component-name")).addClass("open-class");
+    $(this.hid("droping-menu")).removeClass("close-class");
+    $(this.hid("droping-menu")).addClass("open-class");
   }
 
   RotorComponent.prototype.unshowName = function () {
-    $(this.hid("component-name")).removeClass("open-class");
-    $(this.hid("component-name")).addClass("close-class");
+    $(this.hid("droping-menu")).removeClass("open-class");
+    $(this.hid("droping-menu")).addClass("close-class");
   }
 
   RotorComponent.prototype.showLetters = function () {
