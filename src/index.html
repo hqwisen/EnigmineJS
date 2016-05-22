@@ -17,13 +17,13 @@
       <ul id="tabs" class="tabs">
         <li class="tab" id="utilitytab"><a id="utilitylink" href="#utility">UTILITY</a></li>
         <li class="tab" id="graphictab"><a id="graphiclink" href="#graphic">GRAPHIC</a></li>
-        <li class="tab" id="tutorialtab"><a id="tutoriallink" href="#tutorial">TUTORIAL</a></li>
         <li class="tab" id="abouttab"><a id="aboutlink" href="#about">ABOUT </a></li>
       </ul>
       <!--div id="tabbar">
         <div id="bar" />
       </div-->
     </div>
+    <div id="simulator-version">Enigma I Simulator</div>
   </section>
 
   <div id="utility">
@@ -66,19 +66,26 @@
           </div>
           <div id="machine-cables">
             <span id="cables-close">&#x274c;</span>
+            <span id="cables-help">
+              <span>?</span>
+            <div class="help-text">
+              <ul>
+                <li>To add a plug, maintain click on the first entry and release click on the second entry.</li>
+                <li>To remove a plug, right click on an entry.</li>
+              </ul>
+            </div>
+            </span>
           </div>
         </div>
       </div>
     </section>
   </div>
 
-  <div id="tutorial">
-    Here is the tutorial
-  </div>
-
-
   <div id="about">
-    Hakim.Boulahya@ulb.ac.be
+    <br/>Third year project 2015-16 done by Hakim Boulahya. <br/>
+    <br/>Supervisors: Oliver Markowitch and Nikita Veshchikov. <br/>
+    <br/>contact: <a href="mailto:Hakim.Boulahya@ulb.ac.be">Hakim.Boulahya@ulb.ac.be</a>
+
   </div>
 
 
@@ -92,8 +99,8 @@
     $(function () {
       "use strict";
       var INITIAL_TAB = 1;
-      var tabList = ["#utilitytab", "#graphictab", "#tutorialtab", "#abouttab"];
-      var linkList = ["#utilitylink", "#graphiclink", "#tutoriallink", "#aboutlink"];
+      var tabList = ["#utilitytab", "#graphictab", "#abouttab"];
+      var linkList = ["#utilitylink", "#graphiclink", "#aboutlink"];
 
       $('ul.tabs').each(function () {
         var $active, $content, $links = $(this).find('a');

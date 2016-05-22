@@ -518,10 +518,10 @@ $(function () {
     $("<div/>", {
       id: "input-title"
     }).appendTo("#input-toolbar");
-    $("<button/>", {
+   /* $("<button/>", {
       html: "PASTE",
       id: "inputpaste"
-    }).appendTo("#input-menu");
+    }).appendTo("#input-menu");*/
     $("<span/>", {
       text: "Message to crypt"
     }).appendTo("#input-title");
@@ -602,14 +602,14 @@ $(function () {
     $("<div/>", {
       id: "output-title"
     }).appendTo("#output-toolbar");
-    $("<button/>", {
+    /*$("<button/>", {
       html: "COPY",
       id: "outputcopy"
     }).appendTo("#output-menu");
     $("<button/>", {
       html: "SELECT",
       id: "outputselect"
-    }).appendTo("#output-menu");
+    }).appendTo("#output-menu");*/
     $("<span/>", {
       text: "Encrypted message"
     }).appendTo("#output-title");

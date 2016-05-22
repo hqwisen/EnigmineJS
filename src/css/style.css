@@ -42,6 +42,15 @@ body {
 
 /* Toolbar */
 
+#simulator-version{
+  position:absolute;
+  right: 40px;
+  top:17px;
+  color:white;
+  font-variant: small-caps;
+  font-size: 30px;
+}
+
 #toolbar-section {
   width: 100%;
   height: auto;
@@ -173,6 +182,15 @@ body {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+#about a{
+  color:#143b5f;
+}
+
+#about a:hover{
+  color:#3c86cb;
+  text-decoration: none;
 }
 
 #tutorial {
@@ -893,7 +911,7 @@ body {
 }
 
 .rotor-component-name{
-  font-family:Courrier;
+  font-family:inherit;
   color:#f2f2f2;
   margin-top:10px;
   font-size: 20px;
@@ -909,13 +927,13 @@ body {
 }
 
 .droping-menu:hover{
-  background:#002e58;
+  background:#818181;
   cursor: pointer;
-  box-shadow: inset 0px 0px 10px 1px rgb(26, 26, 26), 0px 3px 3px 3px rgb(0, 0, 0);
+  box-shadow: #000000 0px 0px 5px 1px;
 }
 
 .droping-menu:hover > .droping-item{
-  background:#000d19;
+  background:#262626;
   display:block;
 }
 
@@ -927,7 +945,6 @@ body {
 
 .droping-item:hover{
   color:white;
-  font-size:23px;
   font-weight: bold;
 }
 
@@ -1072,7 +1089,7 @@ body {
   right: 0;
   margin: 0;
   padding: 0;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   margin-right: 15px;
   color: rgb(61, 69, 75);
   border-width: 0;
@@ -1084,6 +1101,7 @@ body {
   -moz-transition: none;
   -o-transition: none;
   background-image:url('../image/config25x25.png');
+  background-size: 25px 25px;
   background-color:inherit;
   width:25px;
   height:25px;
@@ -1092,6 +1110,8 @@ body {
 .open-button:hover {
   background-image:url('../image/confighover25x25.png');
 }
+
+
 
 #machine-input {
   display: block;
@@ -1281,18 +1301,63 @@ body {
 #cables-close{
   display:flex;
   position:absolute;
-  margin:0;
+  margin:5px;
   padding:0;
   top:0;
   right:0;
   height:25px;
   width:25px;
   background:inherit;
-  color: #3a454a;
+  color: #516169;
   font-size: 15px;
   align-items: center;
   justify-content: center;
   cursor:pointer;
+}
+
+#cables-close:hover{
+  color:firebrick;
+}
+
+#cables-help{
+  color:#516169;
+  font-weight: bold;
+  font-size:22px;
+  position:absolute;
+  top:0;
+  left:0;
+  margin:5px;
+  margin-left:7px;
+  padding:0;
+  text-align: left;
+  cursor:pointer;
+}
+
+#cables-help:hover{
+  color:#434343;
+}
+
+#cables-help:hover > .help-text{
+  display:block;
+}
+
+#cables-help .help-text ul{
+  padding:10px;
+  margin:5px;
+}
+
+#cables-help .help-text{
+  display:none;
+  background:red;
+  color:#b9b9b9;
+  background:#434343;
+  width:200px;
+  padding:7px;
+  font-size:15px;
+  font-weight: normal;
+  box-shadow: #000000 0px 0px 5px 1px;
+  cursor:default;
+
 }
 
 .open-class{
@@ -1335,8 +1400,8 @@ body {
   cursor:pointer;
 }
 
-.port-hover{
-  color:white;
+.port:hover{
+  color:black;
 }
 
 .port-plugged{
@@ -1346,7 +1411,16 @@ body {
   border-radius:20px;
 }
 
+.port-plugged:hover{
+  color:black;
+}
+
 .port-plugged-active{
+  background:#520707;
+  color:#520707;
+}
+
+.port-plugged-active:hover{
   background:#520707;
   color:#520707;
 }
