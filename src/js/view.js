@@ -1,15 +1,3 @@
-// FIXME ctrl+z, ctrl+y
-// TODO afficher position de depart
-// TODO input back up
-// TODO plugboard
-// TODO selection + keydown (pas delete ou backspace
-// TODO Keydown au mileu du texte
-// TODO delete of non-alpha char
-// TODO quand ecrit texte au milieu
-// TODO static method outside class
-// TODO Fix behaviour plugboard (int and out !!!)
-// FIXME bug in changerotor in graphics view
-
 $(function () {
   "use strict";
 
@@ -94,14 +82,12 @@ $(function () {
     var component = event.data.component;
     component.controller.changeStart(component.side, +1);
     component.rotateWheel();
-    // FIXME (info) wheel rotation is here because need focus to calculte tooth size (controller refresh even when not focus on graphic tab)
   }
 
   function wheelDownEvent(event) {
     var component = event.data.component;
     component.controller.changeStart(component.side, -1);
     component.rotateWheel();
-    // FIXME (info) wheel rotation is here because need focus to calculte tooth size (controller refresh even when not focus on graphic tab)
   }
 
   function openMachineEvent(event) {
@@ -426,7 +412,6 @@ $(function () {
 
   PlugboardView.prototype.removePlug = function (entry1, entry2) {
     console.log("plugboard view remove " + entry1 + entry2);
-    // FIXME bad conception of this.items
     if (this.items[entry1 + entry2] != undefined) {
       this.items[entry1 + entry2].remove();
       delete this.items[entry1 + entry2];
@@ -1019,7 +1004,6 @@ $(function () {
 
 
   RotorComponent.prototype.buildLetters = function () {
-    // Note : build manually 5 (numberOfLetter) letters
     var letters = $("<div/>", {
       class: "rotor-letters",
       id: this.id("letters")
@@ -1141,8 +1125,6 @@ $(function () {
     $(this.hid("component-name")).text(name);
   }
 
-  // NOTE (FIXME): refreshFrame is called every crypt,
-  // even if the rotor does not change (see controller.refreshParameters())
   RotorComponent.prototype.refreshFrame = function (char) {
     this.previousFrame = this.frameVal();
     this.getFrameElement().text(char);
@@ -1681,7 +1663,6 @@ $(function () {
     }
   }
 
-  // FIXME to avoid conflict, |value| = 1
   MachineController.prototype.changeStart = function (side, value) {
     MachineController.log("changeStart(" + side + ", " + value + ")");
     var char = this.getRotorStart(side);
@@ -1699,7 +1680,6 @@ $(function () {
     this.graphicHandler.refreshFrame(side, newStart);
   }
 
-  // FIXME to avoid conflict, |value| = 1
   MachineController.prototype.changeRing = function (side, value) {
     MachineController.log("changeRing(" + side + ", " + value + ")");
     var char = this.getRotorRing(side);

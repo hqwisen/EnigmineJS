@@ -1,6 +1,4 @@
 
-// FIXME better implementation (this one is to hard to understand & bad impl)
-
 function Table(chars){
   "use strict";
   this.chars = chars;
