@@ -1074,7 +1074,6 @@ body {
   padding: 0;
   margin-bottom: 15px;
   margin-right: 15px;
-  background: inherit;
   color: rgb(61, 69, 75);
   border-width: 0;
   font-weight: bold;
@@ -1084,10 +1083,14 @@ body {
   -ms-transition: none;
   -moz-transition: none;
   -o-transition: none;
+  background-image:url('../image/config25x25.png');
+  background-color:inherit;
+  width:25px;
+  height:25px;
 }
 
 .open-button:hover {
-  color: rgb(109, 119, 128);
+  background-image:url('../image/confighover25x25.png');
 }
 
 #machine-input {

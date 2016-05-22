@@ -1593,7 +1593,7 @@ $(function () {
     var $button = $("<button/>", {
       id: "open-button",
       class: "open-button",
-      html: "*"
+      html: ""
     });
     $button.appendTo("#machine-output");
     this.changeOpenAction(this.currentMachineAction);
