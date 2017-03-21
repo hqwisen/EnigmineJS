@@ -1,4 +1,4 @@
-# EnigmineJS
+# EnigmineJS (Enigma I Simulator)
 
 Enigma is an electro-mechanical cryptographic machine that is able to encrypt and decrypt messages. Various versions of this machine were used in the middle of the 20th century.
 
